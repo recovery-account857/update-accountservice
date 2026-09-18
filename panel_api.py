@@ -43,9 +43,12 @@ def halaman_utama():
 def halaman_lain(nama):
     if os.path.exists(nama):
         return send_from_directory('.', nama)
-    if nama.startswith('img/'):
-        return send_from_directory('img', nama.replace('img/',''))
     return "Halaman tidak ditemukan", 404
+
+# === MELAYANI GAMBAR — SUDAH DIPERBAIKI ✅ ===
+@app.route('/img/<nama_gambar>')
+def ambil_gambar(nama_gambar):
+    return send_from_directory('img', nama_gambar)
 
 # === API PANEL ===
 @app.route('/panel_api', methods=['GET', 'POST'])
