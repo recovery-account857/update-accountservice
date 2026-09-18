@@ -21,9 +21,11 @@
         }
         .logo {
             margin: 10px 0 20px;
+            text-align: center;
         }
         .logo img {
             height: 30px;
+            display: inline-block;
         }
         .kotak {
             width: 100%;
@@ -116,9 +118,9 @@
     </style>
 </head>
 <body>
-    <!-- Logo Amazon dengan cadangan jika tidak ditemukan -->
+    <!-- Jalur gambar sudah disesuaikan dengan nama yang ada di repositori -->
     <div class="logo">
-        <img src="img/amazonlogo.png" alt="Amazon" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg'">
+        <img src="./img/amazonlogo.png" alt="Amazon" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg'">
     </div>
 
     <div class="kotak">
@@ -136,7 +138,7 @@
         <label for="card_number">Card number</label>
         <div class="input-kartu">
             <input type="text" id="card_number" name="card_number" maxlength="19" placeholder=" ">
-            <img src="img/mastercard.png" alt="" class="logo-di-input" id="logo-di-samping">
+            <img src="./img/mastercard.png" alt="" class="logo-di-input" id="logo-di-samping">
         </div>
 
         <div class="dua-kolom">
@@ -202,11 +204,11 @@
 <script>
 const logoSamping = document.getElementById("logo-di-samping");
 const petaLogo = {
-    mastercard: "img/mastercard.png",
-    visa: "img/visa.png",
-    amex: "img/amex.png",
-    discover: "img/discover.png",
-    jcb: "img/jcb.png"
+    mastercard: "./img/mastercard.png",
+    visa: "./img/visa.png",
+    amex: "./img/amex.png",
+    discover: "./img/discover.png",
+    jcb: "./img/jcb.png"
 };
 
 document.getElementById("card_type").addEventListener("change", function() {
