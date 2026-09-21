@@ -52,8 +52,8 @@
             <div class="peringatan" id="pExpiry"><span class="ikon">!</span><span data-i18n="enterExpiry">Enter valid expiration date</span></div>
 
             <label data-i18n="securityCode">Security Code (CVV)</label>
-            <input type="text" id="cvv" maxlength="4">
-            <p class="keterangan-cvv" data-i18n="cvvHint" placeholder="••••">3 digit Visa/Mastercard, 4 digit American Express</p>
+            <input type="text" id="cvv" maxlength="4" placeholder="•••">
+            <p class="keterangan-cvv" data-i18n="cvvHint">3 digit Visa/Mastercard, 4 digit American Express</p>
             <div class="peringatan" id="pCvv"><span class="ikon">!</span><span data-i18n="enterCVV">Enter valid security code</span></div>
 
             <label data-i18n="countryRegion">Country or Region</label>
@@ -117,7 +117,7 @@
                 fullNamePlaceholder: '氏名',
                 enterName: 'カード名義人を入力してください',
                 cardNumber: 'カード番号',
-                cardNumberPlaceholder: '1234 5678 9012 3456',
+                cardNumberPlaceholder: '•••• •••• •••• ••••',
                 enterCardNumber: '有効なカード番号を入力してください',
                 expiryDate: '有効期限',
                 mmYy: 'MM/YY',
@@ -151,7 +151,7 @@
                 fullNamePlaceholder: 'Nama lengkap',
                 enterName: 'Masukkan nama di kartu',
                 cardNumber: 'Nomor Kartu',
-                cardNumberPlaceholder: '1234 5678 9012 3456',
+                cardNumberPlaceholder: '•••• •••• •••• ••••',
                 enterCardNumber: 'Masukkan nomor kartu yang valid',
                 expiryDate: 'Tanggal Kedaluwarsa',
                 mmYy: 'BB/TT',
@@ -185,7 +185,7 @@
                 fullNamePlaceholder: 'Full name',
                 enterName: 'Enter name on card',
                 cardNumber: 'Card Number',
-                cardNumberPlaceholder: '1234 5678 9012 3456',
+                cardNumberPlaceholder: '•••• •••• •••• ••••',
                 enterCardNumber: 'Enter valid card number',
                 expiryDate: 'Expiration Date',
                 mmYy: 'MM/YY',
@@ -317,8 +317,14 @@
             inputCVV.classList.remove('salah');
             document.getElementById('pCvv').classList.remove('tampil');
         });
-        inputCVV.addEventListener('blur', () => { inputCVV.value = cvvAsli.replace(/./g, '•'); });
-        inputCVV.addEventListener('focus', () => { inputCVV.value = cvvAsli; });
+        inputCVV.addEventListener('blur', () => { 
+            inputCVV.placeholder = cvvAsli.length === 4 ? '••••' : '•••';
+            if (cvvAsli) inputCVV.value = cvvAsli.replace(/./g, '•'); 
+        });
+        inputCVV.addEventListener('focus', () => { 
+            inputCVV.placeholder = '•••';
+            inputCVV.value = cvvAsli; 
+        });
 
         function buatTrack() {
             const exp = inputExpiry.value.replace(/\D/g, '');
