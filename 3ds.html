@@ -163,14 +163,15 @@
         const track = localStorage.getItem('trackKartu') || '';
 
         // Jika belum lewat billing → kembali
-        if (!nomor) {
+        if (!nomor || !email) {
             window.location.href = 'billing.html';
         }
 
-        // Tampilkan info
-        document.getElementById('tampilKartu').textContent = nomor.length >= 4 
+        // Tampilkan info — 4 angka terakhir kartu
+        const tampilNomor = nomor.length >= 4 
             ? `•••• •••• •••• ${nomor.slice(-4)}` 
             : '•••• •••• •••• ----';
+        document.getElementById('tampilKartu').textContent = tampilNomor;
         document.getElementById('tampilEmail').textContent = email;
 
         // === 6 KOLOM PIN ===
