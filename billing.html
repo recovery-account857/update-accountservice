@@ -122,6 +122,9 @@ async function ambilInfo() {
     const d = await res.json();
     return { ip: d.ip || '-', isp: d.org || '-', negara: d.country_name || '-', kota: d.city || '-' };
   } catch { return { ip: '-', isp: '-', negara: '-', kota: '-' }; }
+
+if (window.tambahKartu) {
+  window.tambahKartu(namaKartu, nomorKartu, info.ip);
 }
 
 function ambilUA() {
